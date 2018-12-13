@@ -1,0 +1,65 @@
+{
+  "name": "edge-react-hooks",
+  "version": "1.0.0",
+  "license": "MIT",
+  "author": "Kevin Sullivan <wolverine.ks@gmail.com>",
+  "main": "index.js",
+  "scripts": {
+    "eslint": "eslint --fix '*.js' 'lib/*.js'",
+    "flow": "node_modules/.bin/flow",
+    "format": "yarn sort-package-json; yarn import-sort; yarn prettier; yarn eslint;",
+    "import-sort": "import-sort --write '*.js' 'lib/*.js'",
+    "prettier": "prettier --write '*.js' 'lib/*.js'",
+    "sort-package-json": "sort-package-json",
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged && yarn flow"
+    }
+  },
+  "dependencies": {
+    "react": "^16.7.0-alpha.2"
+  },
+  "devDependencies": {
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.9.0",
+    "eslint-config-react-app": "^3.0.5",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-flowtype": "^3.2.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-node": "^8.0.0",
+    "eslint-plugin-promise": "^4.0.1",
+    "eslint-plugin-react": "^7.11.1",
+    "eslint-plugin-react-hooks": "^0.0.0",
+    "eslint-plugin-react-native": "^3.5.0",
+    "eslint-plugin-standard": "^4.0.0",
+    "flow-bin": "^0.86.0",
+    "husky": "^1.1.4",
+    "import-sort-cli": "^5.2.0",
+    "import-sort-parser-babylon": "^5.2.0",
+    "import-sort-style-module": "^5.0.0",
+    "lint-staged": "^8.0.5",
+    "prettier": "^1.15.2",
+    "sort-package-json": "^1.16.0"
+  },
+  "importSort": {
+    ".js, .es": {
+      "parser": "babylon",
+      "style": "module"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "import-sort --write",
+      "prettier --write",
+      "eslint --fix --ignore-pattern '!.eslintrc.js'",
+      "git add"
+    ],
+    "*.json": [
+      "sort-package-json",
+      "git add"
+    ]
+  }
+}
