@@ -4,11 +4,10 @@ module.exports = {
   extends: [
     'standard',
     'plugin:flowtype/recommended',
-    'plugin:react/recommended',
-    'plugin:react-native/all'
+    'plugin:react/recommended'
   ],
   parser: 'babel-eslint',
-  plugins: ['flowtype', 'standard', 'react', 'react-native', 'react-hooks'],
+  plugins: ['flowtype', 'standard', 'react', 'react-hooks'],
   rules: {
     'flowtype/require-valid-file-annotation': [2, 'always'],
     'flowtype/semi': [2, 'never'],
@@ -25,8 +24,6 @@ module.exports = {
     'no-throw-literal': 'error',
     'no-var': 'error',
     'prefer-const': 'error',
-    'react-native/no-color-literals': 0,
-    'react-native/no-inline-styles': 0,
     'react-hooks/rules-of-hooks': 'error'
   }
 }
