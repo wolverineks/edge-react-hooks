@@ -1,6 +1,12 @@
 {
   "name": "edge-react-hooks",
-  "version": "1.1.1",
+  "version": "1.1.2",
+  "keywords": [
+    "edge",
+    "hooks",
+    "react"
+  ],
+  "repository": "wolverineks/edge-react-hooks",
   "license": "MIT",
   "author": "Kevin Sullivan <wolverine.ks@gmail.com>",
   "main": "index.js",
