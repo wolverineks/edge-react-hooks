@@ -1,5 +1,6 @@
 [ignore]
 .*/node_modules/edge-core-js
+.*/examples
 
 [include]
 
