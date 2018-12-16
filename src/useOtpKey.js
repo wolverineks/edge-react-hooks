@@ -2,7 +2,9 @@
 
 import { useEffect, useState } from "react";
 
-export const useOtpKey = account => {
+import { type EdgeAccount } from "edge-core-js";
+
+export const useOtpKey = (account: EdgeAccount | null | void) => {
   const [otpKey, setOtpKey] = useState(account ? account.otpKey : []);
 
   const effect = () => {

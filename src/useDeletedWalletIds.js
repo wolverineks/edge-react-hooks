@@ -2,14 +2,16 @@
 
 import { useEffect, useState } from "react";
 
-const getDeletedWalletIds = walletInfos => {
-  const deletedWalletInfos = walletInfos.filter(key => key.deleted);
-  const deletedWalletIds = deletedWalletInfos.map(key => key.id);
+import { type EdgeAccount, type EdgeWalletInfoFull } from "edge-core-js";
+
+const getDeletedWalletIds = (walletInfos: Array<EdgeWalletInfoFull>) => {
+  const deletedWalletInfos: Array<EdgeWalletInfoFull> = walletInfos.filter(key => key.deleted);
+  const deletedWalletIds: Array<string> = deletedWalletInfos.map((key: EdgeWalletInfoFull) => key.id);
 
   return deletedWalletIds;
 };
 
-export const useDeletedWalletIds = account => {
+export const useDeletedWalletIds = (account: EdgeAccount | null | void) => {
   const initialState = account ? getDeletedWalletIds(account.allKeys) : [];
   const [deletedWalletIds, setDeletedWalletIds] = useState(initialState);
 

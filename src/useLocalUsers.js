@@ -2,7 +2,9 @@
 
 import { useEffect, useState } from "react";
 
-export const useLocalUsers = context => {
+import { type EdgeContext } from "edge-core-js";
+
+export const useLocalUsers = (context: EdgeContext | null | void) => {
   const [localUsers, setLocalUsers] = useState(context ? context.localUsers : []);
 
   const effect = () => {

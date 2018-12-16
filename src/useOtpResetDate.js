@@ -2,7 +2,9 @@
 
 import { useEffect, useState } from "react";
 
-export const useOtpResetDate = account => {
+import { type EdgeAccount } from "edge-core-js";
+
+export const useOtpResetDate = (account: EdgeAccount | null | void) => {
   const [otpResetDate, setOtpResetDate] = useState(account ? account.otpResetDate : []);
 
   const effect = () => {

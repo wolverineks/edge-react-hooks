@@ -2,7 +2,9 @@
 
 import { useEffect, useState } from "react";
 
-export const useActiveWalletIds = account => {
+import { type EdgeAccount } from "edge-core-js";
+
+export const useActiveWalletIds = (account: EdgeAccount | null | void) => {
   const [activeWalletIds, setActiveWalletIds] = useState(account ? account.archivedWalletIds : []);
 
   const effect = () => {
