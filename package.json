@@ -1,6 +1,6 @@
 {
   "name": "edge-react-hooks",
-  "version": "1.1.15",
+  "version": "1.1.17",
   "keywords": [
     "edge",
     "hooks",
@@ -8,23 +8,64 @@
   ],
   "repository": "wolverineks/edge-react-hooks",
   "author": "Kevin Sullivan <wolverine.ks@gmail.com>",
-  "main": "dist/index.cjs.js",
-  "module": "dist/index.js",
+  "main": "dist/index.js",
   "scripts": {
-    "build": "rollup -c",
+    "build": "rimraf dist && rollup -c",
     "flow": "node_modules/.bin/flow",
+    "flow-coverage": "flow-coverage-report",
+    "format": "sort-package-json; import-sort -l --write '*.js' 'src/**/*.js'; prettier-eslint --write '*.js' 'src/**/*.js'",
+    "precommit": "yarn format && yarn flow && yarn build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run precommit"
+    }
+  },
   "dependencies": {
-    "edge-currency-ethereum": "^0.11.2",
     "react": "^16.7.0-alpha.2"
   },
   "devDependencies": {
+    "babel-eslint": "^10.0.1",
     "edge-core-js": "^0.13.5",
+    "eslint": "^5.10.0",
+    "eslint-config-react-app": "^3.0.5",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-flowtype": "^3.2.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jsx-a11y": "^6.1.2",
+    "eslint-plugin-node": "^8.0.0",
+    "eslint-plugin-promise": "^4.0.1",
+    "eslint-plugin-react": "^7.11.1",
+    "eslint-plugin-react-hooks": "^0.0.0",
+    "eslint-plugin-standard": "^4.0.0",
     "flow-bin": "^0.89.0",
+    "flow-coverage-report": "^0.6.1",
     "flow-typed": "^2.5.1",
+    "import-sort-cli": "^5.2.0",
+    "import-sort-parser-babylon": "^5.2.0",
+    "import-sort-style-module": "^5.0.0",
+    "prettier-eslint-cli": "^4.7.1",
+    "rimraf": "^2.6.2",
     "rollup": "^0.68.0",
     "rollup-plugin-flow": "^1.1.1",
-    "rollup-plugin-flow-entry": "^0.2.0"
+    "rollup-plugin-flow-entry": "^0.2.0",
+    "sort-package-json": "^1.17.1"
+  },
+  "flow-coverage-report": {
+    "globIncludePatterns": [
+      "src/**/*.js"
+    ],
+    "reportTypes": [
+      "text",
+      "html",
+      "json"
+    ]
+  },
+  "importSort": {
+    ".js, .es": {
+      "parser": "babylon",
+      "style": "module"
+    }
   }
 }
