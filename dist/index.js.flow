@@ -8,6 +8,7 @@ import { useOtpKey } from "./useOtpKey.js";
 import { useOtpResetDate } from "./useOtpResetDate.js";
 import { useLocalStorage } from "./useLocalStorage.js";
 import { useSyncedStorage } from "./useSyncedStorage.js";
+import { useFiatCurrencyCode } from "./useFiatCurrencyCode.js";
 
 export {
   useActiveWalletIds,
@@ -17,5 +18,6 @@ export {
   useOtpKey,
   useOtpResetDate,
   useLocalStorage,
-  useSyncedStorage
+  useSyncedStorage,
+  useFiatCurrencyCode
 };

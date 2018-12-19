@@ -314,6 +314,82 @@ const useSyncedStorage = (
   return { ...state, setData };
 };
 
+//      
+
+                                                                                   
+                                                                                                                 
+                                                                                                 
+                                                                                                               
+             
+                                  
+                                    
+                                  
+                                    
+
+              
+                                  
+                   
+                     
+  
+
+const initialState$2        = {
+  fiatCurrencyCode: null,
+  pending: false,
+  error: null
+};
+
+const reducer$2 = (state       , action        ) => {
+  switch (action.type) {
+    case "WRITE_FIAT_CURRENCY_CODE_START": {
+      return { ...state, pending: true, error: null };
+    }
+    case "READ_FIAT_CURRENCY_CODE_SUCCESS":
+    case "WRITE_FIAT_CURRENCY_CODE_SUCCESS": {
+      const { fiatCurrencyCode } = action;
+      return { ...state, pending: false, fiatCurrencyCode };
+    }
+    case "WRITE_FIAT_CURRENCY_CODE_ERROR": {
+      const { error } = action;
+      return { ...state, pending: false, error };
+    }
+    default:
+      return state;
+  }
+};
+
+const useFiatCurrencyCode = (wallet                                  ) => {
+  const [state, dispatch] = react.useReducer(reducer$2, initialState$2);
+
+  const onSuccess = (fiatCurrencyCode        ) => () =>
+    dispatch({ type: "WRITE_FIAT_CURRENCY_CODE_SUCCESS", fiatCurrencyCode });
+  const onError = (error       ) => dispatch({ type: "WRITE_FIAT_CURRENCY_CODE_ERROR", error });
+
+  const setFiatCurrencyCode = (fiatCurrencyCode        ) => {
+    if (!wallet) return;
+    dispatch({ type: "WRITE_FIAT_CURRENCY_CODE_START" });
+    wallet.setFiatCurrencyCode(fiatCurrencyCode).then(onSuccess(fiatCurrencyCode), onError);
+  };
+
+  const effect = () => {
+    if (!wallet) return; // mount with null
+    dispatch({ type: "READ_FIAT_CURRENCY_CODE_SUCCESS", fiatCurrencyCode: wallet.fiatCurrencyCode });
+
+    const unsubscribe = wallet.watch(
+      // mount with wallet / null -> wallet / walletA -> walletB (2)
+      "fiatCurrencyCode",
+      (fiatCurrencyCode                                                       ) =>
+        dispatch({ type: "WRITE_FIAT_CURRENCY_CODE_SUCCESS", fiatCurrencyCode })
+    );
+
+    return unsubscribe; // unmount with wallet / walletA -> walletB (1) / wallet -> null
+  };
+
+  react.useEffect(effect, []); // onMount
+  react.useEffect(effect, [wallet]); // onUpdate
+
+  return { ...state, setFiatCurrencyCode };
+};
+
 //
 
 exports.useActiveWalletIds = useActiveWalletIds;
@@ -324,3 +400,4 @@ exports.useOtpKey = useOtpKey;
 exports.useOtpResetDate = useOtpResetDate;
 exports.useLocalStorage = useLocalStorage;
 exports.useSyncedStorage = useSyncedStorage;
+exports.useFiatCurrencyCode = useFiatCurrencyCode;
