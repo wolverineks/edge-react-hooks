@@ -6,7 +6,8 @@ import { useDeletedWalletIds } from "./useDeletedWalletIds.js";
 import { useLocalUsers } from "./useLocalUsers.js";
 import { useOtpKey } from "./useOtpKey.js";
 import { useOtpResetDate } from "./useOtpResetDate.js";
-import { useDisklet } from "./useDisklet.js";
+import { useLocalStorage } from "./useLocalStorage.js";
+import { useSyncedStorage } from "./useSyncedStorage.js";
 
 export {
   useActiveWalletIds,
@@ -15,5 +16,6 @@ export {
   useLocalUsers,
   useOtpKey,
   useOtpResetDate,
-  useDisklet
+  useLocalStorage,
+  useSyncedStorage
 };
