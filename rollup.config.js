@@ -10,6 +10,6 @@ export default [
         format: "cjs"
       }
     ],
-    plugins: [rollupPluginFlow(), flowEntry()]
+    plugins: [flowEntry(), rollupPluginFlow()]
   }
 ];
