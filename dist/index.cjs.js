@@ -1,10 +1,14 @@
-import { useState, useEffect, useReducer } from 'react';
-import 'edge-core-js';
+'use strict';
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
+var react = require('react');
+require('edge-core-js');
 
 //      
 
 const useActiveWalletIds = (account                           ) => {
-  const [activeWalletIds, setActiveWalletIds] = useState(account ? account.archivedWalletIds : []);
+  const [activeWalletIds, setActiveWalletIds] = react.useState(account ? account.archivedWalletIds : []);
 
   const effect = () => {
     if (!account) return; // mount with null
@@ -13,8 +17,8 @@ const useActiveWalletIds = (account                           ) => {
     return unsubscribe; // unmount with account / accountA -> accountB (1) / account -> null
   };
 
-  useEffect(effect, []); // onMount
-  useEffect(effect, [account]); // onUpdate
+  react.useEffect(effect, []); // onMount
+  react.useEffect(effect, [account]); // onUpdate
 
   return activeWalletIds;
 };
@@ -22,7 +26,7 @@ const useActiveWalletIds = (account                           ) => {
 //      
 
 const useArchivedWalletIds = (account                           ) => {
-  const [archivedWalletIds, setArchivedWalletIds] = useState(account ? account.activeWalletIds : []);
+  const [archivedWalletIds, setArchivedWalletIds] = react.useState(account ? account.activeWalletIds : []);
 
   const effect = () => {
     if (!account) return; // mount with null
@@ -31,8 +35,8 @@ const useArchivedWalletIds = (account                           ) => {
     return unsubscribe; // unmount with account / accountA -> accountB (1) / account -> null
   };
 
-  useEffect(effect, []); // onMount
-  useEffect(effect, [account]); // onUpdate
+  react.useEffect(effect, []); // onMount
+  react.useEffect(effect, [account]); // onUpdate
 
   return archivedWalletIds;
 };
@@ -48,7 +52,7 @@ const getDeletedWalletIds = (walletInfos                           ) => {
 
 const useDeletedWalletIds = (account                           ) => {
   const initialState = account ? getDeletedWalletIds(account.allKeys) : [];
-  const [deletedWalletIds, setDeletedWalletIds] = useState(initialState);
+  const [deletedWalletIds, setDeletedWalletIds] = react.useState(initialState);
 
   const effect = () => {
     if (!account) return; // mount with null
@@ -59,8 +63,8 @@ const useDeletedWalletIds = (account                           ) => {
     return unsubscribe; // unmount with account / accountA -> accountB (1) / account -> null
   };
 
-  useEffect(effect, []); // onMount
-  useEffect(effect, [account]); // onUpdate
+  react.useEffect(effect, []); // onMount
+  react.useEffect(effect, [account]); // onUpdate
 
   return deletedWalletIds;
 };
@@ -68,7 +72,7 @@ const useDeletedWalletIds = (account                           ) => {
 //      
 
 const useLocalUsers = (context                           ) => {
-  const [localUsers, setLocalUsers] = useState(context ? context.localUsers : []);
+  const [localUsers, setLocalUsers] = react.useState(context ? context.localUsers : []);
 
   const effect = () => {
     if (!context) return; // mount with null
@@ -76,8 +80,8 @@ const useLocalUsers = (context                           ) => {
     return unsubscribe; // unmount with context / contextA -> contextB (1) / context -> null
   };
 
-  useEffect(effect, []); // onMount
-  useEffect(effect, [context]); // onUpdate
+  react.useEffect(effect, []); // onMount
+  react.useEffect(effect, [context]); // onUpdate
 
   return localUsers;
 };
@@ -85,7 +89,7 @@ const useLocalUsers = (context                           ) => {
 //      
 
 const useOtpKey = (account                           ) => {
-  const [otpKey, setOtpKey] = useState(account ? account.otpKey : []);
+  const [otpKey, setOtpKey] = react.useState(account ? account.otpKey : []);
 
   const effect = () => {
     if (!account) return; // mount with null
@@ -94,8 +98,8 @@ const useOtpKey = (account                           ) => {
     return unsubscribe; // unmount with account / accountA -> accountB (1) / account -> null
   };
 
-  useEffect(effect, []); // onMount
-  useEffect(effect, [account]); // onUpdate
+  react.useEffect(effect, []); // onMount
+  react.useEffect(effect, [account]); // onUpdate
 
   return otpKey;
 };
@@ -103,7 +107,7 @@ const useOtpKey = (account                           ) => {
 //      
 
 const useOtpResetDate = (account                           ) => {
-  const [otpResetDate, setOtpResetDate] = useState(account ? account.otpResetDate : []);
+  const [otpResetDate, setOtpResetDate] = react.useState(account ? account.otpResetDate : []);
 
   const effect = () => {
     if (!account) return; // mount with null
@@ -112,8 +116,8 @@ const useOtpResetDate = (account                           ) => {
     return unsubscribe; // unmount with account / accountA -> accountB (1) / account -> null
   };
 
-  useEffect(effect, []); // onMount
-  useEffect(effect, [account]); // onUpdate
+  react.useEffect(effect, []); // onMount
+  react.useEffect(effect, [account]); // onUpdate
 
   return otpResetDate;
 };
@@ -179,7 +183,7 @@ const useLocalStorage = (
   storageContext                                                ,
   path                      
 ) => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = react.useReducer(reducer, initialState);
 
   const onWriteSuccess = (data               ) => () => dispatch({ type: "WRITE_SUCCESS", data });
   const onWriteError = (error       ) => dispatch({ type: "WRITE_ERROR", error });
@@ -208,8 +212,8 @@ const useLocalStorage = (
     return unsubscribe; // unmount with storageContext / storageContextA -> storageContextB (1) / storageContext -> null
   };
 
-  useEffect(effect, []); // onMount
-  useEffect(effect, [storageContext]); // onUpdate
+  react.useEffect(effect, []); // onMount
+  react.useEffect(effect, [storageContext]); // onUpdate
 
   return { ...state, setData };
 };
@@ -275,7 +279,7 @@ const useSyncedStorage = (
   storageContext                                                ,
   path                      
 ) => {
-  const [state, dispatch] = useReducer(reducer$1, initialState$1);
+  const [state, dispatch] = react.useReducer(reducer$1, initialState$1);
 
   const onWriteSuccess = (data               ) => () => dispatch({ type: "WRITE_SUCCESS", data });
   const onWriteError = (error       ) => dispatch({ type: "WRITE_ERROR", error });
@@ -304,8 +308,8 @@ const useSyncedStorage = (
     return unsubscribe; // unmount with storageContext / storageContextA -> storageContextB (1) / storageContext -> null
   };
 
-  useEffect(effect, []); // onMount
-  useEffect(effect, [storageContext]); // onUpdate
+  react.useEffect(effect, []); // onMount
+  react.useEffect(effect, [storageContext]); // onUpdate
 
   return { ...state, setData };
 };
@@ -354,7 +358,7 @@ const reducer$2 = (state       , action        ) => {
 };
 
 const useFiatCurrencyCode = (wallet                                  ) => {
-  const [state, dispatch] = useReducer(reducer$2, initialState$2);
+  const [state, dispatch] = react.useReducer(reducer$2, initialState$2);
 
   const onSuccess = (fiatCurrencyCode        ) => () =>
     dispatch({ type: "WRITE_FIAT_CURRENCY_CODE_SUCCESS", fiatCurrencyCode });
@@ -380,13 +384,21 @@ const useFiatCurrencyCode = (wallet                                  ) => {
     return unsubscribe; // unmount with wallet / walletA -> walletB (1) / wallet -> null
   };
 
-  useEffect(effect, []); // onMount
-  useEffect(effect, [wallet]); // onUpdate
+  react.useEffect(effect, []); // onMount
+  react.useEffect(effect, [wallet]); // onUpdate
 
   return { ...state, setFiatCurrencyCode };
 };
 
 //
 
-export { useActiveWalletIds, useArchivedWalletIds, useDeletedWalletIds, useLocalUsers, useOtpKey, useOtpResetDate, useLocalStorage, useSyncedStorage, useFiatCurrencyCode };
-//# sourceMappingURL=index.js.map
+exports.useActiveWalletIds = useActiveWalletIds;
+exports.useArchivedWalletIds = useArchivedWalletIds;
+exports.useDeletedWalletIds = useDeletedWalletIds;
+exports.useLocalUsers = useLocalUsers;
+exports.useOtpKey = useOtpKey;
+exports.useOtpResetDate = useOtpResetDate;
+exports.useLocalStorage = useLocalStorage;
+exports.useSyncedStorage = useSyncedStorage;
+exports.useFiatCurrencyCode = useFiatCurrencyCode;
+//# sourceMappingURL=index.cjs.js.map

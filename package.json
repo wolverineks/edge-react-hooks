@@ -1,6 +1,6 @@
 {
   "name": "edge-react-hooks",
-  "version": "1.1.14",
+  "version": "1.1.15",
   "keywords": [
     "edge",
     "hooks",
@@ -8,7 +8,8 @@
   ],
   "repository": "wolverineks/edge-react-hooks",
   "author": "Kevin Sullivan <wolverine.ks@gmail.com>",
-  "main": "dist/index.js",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.js",
   "scripts": {
     "build": "rollup -c",
     "flow": "node_modules/.bin/flow",
@@ -21,6 +22,7 @@
   "devDependencies": {
     "edge-core-js": "^0.13.5",
     "flow-bin": "^0.89.0",
+    "flow-typed": "^2.5.1",
     "rollup": "^0.68.0",
     "rollup-plugin-flow": "^1.1.1",
     "rollup-plugin-flow-entry": "^0.2.0"
