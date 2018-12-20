@@ -11,7 +11,13 @@ import {
   useOtpResetDate,
   useLocalUsers,
   useSyncedStorage,
-  useFiatCurrencyCode
+  useFiatCurrencyCode,
+  useName,
+  useBalances,
+  useBlockHeight,
+  useSyncRatio,
+  useDataDump,
+  useEnabledTokens
 } from "edge-react-hooks";
 
 type Props = {||};
@@ -63,18 +69,47 @@ export const App = (props: Props) => {
         {account && account.currencyWallets && (
           <div>
             {(Object.values(account.currencyWallets): any).map((wallet: EdgeCurrencyWallet) => {
-              const { data: name, setData: setName } = useSyncedStorage(wallet, "walletName");
               const { fiatCurrencyCode, setFiatCurrencyCode, error: setFiatCurrencyCodeError } = useFiatCurrencyCode(
                 wallet
               );
+              const { name, setName } = useName(wallet);
+              const balances = useBalances(wallet);
+              const blockHeight = useBlockHeight(wallet);
+              const syncRatio = useSyncRatio(wallet);
+              const { dataDump, getDataDump } = useDataDump(wallet);
+              const { enabledTokens, enableTokens, disableTokens } = useEnabledTokens(wallet);
 
               return (
                 <div>
                   <div>id: {wallet.id}</div>
 
                   <div>
+                    <button onClick={() => enableTokens(["REP"])}>ENABLE REP</button>
+                    <button onClick={() => disableTokens(["REP"])}>DISABLE REP</button>
+                    <div>
+                      Enabled Tokens:
+                      {enabledTokens &&
+                        enabledTokens.map((token: string) => {
+                          return <div>{token}</div>;
+                        })}
+                    </div>
+                  </div>
+
+                  <div>
                     <div>name: {name && name.toString()}</div>
                     <button onClick={() => setName(Math.random().toString())}>SET NAME</button>
+                  </div>
+
+                  <div>
+                    <div>blockHeight: {blockHeight && blockHeight.toString()}</div>
+                  </div>
+
+                  <div>
+                    <div>dataDump: {dataDump && JSON.stringify(dataDump, null, 2)}</div>
+                    <button onClick={getDataDump}>GET DATA DUMP</button>
+                  </div>
+                  <div>
+                    <div>syncRatio: {syncRatio && syncRatio.toString()}</div>
                   </div>
 
                   <div>
@@ -83,7 +118,7 @@ export const App = (props: Props) => {
                     <button onClick={() => setFiatCurrencyCode(Math.random().toString())}>SET FIAT</button>
                   </div>
 
-                  <div>{JSON.stringify(wallet.balances, null, 2)}</div>
+                  <div>{JSON.stringify(balances, null, 2)}</div>
                 </div>
               );
             })}

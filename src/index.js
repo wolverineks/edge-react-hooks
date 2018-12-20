@@ -2,13 +2,19 @@
 
 import { useActiveWalletIds } from './useActiveWalletIds.js'
 import { useArchivedWalletIds } from './useArchivedWalletIds.js'
+import { useBalances } from './useBalances.js'
+import { useBlockHeight } from './useBlockHeight.js'
+import { useDataDump } from './useDataDump.js'
 import { useDeletedWalletIds } from './useDeletedWalletIds.js'
+import { useEnabledTokens } from './useEnabledTokens.js'
 import { useFiatCurrencyCode } from './useFiatCurrencyCode.js'
 import { useLocalStorage } from './useLocalStorage.js'
 import { useLocalUsers } from './useLocalUsers.js'
+import { useName } from './useName.js'
 import { useOtpKey } from './useOtpKey.js'
 import { useOtpResetDate } from './useOtpResetDate.js'
 import { useSyncedStorage } from './useSyncedStorage.js'
+import { useSyncRatio } from './useSyncRatio.js'
 
 export {
   useActiveWalletIds,
@@ -19,5 +25,11 @@ export {
   useOtpResetDate,
   useLocalStorage,
   useSyncedStorage,
-  useFiatCurrencyCode
+  useFiatCurrencyCode,
+  useBalances,
+  useName,
+  useDataDump,
+  useBlockHeight,
+  useSyncRatio,
+  useEnabledTokens
 }

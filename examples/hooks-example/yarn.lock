@@ -2006,9 +2006,9 @@ bs58check@^1.0.8:
     bs58 "^3.1.0"
     create-hash "^1.1.0"
 
-"bs58grscheck@git+https://github.com/Groestlcoin/bs58grscheck.git":
+"bs58grscheck@https://github.com/Groestlcoin/bs58grscheck":
   version "2.1.2"
-  resolved "git+https://github.com/Groestlcoin/bs58grscheck.git#020feec2b3153aeb278596ea70ce3579a37f4e21"
+  resolved "https://github.com/Groestlcoin/bs58grscheck#020feec2b3153aeb278596ea70ce3579a37f4e21"
   dependencies:
     bs58 "^4.0.0"
     create-hash "^1.1.0"
@@ -3352,7 +3352,7 @@ edge-currency-bitcoin@^3.7.6:
     uri-js "^4.2.2"
     url-parse "^1.4.3"
 
-edge-currency-ethereum@^0.11.1, edge-currency-ethereum@^0.11.2:
+edge-currency-ethereum@^0.11.1:
   version "0.11.2"
   resolved "https://registry.yarnpkg.com/edge-currency-ethereum/-/edge-currency-ethereum-0.11.2.tgz#74d2e9d977d3d5997aa0a34b5f10e69c7488db3c"
   integrity sha512-poqZf1AysN6WwKHv7ctHH2qzxW3UaUqd+VvfBfrpETzF80V1de8nUK+CEHhyHhXSoW9j3CvOR57KRXV1gE0jbA==
@@ -3369,11 +3369,10 @@ edge-currency-ethereum@^0.11.1, edge-currency-ethereum@^0.11.2:
     uri-js "^3.0.2"
 
 edge-react-hooks@^1.1.17:
-  version "1.1.15"
-  resolved "https://registry.yarnpkg.com/edge-react-hooks/-/edge-react-hooks-1.1.15.tgz#02d3a1b65e2ae4c965b7f379845f3332a263afb3"
-  integrity sha512-j2lMrQLwCDLcoOIFrgXTeKxqzR2reJkaHOMgEjWAXRVph/0oYRNHsM7u1Z8O5N84KhT+TutH9wjxb7NjVbbzrg==
+  version "1.1.17"
+  resolved "https://registry.yarnpkg.com/edge-react-hooks/-/edge-react-hooks-1.1.17.tgz#fb00c90ee475fd97309968a1b762c97094fe2932"
+  integrity sha512-wucy/0xRuy/kPgOnXUv7fZ1bja+lzRrG9NMXPnjSK4zknQKikIH400tW3QG/wq2vb2EeAd8nf8s3ofIah2FKXg==
   dependencies:
-    edge-currency-ethereum "^0.11.2"
     react "^16.7.0-alpha.2"
 
 ee-first@1.1.1:
