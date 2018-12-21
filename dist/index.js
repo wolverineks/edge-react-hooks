@@ -7,8 +7,9 @@ var react = require('react');
 
 // 
 
+
 const useActiveWalletIds = (account) => {
-  const [activeWalletIds, setActiveWalletIds] = react.useState(account ? account.archivedWalletIds : []);
+  const [activeWalletIds, setActiveWalletIds] = react.useState<State>(account ? account.archivedWalletIds : null);
 
   const effect = () => {
     if (!account) return // mount with null
@@ -25,8 +26,9 @@ const useActiveWalletIds = (account) => {
 
 // 
 
+
 const useArchivedWalletIds = (account) => {
-  const [archivedWalletIds, setArchivedWalletIds] = react.useState(account ? account.activeWalletIds : []);
+  const [archivedWalletIds, setArchivedWalletIds] = react.useState<State>(account ? account.activeWalletIds : null);
 
   const effect = () => {
     if (!account) return // mount with null
@@ -44,130 +46,80 @@ const useArchivedWalletIds = (account) => {
 // 
 
 
-
-const initialState = {
-  balances: null
-};
-
-const reducer = (state, action) => {
-  switch (action.type) {
-    case 'READ_BALANCES_SUCCESS': {
-      const { balances } = action;
-      return { ...state, balances }
-    }
-    default:
-      return state
-  }
-};
-
 const useBalances = (wallet) => {
-  const [state, dispatch] = react.useReducer(reducer, initialState);
+  const [balances, setBalances] = react.useState<State>(wallet ? wallet.balances : null);
 
   const effect = () => {
     if (!wallet) return // mount with null
-
-    dispatch({ type: 'READ_BALANCES_SUCCESS', balances: wallet.balances });
-
-    const unsubscribe = wallet.watch(
-      // mount with wallet / null -> wallet / walletA -> walletB (2)
-      'balances',
-      (balances) => dispatch({ type: 'READ_BALANCES_SUCCESS', balances })
-    );
-
+    setBalances(wallet.balances);
+    const unsubscribe = wallet.watch('balances', setBalances); // mount with wallet / null -> wallet / walletA -> walletB (2)
     return unsubscribe // unmount with wallet / walletA -> walletB (1) / wallet -> null
   };
 
   react.useEffect(effect, []); // onMount
   react.useEffect(effect, [wallet]); // onUpdate
 
-  return state.balances
+  return balances
 };
 
 // 
 
-
-
-const initialState$1 = {
-  blockHeight: null
-};
-
-const reducer$1 = (state, action) => {
-  switch (action.type) {
-    case 'READ_BLOCK_HEIGHT_SUCCESS': {
-      const { blockHeight } = action;
-      return { ...state, blockHeight }
-    }
-    default:
-      return state
-  }
-};
 
 const useBlockHeight = (wallet) => {
-  const [state, dispatch] = react.useReducer(reducer$1, initialState$1);
+  const [blockHeight, setBlockHeight] = react.useState<State>(wallet ? wallet.blockHeight : null);
 
   const effect = () => {
     if (!wallet) return // mount with null
-
-    dispatch({ type: 'READ_BLOCK_HEIGHT_SUCCESS', blockHeight: wallet.blockHeight });
-
-    const unsubscribe = wallet.watch(
-      // mount with wallet / null -> wallet / walletA -> walletB (2)
-      'blockHeight',
-      (blockHeight) =>
-        dispatch({ type: 'READ_BLOCK_HEIGHT_SUCCESS', blockHeight })
-    );
-
+    setBlockHeight(wallet.blockHeight);
+    const unsubscribe = wallet.watch('blockHeight', setBlockHeight); // mount with wallet / null -> wallet / walletA -> walletB (2)
     return unsubscribe // unmount with wallet / walletA -> walletB (1) / wallet -> null
   };
 
   react.useEffect(effect, []); // onMount
   react.useEffect(effect, [wallet]); // onUpdate
 
-  return state.blockHeight
+  return blockHeight
 };
 
 // 
 
 
 
-const initialState$2 = {
+const initialState = {
   dataDump: null,
   error: null,
   pending: false
 };
 
-const reducer$2 = (state, action) => {
+const reducer = (state, action) => {
   switch (action.type) {
     case 'READ_DATA_DUMP_START': {
-      return { ...state, pending: true }
+      return { ...state, pending: true, error: null }
     }
+
     case 'READ_DATA_DUMP_SUCCESS': {
-      const { dataDump } = action;
-      return { ...state, dataDump, pending: false }
+      return { ...state, pending: false, dataDump: action.dataDump }
     }
+
     case 'READ_DATA_DUMP_ERROR': {
-      const { error } = action;
-      return { ...state, error, pending: false }
+      return { ...state, pending: false, error: action.error }
     }
+
     default:
       return state
   }
 };
 
 const useDataDump = (wallet) => {
-  const [state, dispatch] = react.useReducer(reducer$2, initialState$2);
-
-  const onSuccess = (dataDump) => dispatch({ type: 'READ_DATA_DUMP_SUCCESS', dataDump });
-  const onError = (error) => dispatch({ type: 'READ_DATA_DUMP_ERROR', error });
+  const [state, dispatch] = react.useReducer(reducer, initialState);
 
   const getDataDump = () => {
     if (!wallet) return
-
     dispatch({ type: 'READ_DATA_DUMP_START' });
     wallet
       .dumpData()
-      .then(onSuccess)
-      .catch(onError);
+      .then((dataDump) => dispatch({ type: 'READ_DATA_DUMP_SUCCESS', dataDump }))
+      .catch((error) => dispatch({ type: 'READ_DATA_DUMP_ERROR', error }));
   };
 
   return { ...state, getDataDump }
@@ -175,23 +127,14 @@ const useDataDump = (wallet) => {
 
 // 
 
-const getDeletedWalletIds = (walletInfos) => {
-  const deletedWalletInfos = walletInfos.filter(key => key.deleted);
-  const deletedWalletIds = deletedWalletInfos.map((key) => key.id);
-
-  return deletedWalletIds
-};
 
 const useDeletedWalletIds = (account) => {
-  const initialState = account ? getDeletedWalletIds(account.allKeys) : [];
-  const [deletedWalletIds, setDeletedWalletIds] = react.useState(initialState);
+  const [deletedWalletIds, setDeletedWalletIds] = react.useState<State>(account ? getDeletedWalletIds(account.allKeys) : null);
 
   const effect = () => {
     if (!account) return // mount with null
     setDeletedWalletIds(getDeletedWalletIds(account.allKeys)); // mount with account / null -> account / accountA -> accountB (2)
-    const unsubscribe = account.watch('allKeys', allKeys => {
-      setDeletedWalletIds(getDeletedWalletIds(allKeys));
-    }); // mount with account / null -> account / accountA -> accountB (2)
+    const unsubscribe = account.watch('allKeys', allKeys => setDeletedWalletIds(getDeletedWalletIds(allKeys))); // mount with account / null -> account / accountA -> accountB (2)
     return unsubscribe // unmount with account / accountA -> accountB (1) / account -> null
   };
 
@@ -201,6 +144,13 @@ const useDeletedWalletIds = (account) => {
   return deletedWalletIds
 };
 
+const getDeletedWalletIds = (walletInfos) => {
+  const deletedWalletInfos = walletInfos.filter(key => key.deleted);
+  const deletedWalletIds = deletedWalletInfos.map((key) => key.id);
+
+  return deletedWalletIds
+};
+
 // 
 
 
@@ -209,7 +159,7 @@ const useDeletedWalletIds = (account) => {
 
 
 
-const initialState$3 = {
+const initialState$1 = {
   addCustomTokenError: null,
   addCustomTokenPending: false,
 
@@ -225,24 +175,23 @@ const initialState$3 = {
   readEnabledTokensPending: false
 };
 
-const reducer$3 = (state, action) => {
+const reducer$1 = (state, action) => {
   switch (action.type) {
     case 'READ_ENABLED_TOKENS_START': {
-      return { ...state, readEnabledTokensPending: true }
+      return { ...state, readEnabledTokensPending: true, readEnabledTokensError: null }
     }
     case 'ENABLE_TOKENS_START': {
-      return { ...state, enableTokensPending: true }
+      return { ...state, enableTokensPending: true, enableTokensError: null }
     }
     case 'DISABLE_TOKENS_START': {
-      return { ...state, disableTokensPending: true }
+      return { ...state, disableTokensPending: true, disableTokensError: null }
     }
     case 'ADD_CUSTOM_TOKEN_START': {
-      return { ...state, addCustomTokenPending: true }
+      return { ...state, addCustomTokenPending: true, addCustomTokenError: null }
     }
 
     case 'READ_ENABLED_TOKENS_SUCCESS': {
-      const { enabledTokens } = action;
-      return { ...state, enabledTokens, readEnabledTokensPending: false }
+      return { ...state, readEnabledTokensPending: false, enabledTokens: action.enabledTokens }
     }
     case 'ENABLE_TOKENS_SUCCESS': {
       return { ...state, enableTokensPending: false }
@@ -255,34 +204,29 @@ const reducer$3 = (state, action) => {
     }
 
     case 'READ_ENABLED_TOKENS_ERROR': {
-      const { error } = action;
-      return { ...state, readEnabledtokensError: error, readEnabledTokensPending: false }
+      return { ...state, readEnabledTokensPending: false, readEnabledtokensError: action.error }
     }
     case 'ENABLE_TOKENS_ERROR': {
-      const { error } = action;
-      return { ...state, enableTokensPending: false, enableTokenError: error }
+      return { ...state, enableTokensPending: false, enableTokenError: action.error }
     }
     case 'DISABLE_TOKENS_ERROR': {
-      const { error } = action;
-      return { ...state, disableTokensPending: false, disableTokenError: error }
+      return { ...state, disableTokensPending: false, disableTokenError: action.error }
     }
     case 'ADD_CUSTOM_TOKEN_ERROR': {
-      const { error } = action;
-      return { ...state, addCustomTokenPending: false, addCustomTokenError: error }
+      return { ...state, addCustomTokenPending: false, addCustomTokenError: action.error }
     }
+
     default:
       return state
   }
 };
 
 const useEnabledTokens = (wallet) => {
-  const [state, dispatch] = react.useReducer(reducer$3, initialState$3);
+  const [state, dispatch] = react.useReducer(reducer$1, initialState$1);
 
   const enableTokens = (tokens) => {
     if (!wallet) return
-
     dispatch({ type: 'ENABLE_TOKENS_START' });
-
     wallet
       .enableTokens(tokens)
       .then(() => dispatch({ type: 'ENABLE_TOKENS_SUCCESS' }))
@@ -291,9 +235,7 @@ const useEnabledTokens = (wallet) => {
 
   const disableTokens = (tokens) => {
     if (!wallet) return
-
     dispatch({ type: 'DISABLE_TOKENS_START' });
-
     wallet
       .disableTokens(tokens)
       .then(() => dispatch({ type: 'DISABLE_TOKENS_SUCCESS' }))
@@ -302,9 +244,7 @@ const useEnabledTokens = (wallet) => {
 
   const addCustomToken = (tokenInfo) => {
     if (!wallet) return
-
     dispatch({ type: 'ADD_CUSTOM_TOKEN_START' });
-
     wallet
       .addCustomToken(tokenInfo)
       .then(() => dispatch({ type: 'ADD_CUSTOM_TOKEN_SUCCESS' }))
@@ -313,17 +253,10 @@ const useEnabledTokens = (wallet) => {
 
   const effect = () => {
     if (!wallet) return // mount with null
-
     dispatch({ type: 'READ_ENABLED_TOKENS_START' });
-
     wallet
       .getEnabledTokens()
-      .then((enabledTokens) =>
-        dispatch({
-          type: 'READ_ENABLED_TOKENS_SUCCESS',
-          enabledTokens
-        })
-      )
+      .then((enabledTokens) => dispatch({ type: 'READ_ENABLED_TOKENS_SUCCESS', enabledTokens }))
       .catch((error) => dispatch({ type: 'READ_ENABLED_TOKENS_ERROR', error }));
   };
 
@@ -337,61 +270,52 @@ const useEnabledTokens = (wallet) => {
 
 
 
-const initialState$4 = {
+const initialState$2 = {
   fiatCurrencyCode: null,
   pending: false,
   error: null
 };
 
-const reducer$4 = (state, action) => {
+const reducer$2 = (state, action) => {
   switch (action.type) {
     case 'WRITE_FIAT_CURRENCY_CODE_START': {
       return { ...state, pending: true, error: null }
     }
+
     case 'READ_FIAT_CURRENCY_CODE_SUCCESS':
     case 'WRITE_FIAT_CURRENCY_CODE_SUCCESS': {
-      const { fiatCurrencyCode } = action;
-      return { ...state, pending: false, fiatCurrencyCode }
+      return { ...state, pending: false, fiatCurrencyCode: action.fiatCurrencyCode }
     }
+
     case 'WRITE_FIAT_CURRENCY_CODE_ERROR': {
-      const { error } = action;
-      return { ...state, pending: false, error }
+      return { ...state, pending: false, error: action.error }
     }
+
     default:
       return state
   }
 };
 
 const useFiatCurrencyCode = (wallet) => {
-  const [state, dispatch] = react.useReducer(reducer$4, initialState$4);
-
-  const onSuccess = (fiatCurrencyCode) => () =>
-    dispatch({ type: 'WRITE_FIAT_CURRENCY_CODE_SUCCESS', fiatCurrencyCode });
-  const onError = (error) => dispatch({ type: 'WRITE_FIAT_CURRENCY_CODE_ERROR', error });
+  const [state, dispatch] = react.useReducer(reducer$2, initialState$2);
 
   const setFiatCurrencyCode = (fiatCurrencyCode) => {
     if (!wallet) return
     dispatch({ type: 'WRITE_FIAT_CURRENCY_CODE_START' });
     wallet
       .setFiatCurrencyCode(fiatCurrencyCode)
-      .then(onSuccess(fiatCurrencyCode))
-      .catch(onError);
+      .then(() => dispatch({ type: 'WRITE_FIAT_CURRENCY_CODE_SUCCESS', fiatCurrencyCode }))
+      .catch((error) => dispatch({ type: 'WRITE_FIAT_CURRENCY_CODE_ERROR', error }));
   };
 
   const effect = () => {
     if (!wallet) return // mount with null
-    dispatch({
-      type: 'READ_FIAT_CURRENCY_CODE_SUCCESS',
-      fiatCurrencyCode: wallet.fiatCurrencyCode
-    });
-
+    dispatch({ type: 'READ_FIAT_CURRENCY_CODE_SUCCESS', fiatCurrencyCode: wallet.fiatCurrencyCode });
     const unsubscribe = wallet.watch(
-      // mount with wallet / null -> wallet / walletA -> walletB (2)
       'fiatCurrencyCode',
       (fiatCurrencyCode) =>
         dispatch({ type: 'WRITE_FIAT_CURRENCY_CODE_SUCCESS', fiatCurrencyCode })
-    );
-
+    ); // mount with wallet / null -> wallet / walletA -> walletB (2)
     return unsubscribe // unmount with wallet / walletA -> walletB (1) / wallet -> null
   };
 
@@ -406,7 +330,7 @@ const useFiatCurrencyCode = (wallet) => {
 
 
 
-const initialState$5 = {
+const initialState$3 = {
   data: null,
   writePending: false,
   writeError: null,
@@ -414,29 +338,27 @@ const initialState$5 = {
   readError: null
 };
 
-const reducer$5 = (state, action) => {
+const reducer$3 = (state, action) => {
   switch (action.type) {
-    case 'WRITE_START': {
-      return { ...state, writePending: true, writeError: null }
-    }
-    case 'WRITE_SUCCESS': {
-      const { data } = action;
-      return { ...state, writePending: false, data }
-    }
-    case 'WRITE_ERROR': {
-      const { error: writeError } = action;
-      return { ...state, writePending: false, writeError }
-    }
     case 'READ_START': {
       return { ...state, readPending: true, readError: null }
     }
+    case 'WRITE_START': {
+      return { ...state, writePending: true, writeError: null }
+    }
+
     case 'READ_SUCCESS': {
-      const { data } = action;
-      return { ...state, readPending: false, data }
+      return { ...state, readPending: false, data: action.data }
+    }
+    case 'WRITE_SUCCESS': {
+      return { ...state, writePending: false, data: action.data }
+    }
+
+    case 'WRITE_ERROR': {
+      return { ...state, writePending: false, writeError: action.error }
     }
     case 'READ_ERROR': {
-      const { error: readError } = action;
-      return { ...state, readPending: false, readError }
+      return { ...state, readPending: false, readError: action.error }
     }
     default:
       return state
@@ -447,20 +369,15 @@ const useLocalStorage = (
   storageContext,
   path
 ) => {
-  const [state, dispatch] = react.useReducer(reducer$5, initialState$5);
-
-  const onWriteSuccess = (data) => () => dispatch({ type: 'WRITE_SUCCESS', data });
-  const onWriteError = (error) => dispatch({ type: 'WRITE_ERROR', error });
-  const onReadSuccess = (data) => dispatch({ type: 'READ_SUCCESS', data: JSON.parse(data) });
-  const onReadError = (error) => dispatch({ type: 'READ_ERROR', error });
+  const [state, dispatch] = react.useReducer(reducer$3, initialState$3);
 
   const setData = (data) => {
     if (!storageContext || !path) return
     dispatch({ type: 'WRITE_START' });
     storageContext.localDisklet
       .setText(path, JSON.stringify(data))
-      .then(onWriteSuccess(data))
-      .catch(onWriteError);
+      .then(() => dispatch({ type: 'WRITE_SUCCESS', data }))
+      .catch((error) => dispatch({ type: 'WRITE_ERROR', error }));
   };
 
   const effect = () => {
@@ -468,8 +385,8 @@ const useLocalStorage = (
     dispatch({ type: 'READ_START' });
     storageContext.localDisklet
       .getText(path)
-      .then(onReadSuccess)
-      .catch(onReadError); // mount with storageContext / null -> storageContext / storageContextA -> storageContextB
+      .then((data) => dispatch({ type: 'READ_SUCCESS', data: JSON.parse(data) }))
+      .catch((error) => dispatch({ type: 'READ_ERROR', error })); // mount with storageContext / null -> storageContext / storageContextA -> storageContextB
 
     const unsubscribe = storageContext.watch(
       'localDisklet',
@@ -477,11 +394,10 @@ const useLocalStorage = (
         if (!storageContext || !path) return
         localDisklet
           .getText(path)
-          .then(onReadSuccess)
-          .catch(onReadError);
+          .then((data) => dispatch({ type: 'READ_SUCCESS', data: JSON.parse(data) }))
+          .catch((error) => dispatch({ type: 'READ_ERROR', error }));
       }
     );
-
     return unsubscribe // unmount with storageContext / storageContextA -> storageContextB (1) / storageContext -> null
   };
 
@@ -493,81 +409,109 @@ const useLocalStorage = (
 
 // 
 
+
+
+
+const initialState$4 = { deletePending: false, localUsers: null };
+
+const reducer$4 = (state, action) => {
+  switch (action.type) {
+    case 'READ_LOCAL_USERS_SUCCESS': {
+      return { ...state, localUsers: action.localUsers }
+    }
+
+    case 'DELETE_LOCAL_USER_START': {
+      return { ...state, deletePending: true, error: null }
+    }
+
+    case 'DELETE_LOCAL_USER_SUCCESS': {
+      return { ...state, deletePending: false }
+    }
+
+    case 'DELETE_LOCAL_USER_ERROR': {
+      return { ...state, deletePending: false, error: action.error }
+    }
+
+    default:
+      return state
+  }
+};
+
 const useLocalUsers = (context) => {
-  const [localUsers, setLocalUsers] = react.useState(context ? context.localUsers : []);
+  const [state, dispatch] = react.useReducer(reducer$4, initialState$4);
+
+  const deleteLocalUser = (username) => {
+    if (!context) return
+    dispatch({ type: 'DELETE_LOCAL_USER_START' });
+    context
+      .deleteLocalAccount(username)
+      .then(() => dispatch({ type: 'DELETE_LOCAL_USER_SUCCESS' }))
+      .catch((error) => dispatch({ type: 'DELETE_LOCAL_USER_ERROR', error }));
+  };
 
   const effect = () => {
     if (!context) return // mount with null
-    const unsubscribe = context.watch('localUsers', setLocalUsers); // mount with context / null -> context / contextA -> contextB (2)
+    dispatch({ type: 'READ_LOCAL_USERS_SUCCESS', localUsers: context.localUsers });
+    const unsubscribe = context.watch('localUsers', (localUsers) =>
+      dispatch({ type: 'READ_LOCAL_USERS_SUCCESS', localUsers })
+    ); // mount with context / null -> context / contextA -> contextB (2)
     return unsubscribe // unmount with context / contextA -> contextB (1) / context -> null
   };
 
   react.useEffect(effect, []); // onMount
   react.useEffect(effect, [context]); // onUpdate
 
-  return localUsers
+  return { ...state, deleteLocalUser }
 };
 
 // 
 
 
 
-const initialState$6 = {
+const initialState$5 = {
   name: null,
   pending: false,
   error: null
 };
 
-const reducer$6 = (state, action) => {
+const reducer$5 = (state, action) => {
   switch (action.type) {
     case 'WRITE_NAME_START': {
       return { ...state, pending: true, error: null }
     }
+
     case 'READ_NAME_SUCCESS':
     case 'WRITE_NAME_SUCCESS': {
-      const { name } = action;
-      return { ...state, pending: false, name }
+      return { ...state, pending: false, name: action.name }
     }
+
     case 'WRITE_NAME_ERROR': {
-      const { error } = action;
-      return { ...state, pending: false, error }
+      return { ...state, pending: false, error: action.error }
     }
+
     default:
       return state
   }
 };
 
 const useName = (wallet) => {
-  const [state, dispatch] = react.useReducer(reducer$6, initialState$6);
-
-  const onSuccess = (name) => () => dispatch({ type: 'WRITE_NAME_SUCCESS', name });
-  const onError = (error) => dispatch({ type: 'WRITE_NAME_ERROR', error });
+  const [state, dispatch] = react.useReducer(reducer$5, initialState$5);
 
   const setName = (name) => {
     if (!wallet) return
-
     dispatch({ type: 'WRITE_NAME_START' });
-
     wallet
       .renameWallet(name)
-      .then(onSuccess(name))
-      .catch(onError);
+      .then(() => dispatch({ type: 'WRITE_NAME_SUCCESS', name }))
+      .catch((error) => dispatch({ type: 'WRITE_NAME_ERROR', error }));
   };
 
   const effect = () => {
     if (!wallet) return // mount with null
-
-    dispatch({
-      type: 'READ_NAME_SUCCESS',
-      name: wallet.name
-    });
-
-    const unsubscribe = wallet.watch(
-      // mount with wallet / null -> wallet / walletA -> walletB (2)
-      'name',
-      (name) => dispatch({ type: 'WRITE_NAME_SUCCESS', name })
-    );
-
+    dispatch({ type: 'READ_NAME_SUCCESS', name: wallet.name });
+    const unsubscribe = wallet.watch('name', (name) =>
+      dispatch({ type: 'WRITE_NAME_SUCCESS', name })
+    ); // mount with wallet / null -> wallet / walletA -> walletB (2)
     return unsubscribe // unmount with wallet / walletA -> walletB (1) / wallet -> null
   };
 
@@ -579,8 +523,9 @@ const useName = (wallet) => {
 
 // 
 
+
 const useOtpKey = (account) => {
-  const [otpKey, setOtpKey] = react.useState(account ? account.otpKey : []);
+  const [otpKey, setOtpKey] = react.useState<State>(account ? account.otpKey : null);
 
   const effect = () => {
     if (!account) return // mount with null
@@ -597,8 +542,9 @@ const useOtpKey = (account) => {
 
 // 
 
+
 const useOtpResetDate = (account) => {
-  const [otpResetDate, setOtpResetDate] = react.useState(account ? account.otpResetDate : []);
+  const [otpResetDate, setOtpResetDate] = react.useState<State>(account ? account.otpResetDate : null);
 
   const effect = () => {
     if (!account) return // mount with null
@@ -618,7 +564,7 @@ const useOtpResetDate = (account) => {
 
 
 
-const initialState$7 = {
+const initialState$6 = {
   data: null,
   writePending: false,
   writeError: null,
@@ -626,30 +572,29 @@ const initialState$7 = {
   readError: null
 };
 
-const reducer$7 = (state, action) => {
+const reducer$6 = (state, action) => {
   switch (action.type) {
-    case 'WRITE_START': {
-      return { ...state, writePending: true, writeError: null }
-    }
-    case 'WRITE_SUCCESS': {
-      const { data } = action;
-      return { ...state, writePending: false, data }
-    }
-    case 'WRITE_ERROR': {
-      const { error: writeError } = action;
-      return { ...state, writePending: false, writeError }
-    }
     case 'READ_START': {
       return { ...state, readPending: true, readError: null }
     }
+    case 'WRITE_START': {
+      return { ...state, writePending: true, writeError: null }
+    }
+
     case 'READ_SUCCESS': {
-      const { data } = action;
-      return { ...state, readPending: false, data }
+      return { ...state, readPending: false, data: action.data }
     }
+    case 'WRITE_SUCCESS': {
+      return { ...state, writePending: false, data: action.data }
+    }
+
     case 'READ_ERROR': {
-      const { error: readError } = action;
-      return { ...state, readPending: false, readError }
+      return { ...state, readPending: false, readError: action.error }
     }
+    case 'WRITE_ERROR': {
+      return { ...state, writePending: false, writeError: action.error }
+    }
+
     default:
       return state
   }
@@ -659,20 +604,15 @@ const useSyncedStorage = (
   storageContext,
   path
 ) => {
-  const [state, dispatch] = react.useReducer(reducer$7, initialState$7);
-
-  const onWriteSuccess = (data) => () => dispatch({ type: 'WRITE_SUCCESS', data });
-  const onWriteError = (error) => dispatch({ type: 'WRITE_ERROR', error });
-  const onReadSuccess = (data) => dispatch({ type: 'READ_SUCCESS', data: JSON.parse(data) });
-  const onReadError = (error) => dispatch({ type: 'READ_ERROR', error });
+  const [state, dispatch] = react.useReducer(reducer$6, initialState$6);
 
   const setData = (data) => {
     if (!storageContext || !path) return
     dispatch({ type: 'WRITE_START' });
     storageContext.disklet
       .setText(path, JSON.stringify(data))
-      .then(onWriteSuccess(data))
-      .catch(onWriteError);
+      .then(() => dispatch({ type: 'WRITE_SUCCESS', data }))
+      .catch((error) => dispatch({ type: 'WRITE_ERROR', error }));
   };
 
   const effect = () => {
@@ -680,8 +620,8 @@ const useSyncedStorage = (
     dispatch({ type: 'READ_START' });
     storageContext.disklet
       .getText(path)
-      .then(onReadSuccess)
-      .catch(onReadError); // mount with storageContext / null -> storageContext / storageContextA -> storageContextB
+      .then((data) => dispatch({ type: 'READ_SUCCESS', data: JSON.parse(data) }))
+      .catch((error) => dispatch({ type: 'READ_ERROR', error })); // mount with storageContext / null -> storageContext / storageContextA -> storageContextB
 
     const unsubscribe = storageContext.watch(
       'disklet',
@@ -689,11 +629,10 @@ const useSyncedStorage = (
         if (!storageContext || !path) return
         disklet
           .getText(path)
-          .then(onReadSuccess)
-          .catch(onReadError);
+          .then((data) => dispatch({ type: 'READ_SUCCESS', data: JSON.parse(data) }))
+          .catch((error) => dispatch({ type: 'READ_ERROR', error }));
       }
     );
-
     return unsubscribe // unmount with storageContext / storageContextA -> storageContextB (1) / storageContext -> null
   };
 
@@ -706,44 +645,20 @@ const useSyncedStorage = (
 // 
 
 
-
-const initialState$8 = {
-  syncRatio: null
-};
-
-const reducer$8 = (state, action) => {
-  switch (action.type) {
-    case 'READ_SYNC_RATIO_SUCCESS': {
-      const { syncRatio } = action;
-      return { ...state, syncRatio }
-    }
-    default:
-      return state
-  }
-};
-
 const useSyncRatio = (wallet) => {
-  const [state, dispatch] = react.useReducer(reducer$8, initialState$8);
+  const [syncRatio, setSyncRatio] = react.useState<State>(wallet ? wallet.syncRatio : null);
 
   const effect = () => {
     if (!wallet) return // mount with null
-
-    dispatch({ type: 'READ_SYNC_RATIO_SUCCESS', syncRatio: wallet.syncRatio });
-
-    const unsubscribe = wallet.watch(
-      // mount with wallet / null -> wallet / walletA -> walletB (2)
-      'syncRatio',
-      (syncRatio) =>
-        dispatch({ type: 'READ_SYNC_RATIO_SUCCESS', syncRatio })
-    );
-
+    setSyncRatio(wallet.syncRatio);
+    const unsubscribe = wallet.watch('syncRatio', setSyncRatio); // mount with wallet / null -> wallet / walletA -> walletB (2)
     return unsubscribe // unmount with wallet / walletA -> walletB (1) / wallet -> null
   };
 
   react.useEffect(effect, []); // onMount
   react.useEffect(effect, [wallet]); // onUpdate
 
-  return state.syncRatio
+  return syncRatio
 };
 
 //

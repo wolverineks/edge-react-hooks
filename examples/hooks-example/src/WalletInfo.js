@@ -8,6 +8,7 @@ import {
   useName,
   useBlockHeight,
   useSyncRatio,
+  useSync,
   useEnabledTokens
 } from "edge-react-hooks";
 
