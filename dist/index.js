@@ -86,6 +86,25 @@ const useBlockHeight = (wallet) => {
 // 
 
 
+const useCurrencyWallets = (account) => {
+  const [currencyWallets, setCurrencyWallets] = react.useState(account ? account.currencyWallets : null);
+
+  const effect = () => {
+    if (!account) return // mount with null
+    setCurrencyWallets(account.currencyWallets); // mount with account / null -> account / accountA -> accountB (2)
+    const unsubscribe = account.watch('currencyWallets', setCurrencyWallets); // mount with account / null -> account / accountA -> accountB (2)
+    return unsubscribe // unmount with account / accountA -> accountB (1) / account -> null
+  };
+
+  react.useEffect(effect, []); // onMount
+  react.useEffect(effect, [account]); // onUpdate
+
+  return currencyWallets
+};
+
+// 
+
+
 
 const initialState = {
   dataDump: null,
@@ -682,4 +701,5 @@ exports.useDataDump = useDataDump;
 exports.useBlockHeight = useBlockHeight;
 exports.useSyncRatio = useSyncRatio;
 exports.useEnabledTokens = useEnabledTokens;
+exports.useCurrencyWallets = useCurrencyWallets;
 //# sourceMappingURL=index.js.map

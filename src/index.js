@@ -4,6 +4,7 @@ import { useActiveWalletIds } from './useActiveWalletIds.js'
 import { useArchivedWalletIds } from './useArchivedWalletIds.js'
 import { useBalances } from './useBalances.js'
 import { useBlockHeight } from './useBlockHeight.js'
+import { useCurrencyWallets } from './useCurrencyWallets.js'
 import { useDataDump } from './useDataDump.js'
 import { useDeletedWalletIds } from './useDeletedWalletIds.js'
 import { useEnabledTokens } from './useEnabledTokens.js'
@@ -31,5 +32,6 @@ export {
   useDataDump,
   useBlockHeight,
   useSyncRatio,
-  useEnabledTokens
+  useEnabledTokens,
+  useCurrencyWallets
 }
