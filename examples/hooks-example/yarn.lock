@@ -3368,10 +3368,10 @@ edge-currency-ethereum@^0.11.1:
     sprintf-js "^1.1.1"
     uri-js "^3.0.2"
 
-edge-react-hooks@^1.1.21:
-  version "1.1.21"
-  resolved "https://registry.yarnpkg.com/edge-react-hooks/-/edge-react-hooks-1.1.21.tgz#aed2495b85ef5d5929e89e3a03ce158b7a002526"
-  integrity sha512-/F6cTbYiOaGYNVJGMC8AiB2k+l5Jnkn3waw/SEFOwuTaauVOWbsnP9jclCmo6Qnu68srmn7sbi/9ptO95w5AZA==
+edge-react-hooks@^1.1.22:
+  version "1.1.22"
+  resolved "https://registry.yarnpkg.com/edge-react-hooks/-/edge-react-hooks-1.1.22.tgz#6578ba11aef14c734ae4c165a07c424e468a23e4"
+  integrity sha512-0ZMj2iDMof9Sd/NcI+PJCSrdd6TCfk67YpLmnGrRvHuyqRDwCAzWwrS0r1dSWjLA6EoaCHn7YyIqvSKOuNhzig==
   dependencies:
     react "^16.7.0-alpha.2"
 

@@ -586,8 +586,48 @@ const useOtpResetDate = (account) => {
 
 
 
+const initialState$6 = { pending: false, error: null };
 
-const initialState$6 = {
+const reducer$6 = (state, action) => {
+  switch (action.type) {
+    case 'SYNC_START': {
+      return { ...state, pending: true, error: null }
+    }
+
+    case 'SYNC_SUCCESS': {
+      return { ...state, pending: false }
+    }
+
+    case 'SYNC_ERROR': {
+      return { ...state, pending: false, error: action.error }
+    }
+
+    default:
+      return state
+  }
+};
+
+const useSync = (wallet) => {
+  const [state, dispatch] = react.useReducer(reducer$6, initialState$6);
+
+  const sync = () => {
+    if (!wallet) return // mount with null
+    dispatch({ type: 'SYNC_START' }); // mount with wallet / null -> wallet / walletA -> walletB (2)
+    wallet
+      .sync()
+      .then(() => dispatch({ type: 'SYNC_SUCCESS' }))
+      .catch((error) => dispatch({ type: 'SYNC_ERROR', error }));
+  };
+
+  return { ...state, sync }
+};
+
+// 
+
+
+
+
+const initialState$7 = {
   data: null,
   writePending: false,
   writeError: null,
@@ -595,7 +635,7 @@ const initialState$6 = {
   readError: null
 };
 
-const reducer$6 = (state, action) => {
+const reducer$7 = (state, action) => {
   switch (action.type) {
     case 'READ_START': {
       return { ...state, readPending: true, readError: null }
@@ -627,7 +667,7 @@ const useSyncedStorage = (
   storageContext,
   path
 ) => {
-  const [state, dispatch] = react.useReducer(reducer$6, initialState$6);
+  const [state, dispatch] = react.useReducer(reducer$7, initialState$7);
 
   const setData = (data) => {
     if (!storageContext || !path) return
@@ -700,6 +740,7 @@ exports.useName = useName;
 exports.useDataDump = useDataDump;
 exports.useBlockHeight = useBlockHeight;
 exports.useSyncRatio = useSyncRatio;
+exports.useSync = useSync;
 exports.useEnabledTokens = useEnabledTokens;
 exports.useCurrencyWallets = useCurrencyWallets;
 //# sourceMappingURL=index.js.map

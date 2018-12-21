@@ -14,6 +14,7 @@ import { useLocalUsers } from './useLocalUsers.js'
 import { useName } from './useName.js'
 import { useOtpKey } from './useOtpKey.js'
 import { useOtpResetDate } from './useOtpResetDate.js'
+import { useSync } from './useSync.js'
 import { useSyncedStorage } from './useSyncedStorage.js'
 import { useSyncRatio } from './useSyncRatio.js'
 
@@ -32,6 +33,7 @@ export {
   useDataDump,
   useBlockHeight,
   useSyncRatio,
+  useSync,
   useEnabledTokens,
   useCurrencyWallets
 }
