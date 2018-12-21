@@ -9,7 +9,7 @@ var react = require('react');
 
 
 const useActiveWalletIds = (account) => {
-  const [activeWalletIds, setActiveWalletIds] = react.useState<State>(account ? account.archivedWalletIds : null);
+  const [activeWalletIds, setActiveWalletIds] = react.useState(account ? account.archivedWalletIds : null);
 
   const effect = () => {
     if (!account) return // mount with null
@@ -28,7 +28,9 @@ const useActiveWalletIds = (account) => {
 
 
 const useArchivedWalletIds = (account) => {
-  const [archivedWalletIds, setArchivedWalletIds] = react.useState<State>(account ? account.activeWalletIds : null);
+  const [archivedWalletIds, setArchivedWalletIds] = react.useState(
+    account ? account.activeWalletIds : null
+  );
 
   const effect = () => {
     if (!account) return // mount with null
@@ -47,7 +49,7 @@ const useArchivedWalletIds = (account) => {
 
 
 const useBalances = (wallet) => {
-  const [balances, setBalances] = react.useState<State>(wallet ? wallet.balances : null);
+  const [balances, setBalances] = react.useState(wallet ? wallet.balances : null);
 
   const effect = () => {
     if (!wallet) return // mount with null
@@ -66,7 +68,7 @@ const useBalances = (wallet) => {
 
 
 const useBlockHeight = (wallet) => {
-  const [blockHeight, setBlockHeight] = react.useState<State>(wallet ? wallet.blockHeight : null);
+  const [blockHeight, setBlockHeight] = react.useState(wallet ? wallet.blockHeight : null);
 
   const effect = () => {
     if (!wallet) return // mount with null
@@ -129,7 +131,9 @@ const useDataDump = (wallet) => {
 
 
 const useDeletedWalletIds = (account) => {
-  const [deletedWalletIds, setDeletedWalletIds] = react.useState<State>(account ? getDeletedWalletIds(account.allKeys) : null);
+  const [deletedWalletIds, setDeletedWalletIds] = react.useState(
+    account ? getDeletedWalletIds(account.allKeys) : null
+  );
 
   const effect = () => {
     if (!account) return // mount with null
@@ -525,7 +529,7 @@ const useName = (wallet) => {
 
 
 const useOtpKey = (account) => {
-  const [otpKey, setOtpKey] = react.useState<State>(account ? account.otpKey : null);
+  const [otpKey, setOtpKey] = react.useState(account ? account.otpKey : null);
 
   const effect = () => {
     if (!account) return // mount with null
@@ -544,7 +548,7 @@ const useOtpKey = (account) => {
 
 
 const useOtpResetDate = (account) => {
-  const [otpResetDate, setOtpResetDate] = react.useState<State>(account ? account.otpResetDate : null);
+  const [otpResetDate, setOtpResetDate] = react.useState(account ? account.otpResetDate : null);
 
   const effect = () => {
     if (!account) return // mount with null
@@ -646,7 +650,7 @@ const useSyncedStorage = (
 
 
 const useSyncRatio = (wallet) => {
-  const [syncRatio, setSyncRatio] = react.useState<State>(wallet ? wallet.syncRatio : null);
+  const [syncRatio, setSyncRatio] = react.useState(wallet ? wallet.syncRatio : null);
 
   const effect = () => {
     if (!wallet) return // mount with null

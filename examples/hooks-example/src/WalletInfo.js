@@ -8,8 +8,8 @@ import {
   useName,
   useBlockHeight,
   useSyncRatio,
-  useSync,
-  useEnabledTokens
+  useSync
+  // useEnabledTokens
 } from "edge-react-hooks";
 
 const walletStyle = {

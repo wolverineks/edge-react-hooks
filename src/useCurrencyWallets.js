@@ -4,9 +4,10 @@ import { type EdgeAccount } from 'edge-core-js'
 import { useEffect, useState } from 'react'
 
 type State = $PropertyType<EdgeAccount, 'currencyWallets'> | null
+type SetState = (State | (State => State)) => void
 
 export const useCurrencyWallets = (account: EdgeAccount | null | void) => {
-  const [currencyWallets, setCurrencyWallets] = useState<State>(account ? account.currencyWallets : null)
+  const [currencyWallets, setCurrencyWallets]: [State, SetState] = useState(account ? account.currencyWallets : null)
 
   const effect = () => {
     if (!account) return // mount with null

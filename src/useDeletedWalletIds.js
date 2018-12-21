@@ -4,9 +4,12 @@ import { type EdgeAccount, type EdgeWalletInfoFull } from 'edge-core-js'
 import { useEffect, useState } from 'react'
 
 type State = Array<string> | null
+type SetState = (State | (State => State)) => void
 
 export const useDeletedWalletIds = (account: EdgeAccount | null | void) => {
-  const [deletedWalletIds, setDeletedWalletIds] = useState<State>(account ? getDeletedWalletIds(account.allKeys) : null)
+  const [deletedWalletIds, setDeletedWalletIds]: [State, SetState] = useState(
+    account ? getDeletedWalletIds(account.allKeys) : null
+  )
 
   const effect = () => {
     if (!account) return // mount with null

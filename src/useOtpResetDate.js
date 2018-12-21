@@ -4,9 +4,10 @@ import { type EdgeAccount } from 'edge-core-js'
 import { useEffect, useState } from 'react'
 
 type State = $PropertyType<EdgeAccount, 'otpResetDate'> | null
+type SetState = (State | (State => State)) => void
 
 export const useOtpResetDate = (account: EdgeAccount | null | void) => {
-  const [otpResetDate, setOtpResetDate] = useState<State>(account ? account.otpResetDate : null)
+  const [otpResetDate, setOtpResetDate]: [State, SetState] = useState(account ? account.otpResetDate : null)
 
   const effect = () => {
     if (!account) return // mount with null

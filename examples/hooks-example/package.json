@@ -6,7 +6,7 @@
     "edge-core-js": "EdgeApp/edge-core-js#flow-upgrade",
     "edge-currency-bitcoin": "^3.7.6",
     "edge-currency-ethereum": "^0.11.1",
-    "edge-react-hooks": "^1.1.20",
+    "edge-react-hooks": "^1.1.21",
     "react": "^16.7.0-alpha.2",
     "react-dom": "^16.7.0-alpha.2",
     "react-scripts": "2.1.1"

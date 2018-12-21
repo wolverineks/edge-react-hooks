@@ -1893,7 +1893,7 @@ flow-coverage-report@^0.6.1:
     terminal-table "0.0.12"
     yargs "8.0.1"
 
-flow-remove-types@^1.1.0:
+flow-remove-types@^1.1.0, flow-remove-types@^1.2.3:
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/flow-remove-types/-/flow-remove-types-1.2.3.tgz#6131aefc7da43364bb8b479758c9dec7735d1a18"
   integrity sha512-ypq/U3V+t9atYiOuSJd40tekCra03EHKoRsiK/wXGrsZimuum0kdwVY7Yv0HTaoXgHW1WiayomYd+Q3kkvPl9Q==

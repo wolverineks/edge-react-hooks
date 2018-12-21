@@ -31,26 +31,32 @@ export const AccountInfo = ({ account }: { account: EdgeAccount }) => {
 
   return (
     <div>
-      <div style={accountStyle}>
-        ActiveWalletIds: {activeWalletIds.length}
-        {activeWalletIds.map((id: string) => (
-          <div>{id}</div>
-        ))}
-      </div>
+      {activeWalletIds && (
+        <div style={accountStyle}>
+          ActiveWalletIds: {activeWalletIds.length}
+          {activeWalletIds.map((id: string) => (
+            <div>{id}</div>
+          ))}
+        </div>
+      )}
 
-      <div style={accountStyle}>
-        ArchivedWalletIds: {archivedWalletIds.length}
-        {archivedWalletIds.map((id: string) => (
-          <div>{id}</div>
-        ))}
-      </div>
+      {archivedWalletIds && (
+        <div style={accountStyle}>
+          ArchivedWalletIds: {archivedWalletIds.length}
+          {archivedWalletIds.map((id: string) => (
+            <div>{id}</div>
+          ))}
+        </div>
+      )}
 
-      <div style={accountStyle}>
-        DeletedWalletIds: {deletedWalletIds.length}
-        {deletedWalletIds.map((id: string) => (
-          <div>{id}</div>
-        ))}
-      </div>
+      {deletedWalletIds && (
+        <div style={accountStyle}>
+          DeletedWalletIds: {deletedWalletIds.length}
+          {deletedWalletIds.map((id: string) => (
+            <div>{id}</div>
+          ))}
+        </div>
+      )}
 
       <div style={accountStyle}>otpResetDate: {otpResetDate}</div>
       <div style={accountStyle}>otpKey: {otpKey}</div>

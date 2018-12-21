@@ -4,9 +4,10 @@ import { type EdgeCurrencyWallet } from 'edge-core-js'
 import { useEffect, useState } from 'react'
 
 type State = $PropertyType<EdgeCurrencyWallet, 'blockHeight'> | null
+type SetState = (State | (State => State)) => void
 
 export const useBlockHeight = (wallet: EdgeCurrencyWallet | null | void) => {
-  const [blockHeight, setBlockHeight] = useState<State>(wallet ? wallet.blockHeight : null)
+  const [blockHeight, setBlockHeight]: [State, SetState] = useState(wallet ? wallet.blockHeight : null)
 
   const effect = () => {
     if (!wallet) return // mount with null

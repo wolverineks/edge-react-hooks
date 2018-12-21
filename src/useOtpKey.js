@@ -4,9 +4,10 @@ import { type EdgeAccount } from 'edge-core-js'
 import { useEffect, useState } from 'react'
 
 type State = $PropertyType<EdgeAccount, 'otpKey'> | null
+type SetState = (State | (State => State)) => void
 
 export const useOtpKey = (account: EdgeAccount | null | void) => {
-  const [otpKey, setOtpKey] = useState<State>(account ? account.otpKey : null)
+  const [otpKey, setOtpKey]: [State, SetState] = useState(account ? account.otpKey : null)
 
   const effect = () => {
     if (!account) return // mount with null

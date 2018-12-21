@@ -4,9 +4,10 @@ import { type EdgeCurrencyWallet } from 'edge-core-js'
 import { useEffect, useState } from 'react'
 
 type State = $PropertyType<EdgeCurrencyWallet, 'syncRatio'> | null
+type SetState = (State | (State => State)) => void
 
 export const useSyncRatio = (wallet: EdgeCurrencyWallet | null | void) => {
-  const [syncRatio, setSyncRatio] = useState<State>(wallet ? wallet.syncRatio : null)
+  const [syncRatio, setSyncRatio]: [State, SetState] = useState(wallet ? wallet.syncRatio : null)
 
   const effect = () => {
     if (!wallet) return // mount with null
