@@ -69,21 +69,20 @@ const initialState: State = {
 const reducer = (state: State, action: Action) => {
   switch (action.type) {
     case 'READ_ENABLED_TOKENS_START': {
-      return { ...state, readEnabledTokensPending: true }
+      return { ...state, readEnabledTokensPending: true, readEnabledTokensError: null }
     }
     case 'ENABLE_TOKENS_START': {
-      return { ...state, enableTokensPending: true }
+      return { ...state, enableTokensPending: true, enableTokensError: null }
     }
     case 'DISABLE_TOKENS_START': {
-      return { ...state, disableTokensPending: true }
+      return { ...state, disableTokensPending: true, disableTokensError: null }
     }
     case 'ADD_CUSTOM_TOKEN_START': {
-      return { ...state, addCustomTokenPending: true }
+      return { ...state, addCustomTokenPending: true, addCustomTokenError: null }
     }
 
     case 'READ_ENABLED_TOKENS_SUCCESS': {
-      const { enabledTokens } = action
-      return { ...state, enabledTokens, readEnabledTokensPending: false }
+      return { ...state, readEnabledTokensPending: false, enabledTokens: action.enabledTokens }
     }
     case 'ENABLE_TOKENS_SUCCESS': {
       return { ...state, enableTokensPending: false }
@@ -96,21 +95,18 @@ const reducer = (state: State, action: Action) => {
     }
 
     case 'READ_ENABLED_TOKENS_ERROR': {
-      const { error } = action
-      return { ...state, readEnabledtokensError: error, readEnabledTokensPending: false }
+      return { ...state, readEnabledTokensPending: false, readEnabledtokensError: action.error }
     }
     case 'ENABLE_TOKENS_ERROR': {
-      const { error } = action
-      return { ...state, enableTokensPending: false, enableTokenError: error }
+      return { ...state, enableTokensPending: false, enableTokenError: action.error }
     }
     case 'DISABLE_TOKENS_ERROR': {
-      const { error } = action
-      return { ...state, disableTokensPending: false, disableTokenError: error }
+      return { ...state, disableTokensPending: false, disableTokenError: action.error }
     }
     case 'ADD_CUSTOM_TOKEN_ERROR': {
-      const { error } = action
-      return { ...state, addCustomTokenPending: false, addCustomTokenError: error }
+      return { ...state, addCustomTokenPending: false, addCustomTokenError: action.error }
     }
+
     default:
       return state
   }
@@ -121,9 +117,7 @@ export const useEnabledTokens = (wallet: EdgeCurrencyWallet | null | void) => {
 
   const enableTokens = (tokens: Array<string>) => {
     if (!wallet) return
-
     dispatch({ type: 'ENABLE_TOKENS_START' })
-
     wallet
       .enableTokens(tokens)
       .then(() => dispatch({ type: 'ENABLE_TOKENS_SUCCESS' }))
@@ -132,9 +126,7 @@ export const useEnabledTokens = (wallet: EdgeCurrencyWallet | null | void) => {
 
   const disableTokens = (tokens: Array<string>) => {
     if (!wallet) return
-
     dispatch({ type: 'DISABLE_TOKENS_START' })
-
     wallet
       .disableTokens(tokens)
       .then(() => dispatch({ type: 'DISABLE_TOKENS_SUCCESS' }))
@@ -143,9 +135,7 @@ export const useEnabledTokens = (wallet: EdgeCurrencyWallet | null | void) => {
 
   const addCustomToken = (tokenInfo: EdgeTokenInfo) => {
     if (!wallet) return
-
     dispatch({ type: 'ADD_CUSTOM_TOKEN_START' })
-
     wallet
       .addCustomToken(tokenInfo)
       .then(() => dispatch({ type: 'ADD_CUSTOM_TOKEN_SUCCESS' }))
@@ -154,17 +144,10 @@ export const useEnabledTokens = (wallet: EdgeCurrencyWallet | null | void) => {
 
   const effect = () => {
     if (!wallet) return // mount with null
-
     dispatch({ type: 'READ_ENABLED_TOKENS_START' })
-
     wallet
       .getEnabledTokens()
-      .then((enabledTokens: Array<string>) =>
-        dispatch({
-          type: 'READ_ENABLED_TOKENS_SUCCESS',
-          enabledTokens
-        })
-      )
+      .then((enabledTokens: Array<string>) => dispatch({ type: 'READ_ENABLED_TOKENS_SUCCESS', enabledTokens }))
       .catch((error: Error) => dispatch({ type: 'READ_ENABLED_TOKENS_ERROR', error }))
   }
 

@@ -1,37 +1,17 @@
 // @flow
 
-import { makeEdgeContext, type EdgeAccount, type EdgeCurrencyWallet, type EdgeUserInfo } from "edge-core-js";
+import { makeEdgeContext, type EdgeAccount } from "edge-core-js";
 import { ethereumCurrencyPluginFactory } from "edge-currency-ethereum";
 import React, { useEffect, useState } from "react";
-import {
-  useActiveWalletIds,
-  useArchivedWalletIds,
-  useDeletedWalletIds,
-  useOtpKey,
-  useOtpResetDate,
-  useLocalUsers,
-  useSyncedStorage,
-  useFiatCurrencyCode,
-  useName,
-  useBalances,
-  useBlockHeight,
-  useSyncRatio,
-  useDataDump,
-  useEnabledTokens
-} from "edge-react-hooks";
+
+import { ContextInfo } from "./ContextInfo.js";
+import { AccountInfo } from "./AccountInfo.js";
 
 type Props = {||};
 export const App = (props: Props) => {
   const [context, setContext] = useState(null);
   const [account, setAccount] = useState(null);
   const [loading, setLoading] = useState(false);
-  const activeWalletIds = useActiveWalletIds(account);
-  const archivedWalletIds = useArchivedWalletIds(account);
-  const deletedWalletIds = useDeletedWalletIds(account);
-  const localUsers = useLocalUsers(context);
-  const otpResetDate = useOtpResetDate(account);
-  const otpKey = useOtpKey(account);
-  const { data, setData, writePending, readPending } = useSyncedStorage(account, "QWEQWE");
 
   const login = () => {
     setLoading(true);
@@ -62,100 +42,8 @@ export const App = (props: Props) => {
       {context && !loading && !account && <button onClick={login}>Login</button>}
       {loading && <div>Loading...</div>}
       {account && <button onClick={reset}>reset</button>}
-      <div>Previous Users: {localUsers.map((localUser: EdgeUserInfo) => localUser.username)}</div>
-
-      <div>
-        ActiveWallets:
-        {account && account.currencyWallets && (
-          <div>
-            {(Object.values(account.currencyWallets): any).map((wallet: EdgeCurrencyWallet) => {
-              const { fiatCurrencyCode, setFiatCurrencyCode, error: setFiatCurrencyCodeError } = useFiatCurrencyCode(
-                wallet
-              );
-              const { name, setName } = useName(wallet);
-              const balances = useBalances(wallet);
-              const blockHeight = useBlockHeight(wallet);
-              const syncRatio = useSyncRatio(wallet);
-              const { dataDump, getDataDump } = useDataDump(wallet);
-              const { enabledTokens, enableTokens, disableTokens } = useEnabledTokens(wallet);
-
-              return (
-                <div>
-                  <div>id: {wallet.id}</div>
-
-                  <div>
-                    <button onClick={() => enableTokens(["REP"])}>ENABLE REP</button>
-                    <button onClick={() => disableTokens(["REP"])}>DISABLE REP</button>
-                    <div>
-                      Enabled Tokens:
-                      {enabledTokens &&
-                        enabledTokens.map((token: string) => {
-                          return <div>{token}</div>;
-                        })}
-                    </div>
-                  </div>
-
-                  <div>
-                    <div>name: {name && name.toString()}</div>
-                    <button onClick={() => setName(Math.random().toString())}>SET NAME</button>
-                  </div>
-
-                  <div>
-                    <div>blockHeight: {blockHeight && blockHeight.toString()}</div>
-                  </div>
-
-                  <div>
-                    <div>dataDump: {dataDump && JSON.stringify(dataDump, null, 2)}</div>
-                    <button onClick={getDataDump}>GET DATA DUMP</button>
-                  </div>
-                  <div>
-                    <div>syncRatio: {syncRatio && syncRatio.toString()}</div>
-                  </div>
-
-                  <div>
-                    <div>fiatCurrencyCode: {fiatCurrencyCode}</div>
-                    <div>fiatCurrencyCode error: {setFiatCurrencyCodeError && setFiatCurrencyCodeError.toString()}</div>
-                    <button onClick={() => setFiatCurrencyCode(Math.random().toString())}>SET FIAT</button>
-                  </div>
-
-                  <div>{JSON.stringify(balances, null, 2)}</div>
-                </div>
-              );
-            })}
-          </div>
-        )}
-      </div>
-
-      <div>
-        ActiveWalletIds: {activeWalletIds.length}
-        {activeWalletIds.map((id: string) => (
-          <div>{id}</div>
-        ))}
-      </div>
-
-      <div>
-        ArchivedWalletIds: {archivedWalletIds.length}
-        {archivedWalletIds.map((id: string) => (
-          <div>{id}</div>
-        ))}
-      </div>
-
-      <div>
-        DeletedWalletIds: {deletedWalletIds.length}
-        {deletedWalletIds.map((id: string) => (
-          <div>{id}</div>
-        ))}
-      </div>
-
-      <div>otpResetDate: {otpResetDate}</div>
-      <div>otpKey: {otpKey}</div>
-
-      <div>
-        <button onClick={() => setData(Math.random().toString())}>save data</button>
-        <div>account data: {data && data.toString()}</div>
-        <div>write pending: {writePending.toString()}</div>
-        <div>read pending: {readPending.toString()}</div>
-      </div>
+      {context && <ContextInfo context={context} />}
+      {account && <AccountInfo account={account} />}
     </div>
   );
 };

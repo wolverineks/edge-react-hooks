@@ -1,50 +1,22 @@
 // @flow
 
 import { type EdgeCurrencyWallet } from 'edge-core-js'
-import { useEffect, useReducer } from 'react'
+import { useEffect, useState } from 'react'
 
-type READ_SYNC_RATIO_SUCCESS = {| syncRatio: number | null, type: 'READ_SYNC_RATIO_SUCCESS' |}
-type Action = READ_SYNC_RATIO_SUCCESS
-
-type State = {
-  syncRatio: number | null
-}
-
-const initialState: State = {
-  syncRatio: null
-}
-
-const reducer = (state: State, action: Action) => {
-  switch (action.type) {
-    case 'READ_SYNC_RATIO_SUCCESS': {
-      const { syncRatio } = action
-      return { ...state, syncRatio }
-    }
-    default:
-      return state
-  }
-}
+type State = $PropertyType<EdgeCurrencyWallet, 'syncRatio'> | null
 
 export const useSyncRatio = (wallet: EdgeCurrencyWallet | null | void) => {
-  const [state, dispatch] = useReducer(reducer, initialState)
+  const [syncRatio, setSyncRatio] = useState<State>(wallet ? wallet.syncRatio : null)
 
   const effect = () => {
     if (!wallet) return // mount with null
-
-    dispatch({ type: 'READ_SYNC_RATIO_SUCCESS', syncRatio: wallet.syncRatio })
-
-    const unsubscribe = wallet.watch(
-      // mount with wallet / null -> wallet / walletA -> walletB (2)
-      'syncRatio',
-      (syncRatio: $PropertyType<EdgeCurrencyWallet, 'syncRatio'>) =>
-        dispatch({ type: 'READ_SYNC_RATIO_SUCCESS', syncRatio })
-    )
-
+    setSyncRatio(wallet.syncRatio)
+    const unsubscribe = wallet.watch('syncRatio', setSyncRatio) // mount with wallet / null -> wallet / walletA -> walletB (2)
     return unsubscribe // unmount with wallet / walletA -> walletB (1) / wallet -> null
   }
 
   useEffect(effect, []) // onMount
   useEffect(effect, [wallet]) // onUpdate
 
-  return state.syncRatio
+  return syncRatio
 }

@@ -26,15 +26,16 @@ const reducer = (state: State, action: Action) => {
     case 'WRITE_NAME_START': {
       return { ...state, pending: true, error: null }
     }
+
     case 'READ_NAME_SUCCESS':
     case 'WRITE_NAME_SUCCESS': {
-      const { name } = action
-      return { ...state, pending: false, name }
+      return { ...state, pending: false, name: action.name }
     }
+
     case 'WRITE_NAME_ERROR': {
-      const { error } = action
-      return { ...state, pending: false, error }
+      return { ...state, pending: false, error: action.error }
     }
+
     default:
       return state
   }
@@ -43,34 +44,21 @@ const reducer = (state: State, action: Action) => {
 export const useName = (wallet: EdgeCurrencyWallet | null | void) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
-  const onSuccess = (name: string) => () => dispatch({ type: 'WRITE_NAME_SUCCESS', name })
-  const onError = (error: Error) => dispatch({ type: 'WRITE_NAME_ERROR', error })
-
   const setName = (name: string) => {
     if (!wallet) return
-
     dispatch({ type: 'WRITE_NAME_START' })
-
     wallet
       .renameWallet(name)
-      .then(onSuccess(name))
-      .catch(onError)
+      .then(() => dispatch({ type: 'WRITE_NAME_SUCCESS', name }))
+      .catch((error: Error) => dispatch({ type: 'WRITE_NAME_ERROR', error }))
   }
 
   const effect = () => {
     if (!wallet) return // mount with null
-
-    dispatch({
-      type: 'READ_NAME_SUCCESS',
-      name: wallet.name
-    })
-
-    const unsubscribe = wallet.watch(
-      // mount with wallet / null -> wallet / walletA -> walletB (2)
-      'name',
-      (name: $PropertyType<EdgeCurrencyWallet, 'name'>) => dispatch({ type: 'WRITE_NAME_SUCCESS', name })
-    )
-
+    dispatch({ type: 'READ_NAME_SUCCESS', name: wallet.name })
+    const unsubscribe = wallet.watch('name', (name: $PropertyType<EdgeCurrencyWallet, 'name'>) =>
+      dispatch({ type: 'WRITE_NAME_SUCCESS', name })
+    ) // mount with wallet / null -> wallet / walletA -> walletB (2)
     return unsubscribe // unmount with wallet / walletA -> walletB (1) / wallet -> null
   }
 

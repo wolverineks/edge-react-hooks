@@ -31,27 +31,25 @@ const initialState: State = {
 
 const reducer = (state: State, action: Action) => {
   switch (action.type) {
-    case 'WRITE_START': {
-      return { ...state, writePending: true, writeError: null }
-    }
-    case 'WRITE_SUCCESS': {
-      const { data } = action
-      return { ...state, writePending: false, data }
-    }
-    case 'WRITE_ERROR': {
-      const { error: writeError } = action
-      return { ...state, writePending: false, writeError }
-    }
     case 'READ_START': {
       return { ...state, readPending: true, readError: null }
     }
+    case 'WRITE_START': {
+      return { ...state, writePending: true, writeError: null }
+    }
+
     case 'READ_SUCCESS': {
-      const { data } = action
-      return { ...state, readPending: false, data }
+      return { ...state, readPending: false, data: action.data }
+    }
+    case 'WRITE_SUCCESS': {
+      return { ...state, writePending: false, data: action.data }
+    }
+
+    case 'WRITE_ERROR': {
+      return { ...state, writePending: false, writeError: action.error }
     }
     case 'READ_ERROR': {
-      const { error: readError } = action
-      return { ...state, readPending: false, readError }
+      return { ...state, readPending: false, readError: action.error }
     }
     default:
       return state
@@ -64,18 +62,13 @@ export const useLocalStorage = (
 ) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
-  const onWriteSuccess = (data: Stringifyable) => () => dispatch({ type: 'WRITE_SUCCESS', data })
-  const onWriteError = (error: Error) => dispatch({ type: 'WRITE_ERROR', error })
-  const onReadSuccess = (data: string) => dispatch({ type: 'READ_SUCCESS', data: JSON.parse(data) })
-  const onReadError = (error: Error) => dispatch({ type: 'READ_ERROR', error })
-
   const setData = (data: Stringifyable) => {
     if (!storageContext || !path) return
     dispatch({ type: 'WRITE_START' })
     storageContext.localDisklet
       .setText(path, JSON.stringify(data))
-      .then(onWriteSuccess(data))
-      .catch(onWriteError)
+      .then(() => dispatch({ type: 'WRITE_SUCCESS', data }))
+      .catch((error: Error) => dispatch({ type: 'WRITE_ERROR', error }))
   }
 
   const effect = () => {
@@ -83,8 +76,8 @@ export const useLocalStorage = (
     dispatch({ type: 'READ_START' })
     storageContext.localDisklet
       .getText(path)
-      .then(onReadSuccess)
-      .catch(onReadError) // mount with storageContext / null -> storageContext / storageContextA -> storageContextB
+      .then((data: string) => dispatch({ type: 'READ_SUCCESS', data: JSON.parse(data) }))
+      .catch((error: Error) => dispatch({ type: 'READ_ERROR', error })) // mount with storageContext / null -> storageContext / storageContextA -> storageContextB
 
     const unsubscribe = storageContext.watch(
       'localDisklet',
@@ -92,11 +85,10 @@ export const useLocalStorage = (
         if (!storageContext || !path) return
         localDisklet
           .getText(path)
-          .then(onReadSuccess)
-          .catch(onReadError)
+          .then((data: string) => dispatch({ type: 'READ_SUCCESS', data: JSON.parse(data) }))
+          .catch((error: Error) => dispatch({ type: 'READ_ERROR', error }))
       }
     )
-
     return unsubscribe // unmount with storageContext / storageContextA -> storageContextB (1) / storageContext -> null
   }
 
