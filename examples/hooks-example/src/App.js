@@ -16,7 +16,7 @@ export const App = (props: Props) => {
   const login = () => {
     setLoading(true);
     context &&
-      context.loginWithPassword("edgy76", "Test123456").then(
+      context.loginWithPassword("edgy43", "Test123456").then(
         (account: EdgeAccount) => {
           setAccount(account);
           setLoading(false);

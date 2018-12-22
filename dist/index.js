@@ -724,6 +724,267 @@ const useSyncRatio = (wallet) => {
   return syncRatio
 };
 
+// 
+
+
+
+const initialState$8 = { pending: false, error: null, transactionCount: null };
+
+const reducer$8 = (state, action) => {
+  switch (action.type) {
+    case 'READ_TRANSACTION_COUNT_START': {
+      return { ...state, pending: true, error: null }
+    }
+
+    case 'READ_TRANSACTION_COUNT_SUCCESS': {
+      return { ...state, started: true, pending: false, transactionCount: action.transactionCount }
+    }
+
+    case 'READ_TRANSACTION_COUNT_ERROR': {
+      return { ...state, pending: false, error: action.error }
+    }
+
+    default:
+      return state
+  }
+};
+
+const useTransactionCount = (
+  wallet,
+  options
+) => {
+  const [state, dispatch] = react.useReducer(reducer$8, initialState$8);
+
+  const effect = () => {
+    if (!wallet) return // mount with null
+    dispatch({ type: 'READ_TRANSACTION_COUNT_START' });
+    wallet
+      .getNumTransactions(options || undefined)
+      .then((transactionCount) => dispatch({ type: 'READ_TRANSACTION_COUNT_SUCCESS', transactionCount }))
+      .catch((error) => dispatch({ type: 'READ_TRANSACTION_COUNT_ERROR', error }));
+
+    const unsubscribe = wallet.on('newTransactions', () => {
+      if (!wallet) return
+      dispatch({ type: 'READ_TRANSACTION_COUNT_START' });
+      wallet
+        .getNumTransactions(options || undefined)
+        .then((transactionCount) => dispatch({ type: 'READ_TRANSACTION_COUNT_SUCCESS', transactionCount }))
+        .catch((error) => dispatch({ type: 'READ_TRANSACTION_COUNT_ERROR', error }));
+    }); // mount with wallet / null -> wallet / walletA -> walletB (2)
+    return unsubscribe // unmount with wallet / walletA -> walletB (1) / wallet -> null
+  };
+
+  react.useEffect(effect, []); // onMount
+  react.useEffect(effect, [wallet]); // onUpdate
+
+  return { ...state }
+};
+
+// 
+
+
+
+
+const initialState$9 = { pending: false, error: null, transactions: null };
+
+const reducer$9 = (state, action) => {
+  switch (action.type) {
+    case 'READ_TRANSACTIONS_START': {
+      return { ...state, pending: true, error: null }
+    }
+
+    case 'READ_TRANSACTIONS_SUCCESS': {
+      return { ...state, started: true, pending: false, transactions: action.transactions }
+    }
+
+    case 'READ_TRANSACTIONS_ERROR': {
+      return { ...state, pending: false, error: action.error }
+    }
+
+    default:
+      return state
+  }
+};
+
+const useTransactions = (
+  wallet,
+  options
+) => {
+  const [state, dispatch] = react.useReducer(reducer$9, initialState$9);
+
+  const effect = () => {
+    if (!wallet) return // mount with null
+    dispatch({ type: 'READ_TRANSACTIONS_START' });
+    wallet
+      .getTransactions(options || undefined)
+      .then((transactions) => dispatch({ type: 'READ_TRANSACTIONS_SUCCESS', transactions }))
+      .catch((error) => dispatch({ type: 'READ_TRANSACTIONS_ERROR', error }));
+
+    const unsubscribe = wallet.on('newTransactions', () => {
+      if (!wallet) return
+      dispatch({ type: 'READ_TRANSACTIONS_START' });
+      wallet
+        .getTransactions(options || undefined)
+        .then((transactions) => dispatch({ type: 'READ_TRANSACTIONS_SUCCESS', transactions }))
+        .catch((error) => dispatch({ type: 'READ_TRANSACTIONS_ERROR', error }));
+    }); // mount with wallet / null -> wallet / walletA -> walletB (2)
+    return unsubscribe // unmount with wallet / walletA -> walletB (1) / wallet -> null
+  };
+
+  react.useEffect(effect, []); // onMount
+  react.useEffect(effect, [wallet]); // onUpdate
+
+  return { ...state }
+};
+
+// 
+
+
+
+const initialState$a = { pending: false, error: null };
+
+const reducer$a = (state, action) => {
+  switch (action.type) {
+    case 'START_ENGINE_START': {
+      return { ...state, pending: true, error: null }
+    }
+    case 'STOP_ENGINE_START': {
+      return { ...state, pending: true, error: null }
+    }
+
+    case 'START_ENGINE_SUCCESS': {
+      return { ...state, started: true, pending: false }
+    }
+    case 'STOP_ENGINE_SUCCESS': {
+      return { ...state, started: false, pending: false }
+    }
+
+    case 'START_ENGINE_ERROR': {
+      return { ...state, pending: false, error: action.error }
+    }
+    case 'STOP_ENGINE_ERROR': {
+      return { ...state, pending: false, error: action.error }
+    }
+
+    default:
+      return state
+  }
+};
+
+const useEngine = (wallet) => {
+  const [state, dispatch] = react.useReducer(reducer$a, initialState$a);
+
+  const startEngine = () => {
+    if (!wallet) return // mount with null
+    dispatch({ type: 'START_ENGINE_START' }); // mount with wallet / null -> wallet / walletA -> walletB (2)
+    wallet
+      .startEngine()
+      .then(() => dispatch({ type: 'START_ENGINE_SUCCESS' }))
+      .catch((error) => dispatch({ type: 'START_ENGINE_ERROR', error }));
+  };
+
+  const stopEngine = () => {
+    if (!wallet) return // mount with null
+    dispatch({ type: 'STOP_ENGINE_START' }); // mount with wallet / null -> wallet / walletA -> walletB (2)
+    wallet
+      .startEngine()
+      .then(() => dispatch({ type: 'STOP_ENGINE_SUCCESS' }))
+      .catch((error) => dispatch({ type: 'STOP_ENGINE_ERROR', error }));
+  };
+
+  return { ...state, startEngine, stopEngine }
+};
+
+// 
+
+
+
+
+
+
+const initialState$b = {
+  lockReceiveAddressPending: false,
+  readReceiveAddressPending: false,
+  lockReceiveAddressError: null,
+  readReceiveAddressError: null,
+  receiveAddress: null,
+  saveReceiveAddressPending: false,
+  saveReceiveAddressError: null
+};
+
+const reducer$b = (state, action) => {
+  switch (action.type) {
+    case 'READ_RECEIVE_ADDRESS_START': {
+      return { ...state, readReceiveAddressPending: true, readReceiveAddressError: null }
+    }
+    case 'SAVE_RECEIVE_ADDRESS_START': {
+      return { ...state, saveReceiveAddressPending: true, saveReceiveAddressError: null }
+    }
+    case 'LOCK_RECEIVE_ADDRESS_START': {
+      return { ...state, lockReceiveAddressPending: true, lockReceiveAddressError: null }
+    }
+
+    case 'READ_RECEIVE_ADDRESS_SUCCESS': {
+      return { ...state, started: true, readReceiveAddressPending: false, receiveAddress: action.receiveAddress }
+    }
+    case 'SAVE_RECEIVE_ADDRESS_SUCCESS': {
+      return { ...state, started: true, saveReceiveAddressPending: false }
+    }
+    case 'LOCK_RECEIVE_ADDRESS_SUCCESS': {
+      return { ...state, started: true, lockReceiveAddressPending: false }
+    }
+
+    case 'READ_RECEIVE_ADDRESS_ERROR': {
+      return { ...state, readReceiveAddressPending: false, readReceiveAddressError: action.error }
+    }
+    case 'SAVE_RECEIVE_ADDRESS_ERROR': {
+      return { ...state, saveReceiveAddressPending: false, saveReceiveAddressError: action.error }
+    }
+    case 'LOCK_RECEIVE_ADDRESS_ERROR': {
+      return { ...state, lockReceiveAddressPending: false, lockReceiveAddressError: action.error }
+    }
+
+    default:
+      return state
+  }
+};
+
+const useReceiveAddress = (
+  wallet,
+  options
+) => {
+  const [state, dispatch] = react.useReducer(reducer$b, initialState$b);
+
+  const lockReceiveAddress = () => {};
+  const saveReceiveAddress = () => {};
+
+  const effect = () => {
+    if (!wallet) return // mount with null
+    dispatch({ type: 'READ_RECEIVE_ADDRESS_START' });
+    wallet
+      .getReceiveAddress(options || undefined)
+      .then((receiveAddress) => dispatch({ type: 'READ_RECEIVE_ADDRESS_SUCCESS', receiveAddress }))
+      .catch((error) => dispatch({ type: 'READ_RECEIVE_ADDRESS_ERROR', error }));
+
+    const unsubscribe = wallet.on('newTransactions', () => {
+      if (!wallet) return
+      dispatch({ type: 'READ_RECEIVE_ADDRESS_START' });
+      wallet
+        .getReceiveAddress(options || undefined)
+        .then((receiveAddress) =>
+          dispatch({ type: 'READ_RECEIVE_ADDRESS_SUCCESS', receiveAddress })
+        )
+        .catch((error) => dispatch({ type: 'READ_RECEIVE_ADDRESS_ERROR', error }));
+    }); // mount with wallet / null -> wallet / walletA -> walletB (2)
+    return unsubscribe // unmount with wallet / walletA -> walletB (1) / wallet -> null
+  };
+
+  react.useEffect(effect, []); // onMount
+  react.useEffect(effect, [wallet]); // onUpdate
+
+  return { ...state, saveReceiveAddress, lockReceiveAddress }
+};
+
 //
 
 exports.useActiveWalletIds = useActiveWalletIds;
@@ -743,4 +1004,8 @@ exports.useSyncRatio = useSyncRatio;
 exports.useSync = useSync;
 exports.useEnabledTokens = useEnabledTokens;
 exports.useCurrencyWallets = useCurrencyWallets;
+exports.useTransactionCount = useTransactionCount;
+exports.useTransactions = useTransactions;
+exports.useEngine = useEngine;
+exports.useReceiveAddress = useReceiveAddress;
 //# sourceMappingURL=index.js.map

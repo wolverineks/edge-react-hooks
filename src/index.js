@@ -8,15 +8,19 @@ import { useCurrencyWallets } from './useCurrencyWallets.js'
 import { useDataDump } from './useDataDump.js'
 import { useDeletedWalletIds } from './useDeletedWalletIds.js'
 import { useEnabledTokens } from './useEnabledTokens.js'
+import { useEngine } from './useEngine.js'
 import { useFiatCurrencyCode } from './useFiatCurrencyCode.js'
 import { useLocalStorage } from './useLocalStorage.js'
 import { useLocalUsers } from './useLocalUsers.js'
 import { useName } from './useName.js'
 import { useOtpKey } from './useOtpKey.js'
 import { useOtpResetDate } from './useOtpResetDate.js'
+import { useReceiveAddress } from './useReceiveAddress.js'
 import { useSync } from './useSync.js'
 import { useSyncedStorage } from './useSyncedStorage.js'
 import { useSyncRatio } from './useSyncRatio.js'
+import { useTransactionCount } from './useTransactionCount.js'
+import { useTransactions } from './useTransactions.js'
 
 export {
   useActiveWalletIds,
@@ -35,5 +39,9 @@ export {
   useSyncRatio,
   useSync,
   useEnabledTokens,
-  useCurrencyWallets
+  useCurrencyWallets,
+  useTransactionCount,
+  useTransactions,
+  useEngine,
+  useReceiveAddress
 }
