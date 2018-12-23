@@ -5,29 +5,26 @@ import { useEffect, useReducer } from 'react'
 
 type Transactions = Array<EdgeTransaction>
 
-type READ_TRANSACTIONS_START = { type: 'READ_TRANSACTIONS_START' }
-type READ_TRANSACTIONS_SUCCESS = { transactions: Transactions, type: 'READ_TRANSACTIONS_SUCCESS' }
-type READ_TRANSACTIONS_ERROR = { error: Error, type: 'READ_TRANSACTIONS_ERROR' }
-type Action = READ_TRANSACTIONS_START | READ_TRANSACTIONS_SUCCESS | READ_TRANSACTIONS_ERROR
+type ReadTransactionsStart = {| type: 'READ_TRANSACTIONS_START' |}
+type ReadTransactionsSuccess = {| transactions: Transactions, type: 'READ_TRANSACTIONS_SUCCESS' |}
+type ReadTransactionsError = {| error: Error, type: 'READ_TRANSACTIONS_ERROR' |}
+type Action = ReadTransactionsStart | ReadTransactionsSuccess | ReadTransactionsError
 
-type State = { error: Error | null, pending: boolean, transactions: Transactions | null }
+type State = {| error: Error | null, pending: boolean, transactions: Transactions | null |}
 
-const initialState = { pending: false, error: null, transactions: null }
+const initialState: State = { pending: false, error: null, transactions: null }
 
 const reducer = (state: State, action: Action) => {
   switch (action.type) {
     case 'READ_TRANSACTIONS_START': {
       return { ...state, pending: true, error: null }
     }
-
     case 'READ_TRANSACTIONS_SUCCESS': {
-      return { ...state, started: true, pending: false, transactions: action.transactions }
+      return { ...state, pending: false, transactions: action.transactions }
     }
-
     case 'READ_TRANSACTIONS_ERROR': {
       return { ...state, pending: false, error: action.error }
     }
-
     default:
       return state
   }

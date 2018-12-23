@@ -7,7 +7,7 @@ type State = $PropertyType<EdgeAccount, 'activeWalletIds'> | null
 type SetState = (State | (State => State)) => void
 
 export const useActiveWalletIds = (account: EdgeAccount | null | void) => {
-  const [activeWalletIds, setActiveWalletIds]: [State, SetState] = useState(account ? account.archivedWalletIds : null)
+  const [activeWalletIds, setActiveWalletIds]: [State, SetState] = useState(account ? account.activeWalletIds : null)
 
   const effect = () => {
     if (!account) return // mount with null

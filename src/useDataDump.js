@@ -3,37 +3,26 @@
 import { type EdgeCurrencyWallet, type EdgeDataDump } from 'edge-core-js'
 import { useReducer } from 'react'
 
-type READ_DATA_DUMP_START = {| type: 'READ_DATA_DUMP_START' |}
-type READ_DATA_DUMP_SUCCESS = {| dataDump: EdgeDataDump, type: 'READ_DATA_DUMP_SUCCESS' |}
-type READ_DATA_DUMP_ERROR = {| error: Error, type: 'READ_DATA_DUMP_ERROR' |}
-type Action = READ_DATA_DUMP_START | READ_DATA_DUMP_SUCCESS | READ_DATA_DUMP_ERROR
+type ReadDataDumpStart = {| type: 'READ_DATA_DUMP_START' |}
+type ReadDataDumpSuccess = {| dataDump: EdgeDataDump, type: 'READ_DATA_DUMP_SUCCESS' |}
+type ReadDataDumpError = {| error: Error, type: 'READ_DATA_DUMP_ERROR' |}
+type Action = ReadDataDumpStart | ReadDataDumpSuccess | ReadDataDumpError
 
-type State = {
-  dataDump: EdgeDataDump | null,
-  error: Error | null,
-  pending: boolean
-}
+type State = {| dataDump: EdgeDataDump | null, error: Error | null, pending: boolean |}
 
-const initialState: State = {
-  dataDump: null,
-  error: null,
-  pending: false
-}
+const initialState: State = { dataDump: null, error: null, pending: false }
 
 const reducer = (state: State, action: Action) => {
   switch (action.type) {
     case 'READ_DATA_DUMP_START': {
       return { ...state, pending: true, error: null }
     }
-
     case 'READ_DATA_DUMP_SUCCESS': {
       return { ...state, pending: false, dataDump: action.dataDump }
     }
-
     case 'READ_DATA_DUMP_ERROR': {
       return { ...state, pending: false, error: action.error }
     }
-
     default:
       return state
   }

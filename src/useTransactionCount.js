@@ -3,29 +3,26 @@
 import { type EdgeCurrencyCodeOptions, type EdgeCurrencyWallet } from 'edge-core-js'
 import { useEffect, useReducer } from 'react'
 
-type READ_TRANSACTION_COUNT_START = { type: 'READ_TRANSACTION_COUNT_START' }
-type READ_TRANSACTION_COUNT_SUCCESS = { transactionCount: number, type: 'READ_TRANSACTION_COUNT_SUCCESS' }
-type READ_TRANSACTION_COUNT_ERROR = { error: Error, type: 'READ_TRANSACTION_COUNT_ERROR' }
-type Action = READ_TRANSACTION_COUNT_START | READ_TRANSACTION_COUNT_SUCCESS | READ_TRANSACTION_COUNT_ERROR
+type ReadTransactionCountStart = {| type: 'READ_TRANSACTION_COUNT_START' |}
+type ReadTransactionCountSuccess = {| transactionCount: number, type: 'READ_TRANSACTION_COUNT_SUCCESS' |}
+type ReadTransactionCountError = {| error: Error, type: 'READ_TRANSACTION_COUNT_ERROR' |}
+type Action = ReadTransactionCountStart | ReadTransactionCountSuccess | ReadTransactionCountError
 
-type State = { error: Error | null, pending: boolean, transactionCount: number | null }
+type State = {| error: Error | null, pending: boolean, transactionCount: number | null |}
 
-const initialState = { pending: false, error: null, transactionCount: null }
+const initialState: State = { pending: false, error: null, transactionCount: null }
 
 const reducer = (state: State, action: Action) => {
   switch (action.type) {
     case 'READ_TRANSACTION_COUNT_START': {
       return { ...state, pending: true, error: null }
     }
-
     case 'READ_TRANSACTION_COUNT_SUCCESS': {
-      return { ...state, started: true, pending: false, transactionCount: action.transactionCount }
+      return { ...state, pending: false, transactionCount: action.transactionCount }
     }
-
     case 'READ_TRANSACTION_COUNT_ERROR': {
       return { ...state, pending: false, error: action.error }
     }
-
     default:
       return state
   }

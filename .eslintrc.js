@@ -24,6 +24,7 @@ module.exports = {
       }
     ],
     'flowtype/no-dupe-keys': 2,
+    'flowtype/require-exact-type': [2, 'always'],
     'no-throw-literal': 'error',
     'no-var': 'error',
     'prefer-const': 'error',
