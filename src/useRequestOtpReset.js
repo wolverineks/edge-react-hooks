@@ -29,14 +29,14 @@ const reducer = (state: State, action: Action) => {
   }
 }
 
-export const useRequestEdgeLogin = (
+export const useRequestOtpReset = (
   context: EdgeContext | null | void,
   username: string | null | void,
   otpResetToken: string | null | void
 ) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
-  const requestEdgeLogin = () => {
+  const requestOtpReset = () => {
     if (!context || !username || !otpResetToken) return
     dispatch({ type: 'REQUEST_OTP_RESET_START' })
     context
@@ -45,5 +45,5 @@ export const useRequestEdgeLogin = (
       .catch((error: Error) => dispatch({ type: 'REQUEST_OTP_RESET_ERROR', error }))
   }
 
-  return { ...state, requestEdgeLogin }
+  return { ...state, requestOtpReset }
 }

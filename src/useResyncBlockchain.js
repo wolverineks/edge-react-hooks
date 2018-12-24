@@ -28,10 +28,10 @@ const reducer = (state: State, action: Action) => {
   }
 }
 
-export const useResync = (wallet: EdgeCurrencyWallet | null | void) => {
+export const useResyncBlockchain = (wallet: EdgeCurrencyWallet | null | void) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
-  const resync = () => {
+  const resyncBlockchain = () => {
     if (!wallet) return // mount with null
     dispatch({ type: 'RESYNC_START' }) // mount with wallet / null -> wallet / walletA -> walletB (2)
     wallet
@@ -40,5 +40,5 @@ export const useResync = (wallet: EdgeCurrencyWallet | null | void) => {
       .catch((error: Error) => dispatch({ type: 'RESYNC_ERROR', error }))
   }
 
-  return { ...state, resync }
+  return { ...state, resyncBlockchain }
 }
