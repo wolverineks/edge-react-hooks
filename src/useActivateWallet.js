@@ -33,7 +33,7 @@ export const useActivateWallet = (account: EdgeAccount | null | void, walletId: 
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const activateWallet = () => {
-    if (!account || !walletId) return
+    if (!account || !account.loggedIn || !walletId) return
     dispatch({ type: 'ACTIVATE_WALLET_START' })
     account
       .changeWalletStates({ [walletId]: { archived: false } })

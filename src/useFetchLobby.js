@@ -33,7 +33,7 @@ export const useFetchLobby = (account: EdgeAccount | null | void, lobbyId: strin
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const fetchLobby = () => {
-    if (!account) return
+    if (!account || !account.loggedIn) return
     dispatch({ type: 'FETCH_LOBBY_START' })
     account
       .fetchLobby(lobbyId)

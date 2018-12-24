@@ -33,7 +33,7 @@ export const useDeleteRecovery = (account: EdgeAccount | null | void) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const deleteRecovery = () => {
-    if (!account) return
+    if (!account || !account.loggedIn) return
     dispatch({ type: 'DELETE_RECOVERY_START' })
     account
       .deleteRecovery()

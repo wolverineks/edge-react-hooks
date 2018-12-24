@@ -33,7 +33,7 @@ export const useCheckPin = (account: EdgeAccount | null | void, pin: string | nu
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const checkPin = () => {
-    if (!account || !pin) return
+    if (!account || !account.loggedIn || !pin) return
     dispatch({ type: 'CHECK_PIN_START' })
     account
       .checkPin(pin)

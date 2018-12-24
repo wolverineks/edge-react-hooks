@@ -38,7 +38,7 @@ export const useConvertCurrency = (
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const effect = () => {
-    if (!account || !account.rateCache || !fromCurrency || !toCurrency || !amount) return // mount with null
+    if (!account || !account.loggedIn || !account.rateCache || !fromCurrency || !toCurrency || !amount) return // mount with null
     dispatch({ type: 'CONVERT_CURRENCY_START' })
     account.rateCache
       .convertCurrency(fromCurrency, toCurrency, amount)
@@ -46,7 +46,7 @@ export const useConvertCurrency = (
       .catch((error: Error) => dispatch({ type: 'CONVERT_CURRENCY_ERROR', error })) // mount with account / null -> accoun / accounA -> accounB
 
     const unsubscribe = account.rateCache.on('update', () => {
-      if (!account || !account.rateCache || !fromCurrency || !toCurrency || !amount) return
+      if (!account || !account.loggedIn || !account.rateCache || !fromCurrency || !toCurrency || !amount) return
       account.rateCache
         .convertCurrency(fromCurrency, toCurrency, amount)
         .then((amount: number) => dispatch({ type: 'CONVERT_CURRENCY_SUCCESS', amount }))

@@ -10,7 +10,7 @@ export const useArchivedWalletIds = (account: EdgeAccount | null | void) => {
   const [archivedWalletIds, setArchivedWalletIds]: [State, SetState] = useState(null)
 
   const effect = () => {
-    if (!account) return // mount with null
+    if (!account || !account.loggedIn) return // mount with null
     setArchivedWalletIds(account.archivedWalletIds) // mount with account / null -> account / accountA -> accountB (2)
     const unsubscribe = account.watch('archivedWalletIds', setArchivedWalletIds) // mount with account / null -> account / accountA -> accountB (2)
     return unsubscribe // unmount with account / accountA -> accountB (1) / account -> null

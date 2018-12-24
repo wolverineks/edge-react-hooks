@@ -33,7 +33,7 @@ export const useCheckPassword = (account: EdgeAccount | null | void, password: s
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const checkPassword = () => {
-    if (!account || !password) return
+    if (!account || !account.loggedIn || !password) return
     dispatch({ type: 'CHECK_PASSWORD_START' })
     account
       .checkPassword(password)

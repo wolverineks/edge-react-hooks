@@ -33,7 +33,7 @@ export const useLogout = (account: EdgeAccount | null | void) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const logout = () => {
-    if (!account) return
+    if (!account || !account.loggedIn) return
     dispatch({ type: 'LOGOUT_START' })
     account
       .logout()

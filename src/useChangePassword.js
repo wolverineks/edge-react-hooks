@@ -33,7 +33,7 @@ export const useChangePassword = (account: EdgeAccount | null | void, password: 
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const changePassword = () => {
-    if (!account || !password) return
+    if (!account || !account.loggedIn || !password) return
     dispatch({ type: 'CHANGE_PASSWORD_START' })
     account
       .changePassword(password)

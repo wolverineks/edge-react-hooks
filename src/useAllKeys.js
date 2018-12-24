@@ -10,7 +10,7 @@ export const useAllKeys = (account: EdgeAccount | null | void) => {
   const [allKeys, setAllKeys]: [State, SetState] = useState(null)
 
   const effect = () => {
-    if (!account) return // mount with null
+    if (!account || !account.loggedIn) return // mount with null
     setAllKeys(account.allKeys) // mount with account / null -> account / accountA -> accountB (2)
     const unsubscribe = account.watch('allKeys', setAllKeys) // mount with account / null -> account / accountA -> accountB (2)
     return unsubscribe // unmount with account / accountA -> accountB (1) / account -> null

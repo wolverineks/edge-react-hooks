@@ -33,7 +33,7 @@ export const useDeletePassword = (account: EdgeAccount | null | void) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const deletePassword = () => {
-    if (!account) return
+    if (!account || !account.loggedIn) return
     dispatch({ type: 'DELETE_PASSWORD_START' })
     account
       .deletePassword()

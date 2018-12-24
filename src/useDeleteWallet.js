@@ -32,7 +32,7 @@ export const useDeleteWallet = (account: EdgeAccount | null | void, walletId: st
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const deleteWallet = () => {
-    if (!account) return
+    if (!account || !account.loggedIn) return
     dispatch({ type: 'DELETE_WALLET_START' })
     account
       .changeWalletStates({ [walletId]: { deleted: true } })

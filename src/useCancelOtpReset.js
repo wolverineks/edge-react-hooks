@@ -33,7 +33,7 @@ export const useCancelOtpReset = (account: EdgeAccount | null | void) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const cancelOtpReset = () => {
-    if (!account) return
+    if (!account || !account.loggedIn) return
     dispatch({ type: 'CANCEL_OTP_RESET_START' })
     account
       .cancelOtpReset()

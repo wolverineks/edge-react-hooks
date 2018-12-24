@@ -7,10 +7,10 @@ type State = $PropertyType<EdgeAccount, 'currencyWallets'> | null
 type SetState = (State | (State => State)) => void
 
 export const useCurrencyWallets = (account: EdgeAccount | null | void) => {
-  const [currencyWallets, setCurrencyWallets]: [State, SetState] = useState(account ? account.currencyWallets : null)
+  const [currencyWallets, setCurrencyWallets]: [State, SetState] = useState(null)
 
   const effect = () => {
-    if (!account) return // mount with null
+    if (!account || !account.loggedIn) return // mount with null
     setCurrencyWallets(account.currencyWallets) // mount with account / null -> account / accountA -> accountB (2)
     const unsubscribe = account.watch('currencyWallets', setCurrencyWallets) // mount with account / null -> account / accountA -> accountB (2)
     return unsubscribe // unmount with account / accountA -> accountB (1) / account -> null

@@ -33,7 +33,7 @@ export const useDeletePin = (account: EdgeAccount | null | void) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const deletePin = () => {
-    if (!account) return
+    if (!account || !account.loggedIn) return
     dispatch({ type: 'DELETE_PIN_START' })
     account
       .deletePin()

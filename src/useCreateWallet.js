@@ -33,7 +33,7 @@ export const useCreateWallet = (account: EdgeAccount | null | void, type: string
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const createWallet = () => {
-    if (!account || !type || !keys) return
+    if (!account || !account.loggedIn || !type || !keys) return
     dispatch({ type: 'CREATE_WALLET_START' })
     account
       .createWallet(type, keys)

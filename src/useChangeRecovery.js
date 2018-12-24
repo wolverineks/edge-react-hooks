@@ -37,7 +37,7 @@ export const useChangeRecovery = (
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const changeRecovery = () => {
-    if (!account || !questions || !answers) return
+    if (!account || !account.loggedIn || !questions || !answers) return
     dispatch({ type: 'CHANGE_RECOVERY_START' })
     account
       .changeRecovery(questions, answers)

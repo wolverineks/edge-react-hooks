@@ -33,7 +33,7 @@ export const useDisableOtp = (account: EdgeAccount | null | void) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const disableOtp = () => {
-    if (!account) return
+    if (!account || !account.loggedIn) return
     dispatch({ type: 'DISABLE_OTP_START' })
     account
       .disableOtp()

@@ -37,7 +37,7 @@ export const useCreateCurrencyWallet = (
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const createCurrencyWallet = () => {
-    if (!account || !type) return
+    if (!account || !account.loggedIn || !type) return
     dispatch({ type: 'CREATE_CURRENCY_WALLET_START' })
     account
       .createCurrencyWallet(type, options || undefined)

@@ -7,10 +7,10 @@ type State = $PropertyType<EdgeAccount, 'otpKey'> | null
 type SetState = (State | (State => State)) => void
 
 export const useOtpKey = (account: EdgeAccount | null | void) => {
-  const [otpKey, setOtpKey]: [State, SetState] = useState(account ? account.otpKey : null)
+  const [otpKey, setOtpKey]: [State, SetState] = useState(null)
 
   const effect = () => {
-    if (!account) return // mount with null
+    if (!account || !account.loggedIn) return // mount with null
     setOtpKey(account.otpKey) // mount with account / null -> account / accountA -> accountB (2)
     const unsubscribe = account.watch('otpKey', setOtpKey) // mount with account / null -> account / accountA -> accountB (2)
     return unsubscribe // unmount with account / accountA -> accountB (1) / account -> null

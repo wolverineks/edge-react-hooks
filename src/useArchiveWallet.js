@@ -33,7 +33,7 @@ export const useArchiveWallet = (account: EdgeAccount | null | void, walletId: s
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const archiveWallet = () => {
-    if (!account || !walletId) return
+    if (!account || !account.loggedIn || !walletId) return
     dispatch({ type: 'ARCHIVE_WALLET_START' })
     account
       .changeWalletStates({ [walletId]: { archived: true } })

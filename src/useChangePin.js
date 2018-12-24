@@ -33,7 +33,7 @@ export const useChangePin = (account: EdgeAccount | null | void, pin: string | n
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const changePin = () => {
-    if (!account || !pin) return
+    if (!account || !account.loggedIn || !pin) return
     dispatch({ type: 'CHANGE_PIN_START' })
     account
       .changePin({ pin })
