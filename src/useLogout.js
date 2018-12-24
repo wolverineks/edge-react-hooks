@@ -11,7 +11,7 @@ type Action = LogoutStart | LogoutSuccess | LogoutError
 
 type State = {| error: Error | null, pending: boolean |}
 
-const initialState = { error: null, pending: false }
+const initialState: State = { error: null, pending: false }
 
 const reducer = (state: State, action: Action) => {
   switch (action.type) {

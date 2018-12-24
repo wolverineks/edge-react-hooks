@@ -32,8 +32,8 @@ const reducer = (state: State, action: Action) => {
 export const useEnablePinLogin = (account: EdgeAccount | null | void) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
-  const enablePinLogin = (pin: string) => {
-    if (!account || !pin) return
+  const enablePinLogin = () => {
+    if (!account) return
     dispatch({ type: 'ENABLE_PIN_LOGIN_START' })
     account
       .changePin({ enableLogin: true })

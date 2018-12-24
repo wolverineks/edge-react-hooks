@@ -29,7 +29,7 @@ const useActiveWalletIds = (account) => {
 
 
 
-const initialState = { pending: false, error: null };
+const initialState: State = { pending: false, error: null };
 
 const reducer = (state, action) => {
   switch (action.type) {

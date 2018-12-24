@@ -11,7 +11,7 @@ type Action = ReadReceiveAddressStart | ReadReceiveAddressSuccess | ReadReceiveA
 
 type State = {| error: Error | null, pending: boolean, receiveAddress: EdgeReceiveAddress | null |}
 
-const initialState = { pending: false, error: null, receiveAddress: null }
+const initialState: State = { pending: false, error: null, receiveAddress: null }
 
 const reducer = (state: State, action: Action) => {
   switch (action.type) {

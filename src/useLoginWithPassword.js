@@ -11,7 +11,7 @@ type Action = LoginStart | LoginSuccess | LoginError
 
 type State = {| account: EdgeAccount | null, error: Error | null, pending: boolean |}
 
-const initialState = { account: null, error: null, pending: false }
+const initialState: State = { account: null, error: null, pending: false }
 
 const reducer = (state: State, action: Action) => {
   switch (action.type) {
@@ -29,14 +29,19 @@ const reducer = (state: State, action: Action) => {
   }
 }
 
-export const useLoginWithPassword = (context: EdgeContext | null | void) => {
+export const useLoginWithPassword = (
+  context: EdgeContext | null | void,
+  username: string | null | void,
+  password: string | null | void,
+  options: EdgeAccountOptions | null | void
+) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
-  const loginWithPassword = (username: string, password: string, options?: EdgeAccountOptions) => {
-    if (!context) return
+  const loginWithPassword = () => {
+    if (!context || !username || !password) return
     dispatch({ type: 'LOGIN_START' })
     context
-      .loginWithPassword(username, password, options)
+      .loginWithPassword(username, password, options || undefined)
       .then((account: EdgeAccount) => dispatch({ type: 'LOGIN_SUCCESS', account }))
       .catch((error: Error) => dispatch({ type: 'LOGIN_ERROR', error }))
   }

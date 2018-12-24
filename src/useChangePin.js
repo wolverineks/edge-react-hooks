@@ -29,10 +29,10 @@ const reducer = (state: State, action: Action) => {
   }
 }
 
-export const useChangePin = (account: EdgeAccount | null | void) => {
+export const useChangePin = (account: EdgeAccount | null | void, pin: string | null | void) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
-  const changePin = (pin: string) => {
+  const changePin = () => {
     if (!account || !pin) return
     dispatch({ type: 'CHANGE_PIN_START' })
     account

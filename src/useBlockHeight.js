@@ -7,7 +7,7 @@ type State = $PropertyType<EdgeCurrencyWallet, 'blockHeight'> | null
 type SetState = (State | (State => State)) => void
 
 export const useBlockHeight = (wallet: EdgeCurrencyWallet | null | void) => {
-  const [blockHeight, setBlockHeight]: [State, SetState] = useState(wallet ? wallet.blockHeight : null)
+  const [blockHeight, setBlockHeight]: [State, SetState] = useState(null)
 
   const effect = () => {
     if (!wallet) return // mount with null

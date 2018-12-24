@@ -10,7 +10,7 @@ type Action = CreateAccountStart | CreateAccountSuccess | CreateAccountError
 
 type State = {| account: EdgeAccount | null, error: Error | null, pending: boolean |}
 
-const initialState = { account: null, error: null, pending: false }
+const initialState: State = { account: null, error: null, pending: false }
 
 const reducer = (state: State, action: Action) => {
   switch (action.type) {
@@ -28,14 +28,20 @@ const reducer = (state: State, action: Action) => {
   }
 }
 
-export const useCreateAccount = (context: EdgeContext | null | void) => {
+export const useCreateAccount = (
+  context: EdgeContext | null | void,
+  username: string | null | void,
+  password: string | null | void,
+  pin: string | null | void,
+  options: EdgeAccountOptions | null | void
+) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
-  const createAccount = (username: string, password?: string, pin?: string, options?: EdgeAccountOptions) => {
-    if (!context) return
+  const createAccount = () => {
+    if (!context || !username) return
     dispatch({ type: 'CREATE_ACCOUNT_START' })
     context
-      .createAccount(username, password, pin, options)
+      .createAccount(username, password || undefined, pin || undefined, options || undefined)
       .then((account: EdgeAccount) => dispatch({ type: 'CREATE_ACCOUNT_SUCCESS', account }))
       .catch((error: Error) => dispatch({ type: 'CREATE_ACCOUNT_ERROR', error }))
   }

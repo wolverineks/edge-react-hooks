@@ -4,7 +4,7 @@ import { type EdgeCurrencyWallet } from 'edge-core-js'
 import { useReducer } from 'react'
 
 type RenameStart = {| type: 'RENAME_START' |}
-type RenameSuccess = {| name: string | null, type: 'RENAME_SUCCESS' |}
+type RenameSuccess = {| type: 'RENAME_SUCCESS' |}
 type RenameError = {| error: Error, type: 'RENAME_ERROR' |}
 type Action = RenameStart | RenameSuccess | RenameError
 
@@ -28,15 +28,15 @@ const reducer = (state: State, action: Action) => {
   }
 }
 
-export const useRename = (wallet: EdgeCurrencyWallet | null | void) => {
+export const useRename = (wallet: EdgeCurrencyWallet | null | void, name: string | null | void) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
-  const rename = (name: string) => {
-    if (!wallet) return
+  const rename = () => {
+    if (!wallet || !name) return
     dispatch({ type: 'RENAME_START' })
     wallet
       .renameWallet(name)
-      .then(() => dispatch({ type: 'RENAME_SUCCESS', name }))
+      .then(() => dispatch({ type: 'RENAME_SUCCESS' }))
       .catch((error: Error) => dispatch({ type: 'RENAME_ERROR', error }))
   }
 

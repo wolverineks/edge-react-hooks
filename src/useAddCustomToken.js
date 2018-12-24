@@ -29,11 +29,11 @@ const reducer = (state: State, action: Action) => {
   }
 }
 
-export const useAddCustomToken = (wallet: EdgeCurrencyWallet | null | void) => {
+export const useAddCustomToken = (wallet: EdgeCurrencyWallet | null | void, tokenInfo: EdgeTokenInfo | null | void) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
-  const addCustomToken = (tokenInfo: EdgeTokenInfo) => {
-    if (!wallet) return
+  const addCustomToken = () => {
+    if (!wallet || !tokenInfo) return
     dispatch({ type: 'ADD_CUSTOM_TOKEN_START' })
     wallet
       .addCustomToken(tokenInfo)

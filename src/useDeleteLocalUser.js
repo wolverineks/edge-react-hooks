@@ -11,7 +11,7 @@ type Action = DeleteLocalUserStart | DeleteLocalUserSuccess | DeleteLocalUserErr
 
 type State = {| error: Error | null, pending: boolean |}
 
-const initialState = { pending: false, error: null }
+const initialState: State = { pending: false, error: null }
 
 const reducer = (state: State, action: Action) => {
   switch (action.type) {
@@ -29,11 +29,11 @@ const reducer = (state: State, action: Action) => {
   }
 }
 
-export const useDeleteLocalUser = (context: EdgeContext | null | void) => {
+export const useDeleteLocalUser = (context: EdgeContext | null | void, username: string) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
-  const deleteLocalUser = (username: string) => {
-    if (!context) return
+  const deleteLocalUser = () => {
+    if (!context || !username) return
     dispatch({ type: 'DELETE_LOCAL_USER_START' })
     context
       .deleteLocalAccount(username)

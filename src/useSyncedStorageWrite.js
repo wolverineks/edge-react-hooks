@@ -32,12 +32,13 @@ const reducer = (state: State, action: Action) => {
 
 export const useSyncedStorageWrite = (
   storageContext: EdgeAccount | EdgeCurrencyWallet | null | void,
-  path: string | null | void
+  path: string | null | void,
+  data: Stringifyable
 ) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
-  const setData = (data: Stringifyable) => {
-    if (!storageContext || !path) return
+  const setData = () => {
+    if (!storageContext || !path || !data) return
     dispatch({ type: 'WRITE_START' })
     storageContext.disklet
       .setText(path, JSON.stringify(data))

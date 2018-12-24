@@ -29,11 +29,11 @@ const reducer = (state: State, action: Action) => {
   }
 }
 
-export const useDisableTokens = (wallet: EdgeCurrencyWallet | null | void) => {
+export const useDisableTokens = (wallet: EdgeCurrencyWallet | null | void, tokens: Array<string> | null | void) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
-  const disableTokens = (tokens: Array<string>) => {
-    if (!wallet) return
+  const disableTokens = () => {
+    if (!wallet || !tokens) return
     dispatch({ type: 'DISABLE_TOKENS_START' })
     wallet
       .disableTokens(tokens)

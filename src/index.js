@@ -1,13 +1,16 @@
 // @flow
 
+import { useActivateWallet } from './useActivateWallet.js'
 import { useActiveWalletIds } from './useActiveWalletIds.js'
 import { useAddCustomToken } from './useAddCustomToken.js'
 import { useArchivedWalletIds } from './useArchivedWalletIds.js'
+import { useArchiveWallet } from './useArchiveWallet.js'
 import { useBalances } from './useBalances.js'
 import { useBlockHeight } from './useBlockHeight.js'
 import { useCancelOtpReset } from './useCancelOtpReset.js'
 import { useChangePassword } from './useChangePassword.js'
 import { useChangePin } from './useChangePin.js'
+import { useChangeRecovery } from './useChangeRecovery.js'
 import { useCheckPassword } from './useCheckPassword.js'
 import { useCheckPin } from './useCheckPin.js'
 import { useConvertCurrency } from './useConvertCurrency.js'
@@ -18,6 +21,8 @@ import { useDeletedWalletIds } from './useDeletedWalletIds.js'
 import { useDeleteLocalUser } from './useDeleteLocalUser.js'
 import { useDeletePassword } from './useDeletePassword.js'
 import { useDeletePin } from './useDeletePin.js'
+import { useDeleteRecovery } from './useDeleteRecovery.js'
+import { useDeleteWallet } from './useDeleteWallet.js'
 import { useDisableOtp } from './useDisableOtp.js'
 import { useDisablePinLogin } from './useDisablePinLogin.js'
 import { useDisableTokens } from './useDisableTokens.js'
@@ -35,7 +40,6 @@ import { useName } from './useName.js'
 import { useOtpKey } from './useOtpKey.js'
 import { useOtpResetDate } from './useOtpResetDate.js'
 import { useReceiveAddress } from './useReceiveAddress.js'
-import { useRecovery } from './useRecovery.js'
 import { useRename } from './useRename.js'
 import { useSetFiatCurrencyCode } from './useSetFiatCurrencyCode.js'
 import { useStartEngine } from './useStartEngine.js'
@@ -93,5 +97,9 @@ export {
   useDeletePin,
   useChangePin,
   useCheckPin,
-  useRecovery
+  useDeleteRecovery,
+  useChangeRecovery,
+  useActivateWallet,
+  useArchiveWallet,
+  useDeleteWallet
 }

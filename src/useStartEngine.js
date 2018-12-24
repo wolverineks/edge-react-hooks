@@ -10,7 +10,7 @@ type Action = StartEngineStart | StartEngineSuccess | StartEngineError
 
 type State = {| error: Error | null, pending: boolean |}
 
-const initialState = { pending: false, error: null }
+const initialState: State = { pending: false, error: null }
 
 const reducer = (state: State, action: Action) => {
   switch (action.type) {

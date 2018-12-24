@@ -11,7 +11,7 @@ type Action = CheckPasswordStart | CheckPasswordSuccess | CheckPasswordError
 
 type State = {| error: Error | null, passwordVerified: boolean | null, pending: boolean |}
 
-const initialState = { pending: false, error: null, passwordVerified: null }
+const initialState: State = { pending: false, error: null, passwordVerified: null }
 
 const reducer = (state: State, action: Action) => {
   switch (action.type) {
@@ -29,10 +29,10 @@ const reducer = (state: State, action: Action) => {
   }
 }
 
-export const useCheckPassword = (account: EdgeAccount | null | void) => {
+export const useCheckPassword = (account: EdgeAccount | null | void, password: string | null | void) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
-  const checkPassword = (password: string) => {
+  const checkPassword = () => {
     if (!account || !password) return
     dispatch({ type: 'CHECK_PASSWORD_START' })
     account

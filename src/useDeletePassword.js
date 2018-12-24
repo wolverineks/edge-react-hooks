@@ -11,7 +11,7 @@ type Action = DeletePasswordStart | DeletePasswordSuccess | DeletePasswordError
 
 type State = {| error: Error | null, pending: boolean |}
 
-const initialState = { pending: false, error: null }
+const initialState: State = { pending: false, error: null }
 
 const reducer = (state: State, action: Action) => {
   switch (action.type) {
@@ -32,8 +32,8 @@ const reducer = (state: State, action: Action) => {
 export const useDeletePassword = (account: EdgeAccount | null | void) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
-  const deletePassword = (password: string) => {
-    if (!account || !password) return
+  const deletePassword = () => {
+    if (!account) return
     dispatch({ type: 'DELETE_PASSWORD_START' })
     account
       .deletePassword()

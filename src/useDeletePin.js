@@ -32,7 +32,7 @@ const reducer = (state: State, action: Action) => {
 export const useDeletePin = (account: EdgeAccount | null | void) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
-  const enablePinLogin = () => {
+  const deletePin = () => {
     if (!account) return
     dispatch({ type: 'DELETE_PIN_START' })
     account
@@ -41,5 +41,5 @@ export const useDeletePin = (account: EdgeAccount | null | void) => {
       .catch((error: Error) => dispatch({ type: 'DELETE_PIN_ERROR', error }))
   }
 
-  return { ...state, enablePinLogin }
+  return { ...state, deletePin }
 }

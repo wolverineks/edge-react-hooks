@@ -4,7 +4,7 @@ import { type EdgeCurrencyWallet } from 'edge-core-js'
 import { useReducer } from 'react'
 
 type WriteFiatCurrencyCodeStart = {| type: 'WRITE_FIAT_CURRENCY_CODE_START' |}
-type WriteFiatCurrencyCodeSuccess = {| fiatCurrencyCode: string, type: 'WRITE_FIAT_CURRENCY_CODE_SUCCESS' |}
+type WriteFiatCurrencyCodeSuccess = {| type: 'WRITE_FIAT_CURRENCY_CODE_SUCCESS' |}
 type WriteFiatCurrencyCodeError = {| error: Error, type: 'WRITE_FIAT_CURRENCY_CODE_ERROR' |}
 type Action = WriteFiatCurrencyCodeStart | WriteFiatCurrencyCodeSuccess | WriteFiatCurrencyCodeError
 
@@ -28,15 +28,18 @@ const reducer = (state: State, action: Action) => {
   }
 }
 
-export const useSetFiatCurrencyCode = (wallet: EdgeCurrencyWallet | null | void) => {
+export const useSetFiatCurrencyCode = (
+  wallet: EdgeCurrencyWallet | null | void,
+  fiatCurrencyCode: string | null | void
+) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
-  const setFiatCurrencyCode = (fiatCurrencyCode: string) => {
-    if (!wallet) return
+  const setFiatCurrencyCode = () => {
+    if (!wallet || !fiatCurrencyCode) return
     dispatch({ type: 'WRITE_FIAT_CURRENCY_CODE_START' })
     wallet
       .setFiatCurrencyCode(fiatCurrencyCode)
-      .then(() => dispatch({ type: 'WRITE_FIAT_CURRENCY_CODE_SUCCESS', fiatCurrencyCode }))
+      .then(() => dispatch({ type: 'WRITE_FIAT_CURRENCY_CODE_SUCCESS' }))
       .catch((error: Error) => dispatch({ type: 'WRITE_FIAT_CURRENCY_CODE_ERROR', error }))
   }
 

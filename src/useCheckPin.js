@@ -29,10 +29,10 @@ const reducer = (state: State, action: Action) => {
   }
 }
 
-export const useCheckPin = (account: EdgeAccount | null | void) => {
+export const useCheckPin = (account: EdgeAccount | null | void, pin: string | null | void) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
-  const checkPin = (pin: string) => {
+  const checkPin = () => {
     if (!account || !pin) return
     dispatch({ type: 'CHECK_PIN_START' })
     account
