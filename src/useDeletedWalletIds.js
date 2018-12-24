@@ -7,9 +7,7 @@ type State = Array<string> | null
 type SetState = (State | (State => State)) => void
 
 export const useDeletedWalletIds = (account: EdgeAccount | null | void) => {
-  const [deletedWalletIds, setDeletedWalletIds]: [State, SetState] = useState(
-    account ? getDeletedWalletIds(account.allKeys) : null
-  )
+  const [deletedWalletIds, setDeletedWalletIds]: [State, SetState] = useState(null)
 
   const effect = () => {
     if (!account || !account.loggedIn) return // mount with null

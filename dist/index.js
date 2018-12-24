@@ -32,7 +32,7 @@ const useActivateWallet = (account, walletId) => {
   const [state, dispatch] = react.useReducer(reducer, initialState);
 
   const activateWallet = () => {
-    if (!account || !walletId) return
+    if (!account || !account.loggedIn || !walletId) return
     dispatch({ type: 'ACTIVATE_WALLET_START' });
     account
       .changeWalletStates({ [walletId]: { archived: false } })
@@ -50,7 +50,7 @@ const useActiveWalletIds = (account) => {
   const [activeWalletIds, setActiveWalletIds] = react.useState(null);
 
   const effect = () => {
-    if (!account) return // mount with null
+    if (!account || !account.loggedIn) return // mount with null, logged out
     setActiveWalletIds(account.activeWalletIds); // mount with account / null -> account / accountA -> accountB (2)
     const unsubscribe = account.watch('activeWalletIds', setActiveWalletIds); // mount with account / null -> account / accountA -> accountB (2)
     return unsubscribe // unmount with account / accountA -> accountB (1) / account -> null
@@ -107,7 +107,7 @@ const useAllKeys = (account) => {
   const [allKeys, setAllKeys] = react.useState(null);
 
   const effect = () => {
-    if (!account) return // mount with null
+    if (!account || !account.loggedIn) return // mount with null
     setAllKeys(account.allKeys); // mount with account / null -> account / accountA -> accountB (2)
     const unsubscribe = account.watch('allKeys', setAllKeys); // mount with account / null -> account / accountA -> accountB (2)
     return unsubscribe // unmount with account / accountA -> accountB (1) / account -> null
@@ -126,7 +126,7 @@ const useArchivedWalletIds = (account) => {
   const [archivedWalletIds, setArchivedWalletIds] = react.useState(null);
 
   const effect = () => {
-    if (!account) return // mount with null
+    if (!account || !account.loggedIn) return // mount with null
     setArchivedWalletIds(account.archivedWalletIds); // mount with account / null -> account / accountA -> accountB (2)
     const unsubscribe = account.watch('archivedWalletIds', setArchivedWalletIds); // mount with account / null -> account / accountA -> accountB (2)
     return unsubscribe // unmount with account / accountA -> accountB (1) / account -> null
@@ -165,7 +165,7 @@ const useArchiveWallet = (account, walletId) => {
   const [state, dispatch] = react.useReducer(reducer$2, initialState$2);
 
   const archiveWallet = () => {
-    if (!account || !walletId) return
+    if (!account || !account.loggedIn || !walletId) return
     dispatch({ type: 'ARCHIVE_WALLET_START' });
     account
       .changeWalletStates({ [walletId]: { archived: true } })
@@ -282,7 +282,7 @@ const useCancelOtpReset = (account) => {
   const [state, dispatch] = react.useReducer(reducer$4, initialState$4);
 
   const cancelOtpReset = () => {
-    if (!account) return
+    if (!account || !account.loggedIn) return
     dispatch({ type: 'CANCEL_OTP_RESET_START' });
     account
       .cancelOtpReset()
@@ -320,7 +320,7 @@ const useChangePassword = (account, password) => {
   const [state, dispatch] = react.useReducer(reducer$5, initialState$5);
 
   const changePassword = () => {
-    if (!account || !password) return
+    if (!account || !account.loggedIn || !password) return
     dispatch({ type: 'CHANGE_PASSWORD_START' });
     account
       .changePassword(password)
@@ -358,7 +358,7 @@ const useChangePin = (account, pin) => {
   const [state, dispatch] = react.useReducer(reducer$6, initialState$6);
 
   const changePin = () => {
-    if (!account || !pin) return
+    if (!account || !account.loggedIn || !pin) return
     dispatch({ type: 'CHANGE_PIN_START' });
     account
       .changePin({ pin })
@@ -400,7 +400,7 @@ const useChangeRecovery = (
   const [state, dispatch] = react.useReducer(reducer$7, initialState$7);
 
   const changeRecovery = () => {
-    if (!account || !questions || !answers) return
+    if (!account || !account.loggedIn || !questions || !answers) return
     dispatch({ type: 'CHANGE_RECOVERY_START' });
     account
       .changeRecovery(questions, answers)
@@ -437,7 +437,7 @@ const useChangeWalletStates = (account, walletStates) => {
   const [state, dispatch] = react.useReducer(reducer$8, initialState$8);
 
   const activateWallet = () => {
-    if (!account || !walletStates) return
+    if (!account || !account.loggedIn || !walletStates) return
     dispatch({ type: 'CHANGE_STATES_START' });
     account
       .changeWalletStates(walletStates)
@@ -475,7 +475,7 @@ const useCheckPassword = (account, password) => {
   const [state, dispatch] = react.useReducer(reducer$9, initialState$9);
 
   const checkPassword = () => {
-    if (!account || !password) return
+    if (!account || !account.loggedIn || !password) return
     dispatch({ type: 'CHECK_PASSWORD_START' });
     account
       .checkPassword(password)
@@ -513,7 +513,7 @@ const useCheckPin = (account, pin) => {
   const [state, dispatch] = react.useReducer(reducer$a, initialState$a);
 
   const checkPin = () => {
-    if (!account || !pin) return
+    if (!account || !account.loggedIn || !pin) return
     dispatch({ type: 'CHECK_PIN_START' });
     account
       .checkPin(pin)
@@ -633,7 +633,7 @@ const useConvertCurrency = (
   const [state, dispatch] = react.useReducer(reducer$d, initialState$d);
 
   const effect = () => {
-    if (!account || !account.rateCache || !fromCurrency || !toCurrency || !amount) return // mount with null
+    if (!account || !account.loggedIn || !account.rateCache || !fromCurrency || !toCurrency || !amount) return // mount with null
     dispatch({ type: 'CONVERT_CURRENCY_START' });
     account.rateCache
       .convertCurrency(fromCurrency, toCurrency, amount)
@@ -641,7 +641,7 @@ const useConvertCurrency = (
       .catch((error) => dispatch({ type: 'CONVERT_CURRENCY_ERROR', error })); // mount with account / null -> accoun / accounA -> accounB
 
     const unsubscribe = account.rateCache.on('update', () => {
-      if (!account || !account.rateCache || !fromCurrency || !toCurrency || !amount) return
+      if (!account || !account.loggedIn || !account.rateCache || !fromCurrency || !toCurrency || !amount) return
       account.rateCache
         .convertCurrency(fromCurrency, toCurrency, amount)
         .then((amount) => dispatch({ type: 'CONVERT_CURRENCY_SUCCESS', amount }))
@@ -730,7 +730,7 @@ const useCreateCurrencyWallet = (
   const [state, dispatch] = react.useReducer(reducer$f, initialState$f);
 
   const createCurrencyWallet = () => {
-    if (!account || !type) return
+    if (!account || !account.loggedIn || !type) return
     dispatch({ type: 'CREATE_CURRENCY_WALLET_START' });
     account
       .createCurrencyWallet(type, options || undefined)
@@ -768,7 +768,7 @@ const useCreateWallet = (account, type, keys) => {
   const [state, dispatch] = react.useReducer(reducer$g, initialState$g);
 
   const createWallet = () => {
-    if (!account || !type || !keys) return
+    if (!account || !account.loggedIn || !type || !keys) return
     dispatch({ type: 'CREATE_WALLET_START' });
     account
       .createWallet(type, keys)
@@ -783,10 +783,10 @@ const useCreateWallet = (account, type, keys) => {
 
 
 const useCurrencyWallets = (account) => {
-  const [currencyWallets, setCurrencyWallets] = react.useState(account ? account.currencyWallets : null);
+  const [currencyWallets, setCurrencyWallets] = react.useState(null);
 
   const effect = () => {
-    if (!account) return // mount with null
+    if (!account || !account.loggedIn) return // mount with null
     setCurrencyWallets(account.currencyWallets); // mount with account / null -> account / accountA -> accountB (2)
     const unsubscribe = account.watch('currencyWallets', setCurrencyWallets); // mount with account / null -> account / accountA -> accountB (2)
     return unsubscribe // unmount with account / accountA -> accountB (1) / account -> null
@@ -839,12 +839,10 @@ const useDataDump = (wallet) => {
 
 
 const useDeletedWalletIds = (account) => {
-  const [deletedWalletIds, setDeletedWalletIds] = react.useState(
-    account ? getDeletedWalletIds(account.allKeys) : null
-  );
+  const [deletedWalletIds, setDeletedWalletIds] = react.useState(null);
 
   const effect = () => {
-    if (!account) return // mount with null
+    if (!account || !account.loggedIn) return // mount with null
     setDeletedWalletIds(getDeletedWalletIds(account.allKeys)); // mount with account / null -> account / accountA -> accountB (2)
     const unsubscribe = account.watch('allKeys', allKeys => setDeletedWalletIds(getDeletedWalletIds(allKeys))); // mount with account / null -> account / accountA -> accountB (2)
     return unsubscribe // unmount with account / accountA -> accountB (1) / account -> null
@@ -928,7 +926,7 @@ const useDeletePassword = (account) => {
   const [state, dispatch] = react.useReducer(reducer$j, initialState$j);
 
   const deletePassword = () => {
-    if (!account) return
+    if (!account || !account.loggedIn) return
     dispatch({ type: 'DELETE_PASSWORD_START' });
     account
       .deletePassword()
@@ -966,7 +964,7 @@ const useDeletePin = (account) => {
   const [state, dispatch] = react.useReducer(reducer$k, initialState$k);
 
   const deletePin = () => {
-    if (!account) return
+    if (!account || !account.loggedIn) return
     dispatch({ type: 'DELETE_PIN_START' });
     account
       .deletePin()
@@ -1004,7 +1002,7 @@ const useDeleteRecovery = (account) => {
   const [state, dispatch] = react.useReducer(reducer$l, initialState$l);
 
   const deleteRecovery = () => {
-    if (!account) return
+    if (!account || !account.loggedIn) return
     dispatch({ type: 'DELETE_RECOVERY_START' });
     account
       .deleteRecovery()
@@ -1041,7 +1039,7 @@ const useDeleteWallet = (account, walletId) => {
   const [state, dispatch] = react.useReducer(reducer$m, initialState$m);
 
   const deleteWallet = () => {
-    if (!account) return
+    if (!account || !account.loggedIn) return
     dispatch({ type: 'DELETE_WALLET_START' });
     account
       .changeWalletStates({ [walletId]: { deleted: true } })
@@ -1079,7 +1077,7 @@ const useDisableOtp = (account) => {
   const [state, dispatch] = react.useReducer(reducer$n, initialState$n);
 
   const disableOtp = () => {
-    if (!account) return
+    if (!account || !account.loggedIn) return
     dispatch({ type: 'DISABLE_OTP_START' });
     account
       .disableOtp()
@@ -1117,7 +1115,7 @@ const useDisablePinLogin = (account) => {
   const [state, dispatch] = react.useReducer(reducer$o, initialState$o);
 
   const disablePinLogin = () => {
-    if (!account) return
+    if (!account || !account.loggedIn) return
     dispatch({ type: 'DISABLE_PIN_LOGIN_START' });
     account
       .changePin({ enableLogin: false })
@@ -1234,7 +1232,7 @@ const useEnableOtp = (account) => {
   const [state, dispatch] = react.useReducer(reducer$r, initialState$r);
 
   const enableOtp = () => {
-    if (!account) return
+    if (!account || !account.loggedIn) return
     dispatch({ type: 'ENABLE_OTP_START' });
     account
       .enableOtp()
@@ -1272,7 +1270,7 @@ const useEnablePinLogin = (account) => {
   const [state, dispatch] = react.useReducer(reducer$s, initialState$s);
 
   const enablePinLogin = () => {
-    if (!account) return
+    if (!account || !account.loggedIn) return
     dispatch({ type: 'ENABLE_PIN_LOGIN_START' });
     account
       .changePin({ enableLogin: true })
@@ -1465,7 +1463,7 @@ const useFetchLobby = (account, lobbyId) => {
   const [state, dispatch] = react.useReducer(reducer$x, initialState$x);
 
   const fetchLobby = () => {
-    if (!account) return
+    if (!account || !account.loggedIn) return
     dispatch({ type: 'FETCH_LOBBY_START' });
     account
       .fetchLobby(lobbyId)
@@ -2126,7 +2124,7 @@ const useLogout = (account) => {
   const [state, dispatch] = react.useReducer(reducer$M, initialState$M);
 
   const logout = () => {
-    if (!account) return
+    if (!account || !account.loggedIn) return
     dispatch({ type: 'LOGOUT_START' });
     account
       .logout()
@@ -2235,10 +2233,10 @@ const useName = (wallet) => {
 
 
 const useOtpKey = (account) => {
-  const [otpKey, setOtpKey] = react.useState(account ? account.otpKey : null);
+  const [otpKey, setOtpKey] = react.useState(null);
 
   const effect = () => {
-    if (!account) return // mount with null
+    if (!account || !account.loggedIn) return // mount with null
     setOtpKey(account.otpKey); // mount with account / null -> account / accountA -> accountB (2)
     const unsubscribe = account.watch('otpKey', setOtpKey); // mount with account / null -> account / accountA -> accountB (2)
     return unsubscribe // unmount with account / accountA -> accountB (1) / account -> null
@@ -2254,10 +2252,10 @@ const useOtpKey = (account) => {
 
 
 const useOtpResetDate = (account) => {
-  const [otpResetDate, setOtpResetDate] = react.useState(account ? account.otpResetDate : null);
+  const [otpResetDate, setOtpResetDate] = react.useState(null);
 
   const effect = () => {
-    if (!account) return // mount with null
+    if (!account || !account.loggedIn) return // mount with null
     setOtpResetDate(account.otpResetDate); // mount with account / null -> account / accountA -> accountB (2)
     const unsubscribe = account.watch('otpResetDate', setOtpResetDate); // mount with account / null -> account / accountA -> accountB (2)
     return unsubscribe // unmount with account / accountA -> accountB (1) / account -> null
