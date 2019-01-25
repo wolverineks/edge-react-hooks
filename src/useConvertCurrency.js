@@ -2,7 +2,6 @@
 
 import { type EdgeAccount } from 'edge-core-js'
 import { useEffect, useReducer } from 'react'
-import { useRef, useState } from 'react'
 
 type ConvertCurrencyStart = {| type: 'CONVERT_CURRENCY_START' |}
 type ConvertCurrencySuccess = {| amount: number, type: 'CONVERT_CURRENCY_SUCCESS' |}

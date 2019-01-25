@@ -33,6 +33,9 @@ import { useDeleteWallet } from './useDeleteWallet.js'
 import { useDisableOtp } from './useDisableOtp.js'
 import { useDisablePinLogin } from './useDisablePinLogin.js'
 import { useDisableTokens } from './useDisableTokens.js'
+import { useEdgeAccount } from './useEdgeAccount.js'
+import { useEdgeContext } from './useEdgeContext.js'
+import { useEdgeCurrencyWallet } from './useEdgeCurrencyWallet.js'
 import { useEnabledTokens } from './useEnabledTokens.js'
 import { useEnableOtp } from './useEnableOtp.js'
 import { useEnablePinLogin } from './useEnablePinLogin.js'
@@ -58,6 +61,7 @@ import { useLoginWithPassword } from './useLoginWithPassword.js'
 import { useLoginWithPin } from './useLoginWithPin.js'
 import { useLoginWithRecovery2 } from './useLoginWithRecovery2.js'
 import { useLogout } from './useLogout.js'
+import { useMakeEdgeContext } from './useMakeEdgeContext.js'
 import { useMakeSpend } from './useMakeSpend.js'
 import { useMaxSpendable } from './useMaxSpendable.js'
 import { useName } from './useName.js'
@@ -87,6 +91,10 @@ import { useTransactions } from './useTransactions.js'
 import { useValidatePassword } from './useValidatePassword.js'
 
 export {
+  useEdgeContext,
+  useEdgeAccount,
+  useEdgeCurrencyWallet,
+  useMakeEdgeContext,
   useActivateWallet,
   useActiveWalletIds,
   useAddCustomToken,
