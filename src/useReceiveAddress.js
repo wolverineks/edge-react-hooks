@@ -29,10 +29,7 @@ const reducer = (state: State, action: Action) => {
   }
 }
 
-export const useReceiveAddress = (
-  wallet: EdgeCurrencyWallet | null | void,
-  options: EdgeCurrencyCodeOptions | null | void
-) => {
+export const useReceiveAddress = (wallet: ?EdgeCurrencyWallet, options: ?EdgeCurrencyCodeOptions) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const effect = () => {
@@ -56,8 +53,7 @@ export const useReceiveAddress = (
     return unsubscribe // unmount with wallet / walletA -> walletB (1) / wallet -> null
   }
 
-  useEffect(effect, []) // onMount
-  useEffect(effect, [wallet]) // onUpdate
+  useEffect(effect, [wallet])
 
   return state
 }

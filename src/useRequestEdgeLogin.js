@@ -29,10 +29,7 @@ const reducer = (state: State, action: Action) => {
   }
 }
 
-export const useRequestEdgeLogin = (
-  context: EdgeContext | null | void,
-  options: EdgeEdgeLoginOptions | null | void
-) => {
+export const useRequestEdgeLogin = (context: ?EdgeContext, options: ?EdgeEdgeLoginOptions) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const requestEdgeLogin = () => {

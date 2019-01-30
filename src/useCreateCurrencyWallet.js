@@ -30,9 +30,9 @@ const reducer = (state: State, action: Action) => {
 }
 
 export const useCreateCurrencyWallet = (
-  account: EdgeAccount | null | void,
+  account: ?EdgeAccount,
   type: string,
-  options: EdgeCreateCurrencyWalletOptions | null | void
+  options: ?EdgeCreateCurrencyWalletOptions
 ) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 

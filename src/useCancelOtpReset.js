@@ -29,7 +29,7 @@ const reducer = (state: State, action: Action) => {
   }
 }
 
-export const useCancelOtpReset = (account: EdgeAccount | null | void) => {
+export const useCancelOtpReset = (account: ?EdgeAccount) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const cancelOtpReset = () => {

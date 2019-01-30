@@ -29,7 +29,7 @@ const reducer = (state: State, action: Action) => {
   }
 }
 
-export const useGetRecovery2Key = (context: EdgeContext | null | void, username: string | null | void) => {
+export const useGetRecovery2Key = (context: ?EdgeContext, username: ?string) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const getRecovery2Key = () => {

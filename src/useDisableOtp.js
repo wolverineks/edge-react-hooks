@@ -29,7 +29,7 @@ const reducer = (state: State, action: Action) => {
   }
 }
 
-export const useDisableOtp = (account: EdgeAccount | null | void) => {
+export const useDisableOtp = (account: ?EdgeAccount) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const disableOtp = () => {

@@ -29,7 +29,7 @@ const reducer = (state: State, action: Action) => {
   }
 }
 
-export const useDeleteLocalUser = (context: EdgeContext | null | void, username: string) => {
+export const useDeleteLocalUser = (context: ?EdgeContext, username: string) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const deleteLocalUser = () => {

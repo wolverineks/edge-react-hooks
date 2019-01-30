@@ -29,7 +29,7 @@ const reducer = (state: State, action: Action) => {
   }
 }
 
-export const useFetchLobby = (account: EdgeAccount | null | void, lobbyId: string) => {
+export const useFetchLobby = (account: ?EdgeAccount, lobbyId: string) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const fetchLobby = () => {

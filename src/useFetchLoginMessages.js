@@ -29,7 +29,7 @@ const reducer = (state: State, action: Action) => {
   }
 }
 
-export const useFetchLoginMessages = (context: EdgeContext | null | void) => {
+export const useFetchLoginMessages = (context: ?EdgeContext) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const fetchLoginMessages = () => {

@@ -1,13 +1,8 @@
 // @flow
 
 import { useActivateWallet } from './useActivateWallet.js'
-import { useActiveWalletIds } from './useActiveWalletIds.js'
 import { useAddCustomToken } from './useAddCustomToken.js'
-import { useAllKeys } from './useAllKeys.js'
-import { useArchivedWalletIds } from './useArchivedWalletIds.js'
 import { useArchiveWallet } from './useArchiveWallet.js'
-import { useBalances } from './useBalances.js'
-import { useBlockHeight } from './useBlockHeight.js'
 import { useBroadcastTransaction } from './useBroadcastTransaction.js'
 import { useCancelOtpReset } from './useCancelOtpReset.js'
 import { useChangePassword } from './useChangePassword.js'
@@ -22,9 +17,7 @@ import { useConvertCurrency } from './useConvertCurrency.js'
 import { useCreateAccount } from './useCreateAccount.js'
 import { useCreateCurrencyWallet } from './useCreateCurrencyWallet.js'
 import { useCreateWallet } from './useCreateWallet.js'
-import { useCurrencyWallets } from './useCurrencyWallets.js'
 import { useDataDump } from './useDataDump.js'
-import { useDeletedWalletIds } from './useDeletedWalletIds.js'
 import { useDeleteLocalUser } from './useDeleteLocalUser.js'
 import { useDeletePassword } from './useDeletePassword.js'
 import { useDeletePin } from './useDeletePin.js'
@@ -46,7 +39,6 @@ import { useExportToQbo } from './useExportToQbo.js'
 import { useFetchLobby } from './useFetchLobby.js'
 import { useFetchLoginMessages } from './useFetchLoginMessages.js'
 import { useFetchRecovery2Questions } from './useFetchRecovery2Questions.js'
-import { useFiatCurrencyCode } from './useFiatCurrencyCode.js'
 import { useFixUsername } from './useFixUsername.js'
 import { useGetPaymentProtocolInfo } from './useGetPaymentProtocolInfo.js'
 import { useGetRecovery2Key } from './useGetRecovery2Key.js'
@@ -54,7 +46,6 @@ import { useListRecoveryQuestionChoices } from './useListRecoveryQuestionChoices
 import { useListUsernames } from './useListUsernames.js'
 import { useLocalStorageRead } from './useLocalStorageRead.js'
 import { useLocalStorageWrite } from './useLocalStorageWrite.js'
-import { useLocalUsers } from './useLocalUsers.js'
 import { useLockReceiveAddress } from './useLockReceiveAddress.js'
 import { useLoginWithKey } from './useLoginWithKey.js'
 import { useLoginWithPassword } from './useLoginWithPassword.js'
@@ -64,9 +55,6 @@ import { useLogout } from './useLogout.js'
 import { useMakeEdgeContext } from './useMakeEdgeContext.js'
 import { useMakeSpend } from './useMakeSpend.js'
 import { useMaxSpendable } from './useMaxSpendable.js'
-import { useName } from './useName.js'
-import { useOtpKey } from './useOtpKey.js'
-import { useOtpResetDate } from './useOtpResetDate.js'
 import { useParseUri } from './useParseUri.js'
 import { useReceiveAddress } from './useReceiveAddress.js'
 import { useRename } from './useRename.js'
@@ -85,7 +73,6 @@ import { useSweepPrivateKeys } from './useSweepPrivateKeys.js'
 import { useSync } from './useSync.js'
 import { useSyncedStorageRead } from './useSyncedStorageRead.js'
 import { useSyncedStorageWrite } from './useSyncedStorageWrite.js'
-import { useSyncRatio } from './useSyncRatio.js'
 import { useTransactionCount } from './useTransactionCount.js'
 import { useTransactions } from './useTransactions.js'
 import { useValidatePassword } from './useValidatePassword.js'
@@ -96,13 +83,8 @@ export {
   useEdgeCurrencyWallet,
   useMakeEdgeContext,
   useActivateWallet,
-  useActiveWalletIds,
   useAddCustomToken,
-  useAllKeys,
-  useArchivedWalletIds,
   useArchiveWallet,
-  useBalances,
-  useBlockHeight,
   useBroadcastTransaction,
   useCancelOtpReset,
   useChangePassword,
@@ -117,9 +99,7 @@ export {
   useCreateAccount,
   useCreateCurrencyWallet,
   useCreateWallet,
-  useCurrencyWallets,
   useDataDump,
-  useDeletedWalletIds,
   useDeleteLocalUser,
   useDeletePassword,
   useDeletePin,
@@ -138,7 +118,6 @@ export {
   useFetchLobby,
   useFetchLoginMessages,
   useFetchRecovery2Questions,
-  useFiatCurrencyCode,
   useFixUsername,
   useGetPaymentProtocolInfo,
   useGetRecovery2Key,
@@ -146,7 +125,6 @@ export {
   useListUsernames,
   useLocalStorageRead,
   useLocalStorageWrite,
-  useLocalUsers,
   useLockReceiveAddress,
   useLoginWithKey,
   useLoginWithPassword,
@@ -155,9 +133,6 @@ export {
   useLogout,
   useMakeSpend,
   useMaxSpendable,
-  useName,
-  useOtpKey,
-  useOtpResetDate,
   useParseUri,
   useReceiveAddress,
   useRename,
@@ -176,7 +151,6 @@ export {
   useSync,
   useSyncedStorageRead,
   useSyncedStorageWrite,
-  useSyncRatio,
   useTransactionCount,
   useTransactions,
   useValidatePassword

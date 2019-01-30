@@ -28,10 +28,7 @@ const reducer = (state: State, action: Action) => {
   }
 }
 
-export const useSaveReceiveAddress = (
-  wallet: EdgeCurrencyWallet | null | void,
-  receiveAddress: EdgeReceiveAddress | null | void
-) => {
+export const useSaveReceiveAddress = (wallet: ?EdgeCurrencyWallet, receiveAddress: ?EdgeReceiveAddress) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const saveReceiveAddress = () => {

@@ -29,7 +29,7 @@ const reducer = (state: State, action: Action) => {
   }
 }
 
-export const useDeletePin = (account: EdgeAccount | null | void) => {
+export const useDeletePin = (account: ?EdgeAccount) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const deletePin = () => {

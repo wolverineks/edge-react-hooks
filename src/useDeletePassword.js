@@ -29,7 +29,7 @@ const reducer = (state: State, action: Action) => {
   }
 }
 
-export const useDeletePassword = (account: EdgeAccount | null | void) => {
+export const useDeletePassword = (account: ?EdgeAccount) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const deletePassword = () => {

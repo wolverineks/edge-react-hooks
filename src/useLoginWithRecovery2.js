@@ -30,11 +30,11 @@ const reducer = (state: State, action: Action) => {
 }
 
 export const useLoginWithRecovery2 = (
-  context: EdgeContext | null | void,
-  recovery2Key: string | null | void,
-  username: string | null | void,
-  answers: Array<string> | null | void,
-  options: EdgeAccountOptions | null | void
+  context: ?EdgeContext,
+  recovery2Key: ?string,
+  username: ?string,
+  answers: ?Array<string>,
+  options: ?EdgeAccountOptions
 ) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 

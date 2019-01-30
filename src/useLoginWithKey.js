@@ -30,10 +30,10 @@ const reducer = (state: State, action: Action) => {
 }
 
 export const useLoginWithKey = (
-  context: EdgeContext | null | void,
-  username: string | null | void,
-  key: string | null | void,
-  options: EdgeAccountOptions | null | void
+  context: ?EdgeContext,
+  username: ?string,
+  key: ?string,
+  options: ?EdgeAccountOptions
 ) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 

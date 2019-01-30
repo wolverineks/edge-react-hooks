@@ -28,7 +28,7 @@ const reducer = (state: State, action: Action) => {
   }
 }
 
-export const useDataDump = (wallet: EdgeCurrencyWallet | null | void) => {
+export const useDataDump = (wallet: ?EdgeCurrencyWallet) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const getDataDump = () => {

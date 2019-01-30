@@ -29,11 +29,7 @@ const reducer = (state: State, action: Action) => {
   }
 }
 
-export const useChangeRecovery = (
-  account: EdgeAccount | null | void,
-  questions: Array<string>,
-  answers: Array<string>
-) => {
+export const useChangeRecovery = (account: ?EdgeAccount, questions: Array<string>, answers: Array<string>) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const changeRecovery = () => {

@@ -29,7 +29,7 @@ const reducer = (state: State, action: Action) => {
   }
 }
 
-export const useEnablePinLogin = (account: EdgeAccount | null | void) => {
+export const useEnablePinLogin = (account: ?EdgeAccount) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const enablePinLogin = () => {

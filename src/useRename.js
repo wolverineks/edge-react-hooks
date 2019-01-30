@@ -28,7 +28,7 @@ const reducer = (state: State, action: Action) => {
   }
 }
 
-export const useRename = (wallet: EdgeCurrencyWallet | null | void, name: string | null | void) => {
+export const useRename = (wallet: ?EdgeCurrencyWallet, name: ?string) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const rename = () => {

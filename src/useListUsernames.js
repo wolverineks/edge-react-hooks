@@ -29,7 +29,7 @@ const reducer = (state: State, action: Action) => {
   }
 }
 
-export const useListUsernames = (context: EdgeContext | null | void) => {
+export const useListUsernames = (context: ?EdgeContext) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const listUsernames = () => {

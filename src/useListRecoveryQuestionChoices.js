@@ -32,7 +32,7 @@ const reducer = (state: State, action: Action) => {
   }
 }
 
-export const useListRecoveryQuestionChoices = (context: EdgeContext | null | void, username: string | null | void) => {
+export const useListRecoveryQuestionChoices = (context: ?EdgeContext, username: ?string) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const listRecoveryQuestionChoices = () => {

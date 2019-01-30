@@ -30,10 +30,7 @@ const reducer = (state: State, action: Action) => {
   }
 }
 
-export const useTransactions = (
-  wallet: EdgeCurrencyWallet | null | void,
-  options: EdgeGetTransactionsOptions | null | void
-) => {
+export const useTransactions = (wallet: ?EdgeCurrencyWallet, options: ?EdgeGetTransactionsOptions = {}) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const effect = () => {
@@ -55,8 +52,7 @@ export const useTransactions = (
     return unsubscribe // unmount with wallet / walletA -> walletB (1) / wallet -> null
   }
 
-  useEffect(effect, []) // onMount
-  useEffect(effect, [wallet]) // onUpdate
+  useEffect(effect, [wallet])
 
   return { ...state }
 }

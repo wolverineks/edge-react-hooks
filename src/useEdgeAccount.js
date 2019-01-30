@@ -9,14 +9,12 @@ export const useEdgeAccount = (account: ?EdgeAccount, properties: Array<$Keys<Ed
   const forceUpdate = useForceUpdate()
 
   const effect = () => {
-    if (!account) return // mount with null
     const unsubscribes = properties.map(property => (account ? account.watch(property, forceUpdate) : () => null))
     const unsubscribe = () => unsubscribes.forEach(fn => fn())
     return unsubscribe // unmount with account / accountA -> accountB (1) / account -> null
   }
 
-  useEffect(effect, []) // onMount
-  useEffect(effect, [account]) // onUpdate
+  useEffect(effect, [account])
 
   return void 0
 }

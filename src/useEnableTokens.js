@@ -29,7 +29,7 @@ const reducer = (state: State, action: Action) => {
   }
 }
 
-export const useEnableTokens = (wallet: EdgeCurrencyWallet | null | void, tokens: Array<string> | null | void) => {
+export const useEnableTokens = (wallet: ?EdgeCurrencyWallet, tokens: ?Array<string>) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const enableTokens = () => {

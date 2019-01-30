@@ -28,7 +28,7 @@ const reducer = (state: State, action: Action) => {
   }
 }
 
-export const useMakeSpend = (wallet: EdgeCurrencyWallet | null | void, spendInfo: EdgeSpendInfo | null | void) => {
+export const useMakeSpend = (wallet: ?EdgeCurrencyWallet, spendInfo: ?EdgeSpendInfo) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const makeSpend = () => {

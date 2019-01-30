@@ -29,7 +29,7 @@ const reducer = (state: State, action: Action) => {
   }
 }
 
-export const useCheckPassword = (account: EdgeAccount | null | void, password: string | null | void) => {
+export const useCheckPassword = (account: ?EdgeAccount, password: ?string) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const checkPassword = () => {

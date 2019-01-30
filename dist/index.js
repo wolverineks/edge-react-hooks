@@ -2,7 +2,7 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-require('edge-core-js');
+var edgeCoreJs = require('edge-core-js');
 var react = require('react');
 
 // 
@@ -46,25 +46,6 @@ const useActivateWallet = (account, walletId) => {
 // 
 
 
-const useActiveWalletIds = (account) => {
-  const [activeWalletIds, setActiveWalletIds] = react.useState(null);
-
-  const effect = () => {
-    if (!account || !account.loggedIn) return // mount with null, logged out
-    setActiveWalletIds(account.activeWalletIds); // mount with account / null -> account / accountA -> accountB (2)
-    const unsubscribe = account.watch('activeWalletIds', setActiveWalletIds); // mount with account / null -> account / accountA -> accountB (2)
-    return unsubscribe // unmount with account / accountA -> accountB (1) / account -> null
-  };
-
-  react.useEffect(effect, []); // onMount
-  react.useEffect(effect, [account]); // onUpdate
-
-  return activeWalletIds
-};
-
-// 
-
-
 
 
 const initialState$1 = { pending: false, error: null };
@@ -98,44 +79,6 @@ const useAddCustomToken = (wallet, tokenInfo) => {
   };
 
   return { ...state, addCustomToken }
-};
-
-// 
-
-
-const useAllKeys = (account) => {
-  const [allKeys, setAllKeys] = react.useState(null);
-
-  const effect = () => {
-    if (!account || !account.loggedIn) return // mount with null
-    setAllKeys(account.allKeys); // mount with account / null -> account / accountA -> accountB (2)
-    const unsubscribe = account.watch('allKeys', setAllKeys); // mount with account / null -> account / accountA -> accountB (2)
-    return unsubscribe // unmount with account / accountA -> accountB (1) / account -> null
-  };
-
-  react.useEffect(effect, []); // onMount
-  react.useEffect(effect, [account]); // onUpdate
-
-  return allKeys
-};
-
-// 
-
-
-const useArchivedWalletIds = (account) => {
-  const [archivedWalletIds, setArchivedWalletIds] = react.useState(null);
-
-  const effect = () => {
-    if (!account || !account.loggedIn) return // mount with null
-    setArchivedWalletIds(account.archivedWalletIds); // mount with account / null -> account / accountA -> accountB (2)
-    const unsubscribe = account.watch('archivedWalletIds', setArchivedWalletIds); // mount with account / null -> account / accountA -> accountB (2)
-    return unsubscribe // unmount with account / accountA -> accountB (1) / account -> null
-  };
-
-  react.useEffect(effect, []); // onMount
-  react.useEffect(effect, [account]); // onUpdate
-
-  return archivedWalletIds
 };
 
 // 
@@ -179,44 +122,6 @@ const useArchiveWallet = (account, walletId) => {
 // 
 
 
-const useBalances = (wallet) => {
-  const [balances, setBalances] = react.useState(null);
-
-  const effect = () => {
-    if (!wallet) return // mount with null
-    setBalances(wallet.balances);
-    const unsubscribe = wallet.watch('balances', setBalances); // mount with wallet / null -> wallet / walletA -> walletB (2)
-    return unsubscribe // unmount with wallet / walletA -> walletB (1) / wallet -> null
-  };
-
-  react.useEffect(effect, []); // onMount
-  react.useEffect(effect, [wallet]); // onUpdate
-
-  return balances
-};
-
-// 
-
-
-const useBlockHeight = (wallet) => {
-  const [blockHeight, setBlockHeight] = react.useState(null);
-
-  const effect = () => {
-    if (!wallet) return // mount with null
-    setBlockHeight(wallet.blockHeight);
-    const unsubscribe = wallet.watch('blockHeight', setBlockHeight); // mount with wallet / null -> wallet / walletA -> walletB (2)
-    return unsubscribe // unmount with wallet / walletA -> walletB (1) / wallet -> null
-  };
-
-  react.useEffect(effect, []); // onMount
-  react.useEffect(effect, [wallet]); // onUpdate
-
-  return blockHeight
-};
-
-// 
-
-
 
 
 const initialState$3 = { pending: false, error: null };
@@ -237,10 +142,7 @@ const reducer$3 = (state, action) => {
   }
 };
 
-const useBroadcastTransaction = (
-  wallet,
-  transaction
-) => {
+const useBroadcastTransaction = (wallet, transaction) => {
   const [state, dispatch] = react.useReducer(reducer$3, initialState$3);
 
   const broadcastTransaction = () => {
@@ -650,8 +552,7 @@ const useConvertCurrency = (
     return unsubscribe // unmount with account / accountA -> accountB (1) / account -> null
   };
 
-  react.useEffect(effect, []); // onMount
-  react.useEffect(effect, [account, fromCurrency, toCurrency, amount]); // onUpdate
+  react.useEffect(effect, [account, fromCurrency, toCurrency, amount]);
 
   return state
 };
@@ -683,7 +584,7 @@ const useCreateAccount = (
   username,
   password,
   pin,
-  options
+  options = {}
 ) => {
   const [state, dispatch] = react.useReducer(reducer$e, initialState$e);
 
@@ -782,25 +683,6 @@ const useCreateWallet = (account, type, keys) => {
 // 
 
 
-const useCurrencyWallets = (account) => {
-  const [currencyWallets, setCurrencyWallets] = react.useState(null);
-
-  const effect = () => {
-    if (!account || !account.loggedIn) return // mount with null
-    setCurrencyWallets(account.currencyWallets); // mount with account / null -> account / accountA -> accountB (2)
-    const unsubscribe = account.watch('currencyWallets', setCurrencyWallets); // mount with account / null -> account / accountA -> accountB (2)
-    return unsubscribe // unmount with account / accountA -> accountB (1) / account -> null
-  };
-
-  react.useEffect(effect, []); // onMount
-  react.useEffect(effect, [account]); // onUpdate
-
-  return currencyWallets
-};
-
-// 
-
-
 
 const initialState$h = { dataDump: null, error: null, pending: false };
 
@@ -833,32 +715,6 @@ const useDataDump = (wallet) => {
   };
 
   return { ...state, getDataDump }
-};
-
-// 
-
-
-const useDeletedWalletIds = (account) => {
-  const [deletedWalletIds, setDeletedWalletIds] = react.useState(null);
-
-  const effect = () => {
-    if (!account || !account.loggedIn) return // mount with null
-    setDeletedWalletIds(getDeletedWalletIds(account.allKeys)); // mount with account / null -> account / accountA -> accountB (2)
-    const unsubscribe = account.watch('allKeys', allKeys => setDeletedWalletIds(getDeletedWalletIds(allKeys))); // mount with account / null -> account / accountA -> accountB (2)
-    return unsubscribe // unmount with account / accountA -> accountB (1) / account -> null
-  };
-
-  react.useEffect(effect, []); // onMount
-  react.useEffect(effect, [account]); // onUpdate
-
-  return deletedWalletIds
-};
-
-const getDeletedWalletIds = (walletInfos) => {
-  const deletedWalletInfos = walletInfos.filter(key => key.deleted);
-  const deletedWalletIds = deletedWalletInfos.map((key) => key.id);
-
-  return deletedWalletIds
 };
 
 // 
@@ -1166,6 +1022,65 @@ const useDisableTokens = (wallet, tokens) => {
 
 // 
 
+const useForceUpdate = () => {
+  const [, setState] = react.useState(false);
+  const forceUpdate = () => setState(state => !state);
+  return forceUpdate
+};
+
+// 
+
+const useEdgeAccount = (account, properties) => {
+  const forceUpdate = useForceUpdate();
+
+  const effect = () => {
+    const unsubscribes = properties.map(property => (account ? account.watch(property, forceUpdate) : () => null));
+    const unsubscribe = () => unsubscribes.forEach(fn => fn());
+    return unsubscribe // unmount with account / accountA -> accountB (1) / account -> null
+  };
+
+  react.useEffect(effect, [account]);
+
+  return void 0
+};
+
+// 
+
+const useEdgeContext = (context, properties = []) => {
+  const forceUpdate = useForceUpdate();
+
+  const effect = () => {
+    const unsubscribes = properties.map(key => (context ? context.watch(key, forceUpdate) : () => null));
+    const unsubscribe = () => unsubscribes.forEach(fn => fn());
+    return unsubscribe // unmount with context / contextA -> contextB (1) / context -> null
+  };
+
+  react.useEffect(effect, [context]);
+
+  return void 0
+};
+
+// 
+
+const useEdgeCurrencyWallet = (
+  wallet,
+  properties = []
+) => {
+  const forceUpdate = useForceUpdate();
+
+  const effect = () => {
+    const unsubscribes = properties.map(property => (wallet ? wallet.watch(property, forceUpdate) : () => null));
+    const unsubscribe = () => unsubscribes.forEach(fn => fn());
+    return unsubscribe // unmount with wallet / walletA -> walletB (1) / wallet -> null
+  };
+
+  react.useEffect(effect, [wallet]);
+
+  return void 0
+};
+
+// 
+
 
 
 
@@ -1199,8 +1114,7 @@ const useEnabledTokens = (wallet) => {
       .catch((error) => dispatch({ type: 'READ_ENABLED_TOKENS_ERROR', error }));
   };
 
-  react.useEffect(effect, []); // onMount
-  react.useEffect(effect, [wallet]); // onUpdate
+  react.useEffect(effect, [wallet]);
 
   return state
 };
@@ -1378,10 +1292,7 @@ const reducer$v = (state, action) => {
   }
 };
 
-const useExportToCsv = (
-  wallet,
-  options
-) => {
+const useExportToCsv = (wallet, options) => {
   const [state, dispatch] = react.useReducer(reducer$v, initialState$v);
 
   const exportToCsv = () => {
@@ -1418,10 +1329,7 @@ const reducer$w = (state, action) => {
   }
 };
 
-const useExportToQbo = (
-  wallet,
-  options
-) => {
+const useExportToQbo = (wallet, options) => {
   const [state, dispatch] = react.useReducer(reducer$w, initialState$w);
 
   const exportToQbo = () => {
@@ -1556,24 +1464,6 @@ const useFetchRecovery2Questions = (
 
 // 
 
-const useFiatCurrencyCode = (wallet) => {
-  const [fiatCurrencyCode, setFiatCurrencyCode] = react.useState(null);
-
-  const effect = () => {
-    if (!wallet) return // mount with null
-    setFiatCurrencyCode(wallet.fiatCurrencyCode);
-    const unsubscribe = wallet.watch('fiatCurrencyCode', setFiatCurrencyCode); // mount with wallet / null -> wallet / walletA -> walletB (2)
-    return unsubscribe // unmount with wallet / walletA -> walletB (1) / wallet -> null
-  };
-
-  react.useEffect(effect, []); // onMount
-  react.useEffect(effect, [wallet]); // onUpdate
-
-  return fiatCurrencyCode
-};
-
-// 
-
 
 
 
@@ -1630,10 +1520,7 @@ const reducer$B = (state, action) => {
   }
 };
 
-const useGetPaymentProtocolInfo = (
-  wallet,
-  paymentProtocolUrl
-) => {
+const useGetPaymentProtocolInfo = (wallet, paymentProtocolUrl) => {
   const [state, dispatch] = react.useReducer(reducer$B, initialState$B);
 
   const getPaymentProtocolInfo = () => {
@@ -1790,10 +1677,7 @@ const reducer$F = (state, action) => {
   }
 };
 
-const useLocalStorageRead = (
-  storageContext,
-  path
-) => {
+const useLocalStorageRead = (storageContext, path) => {
   const [state, dispatch] = react.useReducer(reducer$F, initialState$F);
 
   const effect = () => {
@@ -1803,24 +1687,11 @@ const useLocalStorageRead = (
       .getText(path)
       .then((data) => dispatch({ type: 'READ_SUCCESS', data: JSON.parse(data) }))
       .catch((error) => dispatch({ type: 'READ_ERROR', error })); // mount with storageContext / null -> storageContext / storageContextA -> storageContextB
-
-    const unsubscribe = storageContext.watch(
-      'localDisklet',
-      (localDisklet) => {
-        if (!storageContext || !path) return
-        localDisklet
-          .getText(path)
-          .then((data) => dispatch({ type: 'READ_SUCCESS', data: JSON.parse(data) }))
-          .catch((error) => dispatch({ type: 'READ_ERROR', error }));
-      }
-    );
-    return unsubscribe // unmount with storageContext / storageContextA -> storageContextB (1) / storageContext -> null
   };
 
-  react.useEffect(effect, []); // onMount
-  react.useEffect(effect, [storageContext]); // onUpdate
+  react.useEffect(effect, [storageContext]);
 
-  return state
+  return { ...state, refresh: effect }
 };
 
 // 
@@ -1847,11 +1718,7 @@ const reducer$G = (state, action) => {
   }
 };
 
-const useLocalStorageWrite = (
-  storageContext,
-  path,
-  data
-) => {
+const useLocalStorageWrite = (storageContext, path, data) => {
   const [state, dispatch] = react.useReducer(reducer$G, initialState$G);
 
   const setData = () => {
@@ -1864,24 +1731,6 @@ const useLocalStorageWrite = (
   };
 
   return { ...state, setData }
-};
-
-// 
-
-const useLocalUsers = (context) => {
-  const [localUsers, setLocalUsers] = react.useState(null);
-
-  const effect = () => {
-    if (!context) return // mount with null
-    setLocalUsers(context.localUsers);
-    const unsubscribe = context.watch('localUsers', setLocalUsers); // mount with context / null -> context / contextA -> contextB (2)
-    return unsubscribe // unmount with context / contextA -> contextB (1) / context -> null
-  };
-
-  react.useEffect(effect, []); // onMount
-  react.useEffect(effect, [context]); // onUpdate
-
-  return localUsers
 };
 
 // 
@@ -1906,10 +1755,7 @@ const reducer$H = (state, action) => {
   }
 };
 
-const useLockReceiveAddress = (
-  wallet,
-  receiveAddress
-) => {
+const useLockReceiveAddress = (wallet, receiveAddress) => {
   const [state, dispatch] = react.useReducer(reducer$H, initialState$H);
 
   const lockReceiveAddress = () => {
@@ -2137,6 +1983,23 @@ const useLogout = (account) => {
 
 // 
 
+const useMakeEdgeContext = (contextOptions) => {
+  const [state, setState] = react.useState({ context: null, pending: false, error: null });
+
+  const effect = () => {
+    setState(state => ({ ...state, error: null, pending: true }));
+    edgeCoreJs.makeEdgeContext(contextOptions)
+      .then((context) => setState(state => ({ ...state, pending: false, context })))
+      .catch((error) => setState(state => ({ ...state, pending: false, error })));
+  };
+
+  react.useEffect(effect, []);
+
+  return state
+};
+
+// 
+
 
 
 const initialState$N = { pending: false, error: null };
@@ -2213,63 +2076,6 @@ const useMaxSpendable = (wallet, spendInfo) => {
 // 
 
 
-const useName = (wallet) => {
-  const [name, setName] = react.useState(wallet ? wallet.name : null);
-
-  const effect = () => {
-    if (!wallet) return // mount with null
-    setName(wallet.name); // mount with wallet / null -> wallet / walletA -> walletB (2)
-    const unsubscribe = wallet.watch('name', setName); // mount with wallet / null -> wallet / walletA -> walletB (2)
-    return unsubscribe // unmount with wallet / walletA -> walletB (1) / wallet -> null
-  };
-
-  react.useEffect(effect, []); // onMount
-  react.useEffect(effect, [wallet]); // onUpdate
-
-  return name
-};
-
-// 
-
-
-const useOtpKey = (account) => {
-  const [otpKey, setOtpKey] = react.useState(null);
-
-  const effect = () => {
-    if (!account || !account.loggedIn) return // mount with null
-    setOtpKey(account.otpKey); // mount with account / null -> account / accountA -> accountB (2)
-    const unsubscribe = account.watch('otpKey', setOtpKey); // mount with account / null -> account / accountA -> accountB (2)
-    return unsubscribe // unmount with account / accountA -> accountB (1) / account -> null
-  };
-
-  react.useEffect(effect, []); // onMount
-  react.useEffect(effect, [account]); // onUpdate
-
-  return otpKey
-};
-
-// 
-
-
-const useOtpResetDate = (account) => {
-  const [otpResetDate, setOtpResetDate] = react.useState(null);
-
-  const effect = () => {
-    if (!account || !account.loggedIn) return // mount with null
-    setOtpResetDate(account.otpResetDate); // mount with account / null -> account / accountA -> accountB (2)
-    const unsubscribe = account.watch('otpResetDate', setOtpResetDate); // mount with account / null -> account / accountA -> accountB (2)
-    return unsubscribe // unmount with account / accountA -> accountB (1) / account -> null
-  };
-
-  react.useEffect(effect, []); // onMount
-  react.useEffect(effect, [account]); // onUpdate
-
-  return otpResetDate
-};
-
-// 
-
-
 
 const initialState$P = { pending: false, error: null, uri: null };
 
@@ -2327,10 +2133,7 @@ const reducer$Q = (state, action) => {
   }
 };
 
-const useReceiveAddress = (
-  wallet,
-  options
-) => {
+const useReceiveAddress = (wallet, options) => {
   const [state, dispatch] = react.useReducer(reducer$Q, initialState$Q);
 
   const effect = () => {
@@ -2354,8 +2157,7 @@ const useReceiveAddress = (
     return unsubscribe // unmount with wallet / walletA -> walletB (1) / wallet -> null
   };
 
-  react.useEffect(effect, []); // onMount
-  react.useEffect(effect, [wallet]); // onUpdate
+  react.useEffect(effect, [wallet]);
 
   return state
 };
@@ -2420,10 +2222,7 @@ const reducer$S = (state, action) => {
   }
 };
 
-const useRequestEdgeLogin = (
-  context,
-  options
-) => {
+const useRequestEdgeLogin = (context, options) => {
   const [state, dispatch] = react.useReducer(reducer$S, initialState$S);
 
   const requestEdgeLogin = () => {
@@ -2539,10 +2338,7 @@ const reducer$V = (state, action) => {
   }
 };
 
-const useSaveReceiveAddress = (
-  wallet,
-  receiveAddress
-) => {
+const useSaveReceiveAddress = (wallet, receiveAddress) => {
   const [state, dispatch] = react.useReducer(reducer$V, initialState$V);
 
   const saveReceiveAddress = () => {
@@ -2579,10 +2375,7 @@ const reducer$W = (state, action) => {
   }
 };
 
-const useSaveTransaction = (
-  wallet,
-  transaction
-) => {
+const useSaveTransaction = (wallet, transaction) => {
   const [state, dispatch] = react.useReducer(reducer$W, initialState$W);
 
   const saveTransaction = () => {
@@ -2661,10 +2454,7 @@ const reducer$Y = (state, action) => {
   }
 };
 
-const useSetFiatCurrencyCode = (
-  wallet,
-  fiatCurrencyCode
-) => {
+const useSetFiatCurrencyCode = (wallet, fiatCurrencyCode) => {
   const [state, dispatch] = react.useReducer(reducer$Y, initialState$Y);
 
   const setFiatCurrencyCode = () => {
@@ -2701,10 +2491,7 @@ const reducer$Z = (state, action) => {
   }
 };
 
-const useSignBroadcastAndSaveTransaction = (
-  wallet,
-  transaction
-) => {
+const useSignBroadcastAndSaveTransaction = (wallet, transaction) => {
   const [state, dispatch] = react.useReducer(reducer$Z, initialState$Z);
 
   const signBroadcastAndSaveTransaction = () => {
@@ -2753,10 +2540,7 @@ const reducer$_ = (state, action) => {
   }
 };
 
-const useSignTransaction = (
-  wallet,
-  transaction
-) => {
+const useSignTransaction = (wallet, transaction) => {
   const [state, dispatch] = react.useReducer(reducer$_, initialState$_);
 
   const signTransaction = () => {
@@ -2867,10 +2651,7 @@ const reducer$12 = (state, action) => {
   }
 };
 
-const useSweepPrivateKeys = (
-  wallet,
-  spendInfo
-) => {
+const useSweepPrivateKeys = (wallet, spendInfo) => {
   const [state, dispatch] = react.useReducer(reducer$12, initialState$12);
 
   const sweepPrivateKeys = () => {
@@ -2945,10 +2726,7 @@ const reducer$14 = (state, action) => {
   }
 };
 
-const useSyncedStorageRead = (
-  storageContext,
-  path
-) => {
+const useSyncedStorageRead = (storageContext, path, initial) => {
   const [state, dispatch] = react.useReducer(reducer$14, initialState$14);
 
   const effect = () => {
@@ -2956,26 +2734,18 @@ const useSyncedStorageRead = (
     dispatch({ type: 'READ_START' });
     storageContext.disklet
       .getText(path)
+      .catch((error) => {
+        if (initial === undefined) throw error
+        const hack = storageContext;
+        return hack.disklet.setText(path, initial).then(() => hack.disklet.getText(path))
+      })
       .then((data) => dispatch({ type: 'READ_SUCCESS', data: JSON.parse(data) }))
       .catch((error) => dispatch({ type: 'READ_ERROR', error })); // mount with storageContext / null -> storageContext / storageContextA -> storageContextB
-
-    const unsubscribe = storageContext.watch(
-      'disklet',
-      (disklet) => {
-        if (!storageContext || !path) return
-        disklet
-          .getText(path)
-          .then((data) => dispatch({ type: 'READ_SUCCESS', data: JSON.parse(data) }))
-          .catch((error) => dispatch({ type: 'READ_ERROR', error }));
-      }
-    );
-    return unsubscribe // unmount with storageContext / storageContextA -> storageContextB (1) / storageContext -> null
   };
 
-  react.useEffect(effect, []); // onMount
-  react.useEffect(effect, [storageContext]); // onUpdate
+  react.useEffect(effect, [storageContext]);
 
-  return state
+  return { ...state, refresh: effect }
 };
 
 // 
@@ -3001,11 +2771,7 @@ const reducer$15 = (state, action) => {
   }
 };
 
-const useSyncedStorageWrite = (
-  storageContext,
-  path,
-  data
-) => {
+const useSyncedStorageWrite = (storageContext, path, data) => {
   const [state, dispatch] = react.useReducer(reducer$15, initialState$15);
 
   const setData = () => {
@@ -3018,25 +2784,6 @@ const useSyncedStorageWrite = (
   };
 
   return { ...state, setData }
-};
-
-// 
-
-
-const useSyncRatio = (wallet) => {
-  const [syncRatio, setSyncRatio] = react.useState(wallet ? wallet.syncRatio : null);
-
-  const effect = () => {
-    if (!wallet) return // mount with null
-    setSyncRatio(wallet.syncRatio);
-    const unsubscribe = wallet.watch('syncRatio', setSyncRatio); // mount with wallet / null -> wallet / walletA -> walletB (2)
-    return unsubscribe // unmount with wallet / walletA -> walletB (1) / wallet -> null
-  };
-
-  react.useEffect(effect, []); // onMount
-  react.useEffect(effect, [wallet]); // onUpdate
-
-  return syncRatio
 };
 
 // 
@@ -3061,10 +2808,7 @@ const reducer$16 = (state, action) => {
   }
 };
 
-const useTransactionCount = (
-  wallet,
-  options
-) => {
+const useTransactionCount = (wallet, options = {}) => {
   const [state, dispatch] = react.useReducer(reducer$16, initialState$16);
 
   const effect = () => {
@@ -3086,8 +2830,7 @@ const useTransactionCount = (
     return unsubscribe // unmount with wallet / walletA -> walletB (1) / wallet -> null
   };
 
-  react.useEffect(effect, []); // onMount
-  react.useEffect(effect, [wallet]); // onUpdate
+  react.useEffect(effect, [wallet]);
 
   return { ...state }
 };
@@ -3115,10 +2858,7 @@ const reducer$17 = (state, action) => {
   }
 };
 
-const useTransactions = (
-  wallet,
-  options
-) => {
+const useTransactions = (wallet, options = {}) => {
   const [state, dispatch] = react.useReducer(reducer$17, initialState$17);
 
   const effect = () => {
@@ -3140,8 +2880,7 @@ const useTransactions = (
     return unsubscribe // unmount with wallet / walletA -> walletB (1) / wallet -> null
   };
 
-  react.useEffect(effect, []); // onMount
-  react.useEffect(effect, [wallet]); // onUpdate
+  react.useEffect(effect, [wallet]);
 
   return { ...state }
 };
@@ -3185,14 +2924,13 @@ const useValidatePassword = (context, password) => {
 
 //
 
+exports.useEdgeContext = useEdgeContext;
+exports.useEdgeAccount = useEdgeAccount;
+exports.useEdgeCurrencyWallet = useEdgeCurrencyWallet;
+exports.useMakeEdgeContext = useMakeEdgeContext;
 exports.useActivateWallet = useActivateWallet;
-exports.useActiveWalletIds = useActiveWalletIds;
 exports.useAddCustomToken = useAddCustomToken;
-exports.useAllKeys = useAllKeys;
-exports.useArchivedWalletIds = useArchivedWalletIds;
 exports.useArchiveWallet = useArchiveWallet;
-exports.useBalances = useBalances;
-exports.useBlockHeight = useBlockHeight;
 exports.useBroadcastTransaction = useBroadcastTransaction;
 exports.useCancelOtpReset = useCancelOtpReset;
 exports.useChangePassword = useChangePassword;
@@ -3207,9 +2945,7 @@ exports.useConvertCurrency = useConvertCurrency;
 exports.useCreateAccount = useCreateAccount;
 exports.useCreateCurrencyWallet = useCreateCurrencyWallet;
 exports.useCreateWallet = useCreateWallet;
-exports.useCurrencyWallets = useCurrencyWallets;
 exports.useDataDump = useDataDump;
-exports.useDeletedWalletIds = useDeletedWalletIds;
 exports.useDeleteLocalUser = useDeleteLocalUser;
 exports.useDeletePassword = useDeletePassword;
 exports.useDeletePin = useDeletePin;
@@ -3228,7 +2964,6 @@ exports.useExportToQbo = useExportToQbo;
 exports.useFetchLobby = useFetchLobby;
 exports.useFetchLoginMessages = useFetchLoginMessages;
 exports.useFetchRecovery2Questions = useFetchRecovery2Questions;
-exports.useFiatCurrencyCode = useFiatCurrencyCode;
 exports.useFixUsername = useFixUsername;
 exports.useGetPaymentProtocolInfo = useGetPaymentProtocolInfo;
 exports.useGetRecovery2Key = useGetRecovery2Key;
@@ -3236,7 +2971,6 @@ exports.useListRecoveryQuestionChoices = useListRecoveryQuestionChoices;
 exports.useListUsernames = useListUsernames;
 exports.useLocalStorageRead = useLocalStorageRead;
 exports.useLocalStorageWrite = useLocalStorageWrite;
-exports.useLocalUsers = useLocalUsers;
 exports.useLockReceiveAddress = useLockReceiveAddress;
 exports.useLoginWithKey = useLoginWithKey;
 exports.useLoginWithPassword = useLoginWithPassword;
@@ -3245,9 +2979,6 @@ exports.useLoginWithRecovery2 = useLoginWithRecovery2;
 exports.useLogout = useLogout;
 exports.useMakeSpend = useMakeSpend;
 exports.useMaxSpendable = useMaxSpendable;
-exports.useName = useName;
-exports.useOtpKey = useOtpKey;
-exports.useOtpResetDate = useOtpResetDate;
 exports.useParseUri = useParseUri;
 exports.useReceiveAddress = useReceiveAddress;
 exports.useRename = useRename;
@@ -3266,7 +2997,6 @@ exports.useSweepPrivateKeys = useSweepPrivateKeys;
 exports.useSync = useSync;
 exports.useSyncedStorageRead = useSyncedStorageRead;
 exports.useSyncedStorageWrite = useSyncedStorageWrite;
-exports.useSyncRatio = useSyncRatio;
 exports.useTransactionCount = useTransactionCount;
 exports.useTransactions = useTransactions;
 exports.useValidatePassword = useValidatePassword;

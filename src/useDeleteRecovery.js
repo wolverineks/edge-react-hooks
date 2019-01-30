@@ -29,7 +29,7 @@ const reducer = (state: State, action: Action) => {
   }
 }
 
-export const useDeleteRecovery = (account: EdgeAccount | null | void) => {
+export const useDeleteRecovery = (account: ?EdgeAccount) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const deleteRecovery = () => {

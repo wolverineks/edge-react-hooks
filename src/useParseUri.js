@@ -28,7 +28,7 @@ const reducer = (state: State, action: Action) => {
   }
 }
 
-export const useParseUri = (wallet: EdgeCurrencyWallet | null | void, uri: string | null | void) => {
+export const useParseUri = (wallet: ?EdgeCurrencyWallet, uri: ?string) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const parseUri = () => {

@@ -28,7 +28,7 @@ const reducer = (state: State, action: Action) => {
   }
 }
 
-export const useDeleteWallet = (account: EdgeAccount | null | void, walletId: string) => {
+export const useDeleteWallet = (account: ?EdgeAccount, walletId: string) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const deleteWallet = () => {

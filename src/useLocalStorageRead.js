@@ -31,10 +31,8 @@ const reducer = (state: State, action: Action) => {
   }
 }
 
-export const useLocalStorageRead = (
-  storageContext: EdgeAccount | EdgeCurrencyWallet | null | void,
-  path: string | null | void
-) => {
+type StorageContext = EdgeAccount | EdgeCurrencyWallet
+export const useLocalStorageRead = (storageContext: ?StorageContext, path: ?string) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const effect = () => {
@@ -44,22 +42,9 @@ export const useLocalStorageRead = (
       .getText(path)
       .then((data: string) => dispatch({ type: 'READ_SUCCESS', data: JSON.parse(data) }))
       .catch((error: Error) => dispatch({ type: 'READ_ERROR', error })) // mount with storageContext / null -> storageContext / storageContextA -> storageContextB
-
-    const unsubscribe = storageContext.watch(
-      'localDisklet',
-      (localDisklet: $PropertyType<EdgeAccount | EdgeCurrencyWallet, 'localDisklet'>) => {
-        if (!storageContext || !path) return
-        localDisklet
-          .getText(path)
-          .then((data: string) => dispatch({ type: 'READ_SUCCESS', data: JSON.parse(data) }))
-          .catch((error: Error) => dispatch({ type: 'READ_ERROR', error }))
-      }
-    )
-    return unsubscribe // unmount with storageContext / storageContextA -> storageContextB (1) / storageContext -> null
   }
 
-  useEffect(effect, []) // onMount
-  useEffect(effect, [storageContext]) // onUpdate
+  useEffect(effect, [storageContext])
 
-  return state
+  return { ...state, refresh: effect }
 }

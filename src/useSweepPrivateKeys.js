@@ -28,10 +28,7 @@ const reducer = (state: State, action: Action) => {
   }
 }
 
-export const useSweepPrivateKeys = (
-  wallet: EdgeCurrencyWallet | null | void,
-  spendInfo: EdgeSpendInfo | null | void
-) => {
+export const useSweepPrivateKeys = (wallet: ?EdgeCurrencyWallet, spendInfo: ?EdgeSpendInfo) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const sweepPrivateKeys = () => {

@@ -1,6 +1,6 @@
 {
   "name": "edge-react-hooks",
-  "version": "1.1.31",
+  "version": "1.2.0",
   "keywords": [
     "edge",
     "hooks",
@@ -10,7 +10,7 @@
   "author": "Kevin Sullivan <wolverine.ks@gmail.com>",
   "main": "dist/index.js",
   "scripts": {
-    "build": "rimraf dist && rollup -c",
+    "build": "rimraf dist && mkdir dist && rollup -c",
     "flow": "node_modules/.bin/flow",
     "flow-coverage": "flow-coverage-report",
     "format": "sort-package-json; import-sort -l --write '*.js' 'src/**/*.js'; prettier-eslint --write '*.js' 'src/**/*.js'",

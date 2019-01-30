@@ -30,10 +30,7 @@ const reducer = (state: State, action: Action) => {
   }
 }
 
-export const useGetPaymentProtocolInfo = (
-  wallet: EdgeCurrencyWallet | null | void,
-  paymentProtocolUrl: string | null | void
-) => {
+export const useGetPaymentProtocolInfo = (wallet: ?EdgeCurrencyWallet, paymentProtocolUrl: ?string) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const getPaymentProtocolInfo = () => {

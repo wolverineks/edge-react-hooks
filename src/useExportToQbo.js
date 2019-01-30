@@ -28,10 +28,7 @@ const reducer = (state: State, action: Action) => {
   }
 }
 
-export const useExportToQbo = (
-  wallet: EdgeCurrencyWallet | null | void,
-  options: EdgeGetTransactionsOptions | null | void
-) => {
+export const useExportToQbo = (wallet: ?EdgeCurrencyWallet, options: ?EdgeGetTransactionsOptions) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const exportToQbo = () => {

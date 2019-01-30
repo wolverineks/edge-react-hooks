@@ -28,7 +28,7 @@ const reducer = (state: State, action: Action) => {
   }
 }
 
-export const useStartEngine = (wallet: EdgeCurrencyWallet | null | void) => {
+export const useStartEngine = (wallet: ?EdgeCurrencyWallet) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const startEngine = () => {

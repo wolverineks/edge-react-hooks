@@ -9,14 +9,12 @@ export const useEdgeContext = (context: ?EdgeContext, properties: Array<$Keys<Ed
   const forceUpdate = useForceUpdate()
 
   const effect = () => {
-    if (!context) return // mount with null
     const unsubscribes = properties.map(key => (context ? context.watch(key, forceUpdate) : () => null))
     const unsubscribe = () => unsubscribes.forEach(fn => fn())
     return unsubscribe // unmount with context / contextA -> contextB (1) / context -> null
   }
 
-  useEffect(effect, []) // onMount
-  useEffect(effect, [context]) // onUpdate
+  useEffect(effect, [context])
 
   return void 0
 }

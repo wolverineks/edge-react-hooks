@@ -29,11 +29,11 @@ const reducer = (state: State, action: Action) => {
 }
 
 export const useCreateAccount = (
-  context: EdgeContext | null | void,
-  username: string | null | void,
-  password: string | null | void,
-  pin: string | null | void,
-  options: EdgeAccountOptions | null | void
+  context: ?EdgeContext,
+  username: ?string,
+  password: ?string,
+  pin: ?string,
+  options: ?EdgeAccountOptions = {}
 ) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 

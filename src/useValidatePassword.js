@@ -29,7 +29,7 @@ const reducer = (state: State, action: Action) => {
   }
 }
 
-export const useValidatePassword = (context: EdgeContext | null | void, password: string | null | void) => {
+export const useValidatePassword = (context: ?EdgeContext, password: ?string) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const validatePassword = () => {

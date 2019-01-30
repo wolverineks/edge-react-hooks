@@ -29,10 +29,10 @@ const reducer = (state: State, action: Action) => {
 }
 
 export const useSaveTransactionMetadata = (
-  wallet: EdgeCurrencyWallet | null | void,
-  txid: string | null | void,
-  currencyCode: string | null | void,
-  metadata: EdgeMetadata | null | void
+  wallet: ?EdgeCurrencyWallet,
+  txid: ?string,
+  currencyCode: ?string,
+  metadata: ?EdgeMetadata
 ) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 

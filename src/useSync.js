@@ -28,7 +28,8 @@ const reducer = (state: State, action: Action) => {
   }
 }
 
-export const useSync = (storageContext: EdgeAccount | EdgeCurrencyWallet | null | void) => {
+type StorageContext = EdgeAccount | EdgeCurrencyWallet
+export const useSync = (storageContext: ?StorageContext) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const sync = () => {

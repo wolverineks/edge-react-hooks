@@ -30,10 +30,10 @@ const reducer = (state: State, action: Action) => {
 }
 
 export const useLoginWithPin = (
-  context: EdgeContext | null | void,
-  username: string | null | void,
-  pin: string | null | void,
-  options: EdgeAccountOptions | null | void
+  context: ?EdgeContext,
+  username: ?string,
+  pin: ?string,
+  options: ?EdgeAccountOptions
 ) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 

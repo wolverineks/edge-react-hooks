@@ -28,7 +28,7 @@ const reducer = (state: State, action: Action) => {
   }
 }
 
-export const useResyncBlockchain = (wallet: EdgeCurrencyWallet | null | void) => {
+export const useResyncBlockchain = (wallet: ?EdgeCurrencyWallet) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const resyncBlockchain = () => {

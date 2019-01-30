@@ -29,10 +29,10 @@ const reducer = (state: State, action: Action) => {
 }
 
 export const useConvertCurrency = (
-  account: EdgeAccount | null | void,
-  fromCurrency: string | null | void,
-  toCurrency: string | null | void,
-  amount: number | null | void
+  account: ?EdgeAccount,
+  fromCurrency: ?string,
+  toCurrency: ?string,
+  amount: ?number
 ) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
@@ -54,8 +54,7 @@ export const useConvertCurrency = (
     return unsubscribe // unmount with account / accountA -> accountB (1) / account -> null
   }
 
-  useEffect(effect, []) // onMount
-  useEffect(effect, [account, fromCurrency, toCurrency, amount]) // onUpdate
+  useEffect(effect, [account, fromCurrency, toCurrency, amount])
 
   return state
 }

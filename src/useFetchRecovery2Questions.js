@@ -32,11 +32,7 @@ const reducer = (state: State, action: Action) => {
   }
 }
 
-export const useFetchRecovery2Questions = (
-  context: EdgeContext | null | void,
-  recovery2Key: string | null | void,
-  username: string | null | void
-) => {
+export const useFetchRecovery2Questions = (context: ?EdgeContext, recovery2Key: ?string, username: ?string) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const fetchRecovery2Questions = () => {

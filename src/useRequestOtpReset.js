@@ -29,11 +29,7 @@ const reducer = (state: State, action: Action) => {
   }
 }
 
-export const useRequestOtpReset = (
-  context: EdgeContext | null | void,
-  username: string | null | void,
-  otpResetToken: string | null | void
-) => {
+export const useRequestOtpReset = (context: ?EdgeContext, username: ?string, otpResetToken: ?string) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const requestOtpReset = () => {

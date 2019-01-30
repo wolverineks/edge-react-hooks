@@ -29,7 +29,7 @@ const reducer = (state: State, action: Action) => {
   }
 }
 
-export const useFixUsername = (context: EdgeContext | null | void, username: string | null | void) => {
+export const useFixUsername = (context: ?EdgeContext, username: ?string) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const fixUsername = () => {

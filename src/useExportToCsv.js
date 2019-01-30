@@ -28,10 +28,7 @@ const reducer = (state: State, action: Action) => {
   }
 }
 
-export const useExportToCsv = (
-  wallet: EdgeCurrencyWallet | null | void,
-  options: EdgeGetTransactionsOptions | null | void
-) => {
+export const useExportToCsv = (wallet: ?EdgeCurrencyWallet, options: ?EdgeGetTransactionsOptions) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const exportToCsv = () => {

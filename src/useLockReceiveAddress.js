@@ -28,10 +28,7 @@ const reducer = (state: State, action: Action) => {
   }
 }
 
-export const useLockReceiveAddress = (
-  wallet: EdgeCurrencyWallet | null | void,
-  receiveAddress: EdgeReceiveAddress | null | void
-) => {
+export const useLockReceiveAddress = (wallet: ?EdgeCurrencyWallet, receiveAddress: ?EdgeReceiveAddress) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const lockReceiveAddress = () => {

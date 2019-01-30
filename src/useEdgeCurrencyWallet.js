@@ -12,14 +12,12 @@ export const useEdgeCurrencyWallet = (
   const forceUpdate = useForceUpdate()
 
   const effect = () => {
-    if (!wallet) return // mount with null
     const unsubscribes = properties.map(property => (wallet ? wallet.watch(property, forceUpdate) : () => null))
     const unsubscribe = () => unsubscribes.forEach(fn => fn())
     return unsubscribe // unmount with wallet / walletA -> walletB (1) / wallet -> null
   }
 
-  useEffect(effect, []) // onMount
-  useEffect(effect, [wallet]) // onUpdate
+  useEffect(effect, [wallet])
 
   return void 0
 }

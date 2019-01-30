@@ -29,7 +29,7 @@ const reducer = (state: State, action: Action) => {
   }
 }
 
-export const useAddCustomToken = (wallet: EdgeCurrencyWallet | null | void, tokenInfo: EdgeTokenInfo | null | void) => {
+export const useAddCustomToken = (wallet: ?EdgeCurrencyWallet, tokenInfo: ?EdgeTokenInfo) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const addCustomToken = () => {

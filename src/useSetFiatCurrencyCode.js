@@ -28,10 +28,7 @@ const reducer = (state: State, action: Action) => {
   }
 }
 
-export const useSetFiatCurrencyCode = (
-  wallet: EdgeCurrencyWallet | null | void,
-  fiatCurrencyCode: string | null | void
-) => {
+export const useSetFiatCurrencyCode = (wallet: ?EdgeCurrencyWallet, fiatCurrencyCode: ?string) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const setFiatCurrencyCode = () => {

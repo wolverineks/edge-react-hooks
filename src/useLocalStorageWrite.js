@@ -31,11 +31,8 @@ const reducer = (state: State, action: Action) => {
   }
 }
 
-export const useLocalStorageWrite = (
-  storageContext: EdgeAccount | EdgeCurrencyWallet | null | void,
-  path: string | null | void,
-  data: Stringifyable | null | void
-) => {
+type StorageContext = EdgeAccount | EdgeCurrencyWallet
+export const useLocalStorageWrite = (storageContext: ?StorageContext, path: ?string, data: ?Stringifyable) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const setData = () => {

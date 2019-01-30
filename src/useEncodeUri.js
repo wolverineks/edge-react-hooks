@@ -28,7 +28,7 @@ const reducer = (state: State, action: Action) => {
   }
 }
 
-export const useEncodeUri = (wallet: EdgeCurrencyWallet | null | void, uri: EdgeEncodeUri | null | void) => {
+export const useEncodeUri = (wallet: ?EdgeCurrencyWallet, uri: ?EdgeEncodeUri) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const encodeUri = () => {

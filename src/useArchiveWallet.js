@@ -29,7 +29,7 @@ const reducer = (state: State, action: Action) => {
   }
 }
 
-export const useArchiveWallet = (account: EdgeAccount | null | void, walletId: string | null | void) => {
+export const useArchiveWallet = (account: ?EdgeAccount, walletId: ?string) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const archiveWallet = () => {

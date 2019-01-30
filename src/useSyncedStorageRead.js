@@ -30,10 +30,8 @@ const reducer = (state: State, action: Action) => {
   }
 }
 
-export const useSyncedStorageRead = (
-  storageContext: EdgeAccount | EdgeCurrencyWallet | null | void,
-  path: string | null | void
-) => {
+type StorageContext = EdgeAccount | EdgeCurrencyWallet
+export const useSyncedStorageRead = (storageContext: ?StorageContext, path: ?string, initial: ?Stringifyable) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const effect = () => {
@@ -41,24 +39,16 @@ export const useSyncedStorageRead = (
     dispatch({ type: 'READ_START' })
     storageContext.disklet
       .getText(path)
+      .catch((error: Error) => {
+        if (initial === undefined) throw error
+        const hack: any = storageContext
+        return hack.disklet.setText(path, initial).then(() => hack.disklet.getText(path))
+      })
       .then((data: string) => dispatch({ type: 'READ_SUCCESS', data: JSON.parse(data) }))
       .catch((error: Error) => dispatch({ type: 'READ_ERROR', error })) // mount with storageContext / null -> storageContext / storageContextA -> storageContextB
-
-    const unsubscribe = storageContext.watch(
-      'disklet',
-      (disklet: $PropertyType<EdgeAccount | EdgeCurrencyWallet, 'disklet'>) => {
-        if (!storageContext || !path) return
-        disklet
-          .getText(path)
-          .then((data: string) => dispatch({ type: 'READ_SUCCESS', data: JSON.parse(data) }))
-          .catch((error: Error) => dispatch({ type: 'READ_ERROR', error }))
-      }
-    )
-    return unsubscribe // unmount with storageContext / storageContextA -> storageContextB (1) / storageContext -> null
   }
 
-  useEffect(effect, []) // onMount
-  useEffect(effect, [storageContext]) // onUpdate
+  useEffect(effect, [storageContext])
 
-  return state
+  return { ...state, refresh: effect }
 }

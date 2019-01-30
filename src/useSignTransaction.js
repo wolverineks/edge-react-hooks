@@ -28,10 +28,7 @@ const reducer = (state: State, action: Action) => {
   }
 }
 
-export const useSignTransaction = (
-  wallet: EdgeCurrencyWallet | null | void,
-  transaction: EdgeTransaction | null | void
-) => {
+export const useSignTransaction = (wallet: ?EdgeCurrencyWallet, transaction: ?EdgeTransaction) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const signTransaction = () => {
