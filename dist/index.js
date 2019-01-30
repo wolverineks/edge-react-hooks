@@ -294,11 +294,7 @@ const reducer$7 = (state, action) => {
   }
 };
 
-const useChangeRecovery = (
-  account,
-  questions,
-  answers
-) => {
+const useChangeRecovery = (account, questions, answers) => {
   const [state, dispatch] = react.useReducer(reducer$7, initialState$7);
 
   const changeRecovery = () => {
@@ -1443,11 +1439,7 @@ const reducer$z = (state, action) => {
   }
 };
 
-const useFetchRecovery2Questions = (
-  context,
-  recovery2Key,
-  username
-) => {
+const useFetchRecovery2Questions = (context, recovery2Key, username) => {
   const [state, dispatch] = react.useReducer(reducer$z, initialState$z);
 
   const fetchRecovery2Questions = () => {
@@ -1658,7 +1650,6 @@ const useListUsernames = (context) => {
 
 
 
-
 const initialState$F = { data: null, error: null, pending: false };
 
 const reducer$F = (state, action) => {
@@ -1677,7 +1668,7 @@ const reducer$F = (state, action) => {
   }
 };
 
-const useLocalStorageRead = (storageContext, path) => {
+const useLocalStorageRead = (storageContext, path, initial) => {
   const [state, dispatch] = react.useReducer(reducer$F, initialState$F);
 
   const effect = () => {
@@ -1685,6 +1676,11 @@ const useLocalStorageRead = (storageContext, path) => {
     dispatch({ type: 'READ_START' });
     storageContext.localDisklet
       .getText(path)
+      .catch((error) => {
+        if (initial === undefined) throw error
+        const hack = storageContext;
+        return hack.localDisklet.setText(path, JSON.stringify(initial)).then(() => hack.localDisklet.getText(path))
+      })
       .then((data) => dispatch({ type: 'READ_SUCCESS', data: JSON.parse(data) }))
       .catch((error) => dispatch({ type: 'READ_ERROR', error })); // mount with storageContext / null -> storageContext / storageContextA -> storageContextB
   };
@@ -2260,11 +2256,7 @@ const reducer$T = (state, action) => {
   }
 };
 
-const useRequestOtpReset = (
-  context,
-  username,
-  otpResetToken
-) => {
+const useRequestOtpReset = (context, username, otpResetToken) => {
   const [state, dispatch] = react.useReducer(reducer$T, initialState$T);
 
   const requestOtpReset = () => {
@@ -2737,7 +2729,7 @@ const useSyncedStorageRead = (storageContext, path, initial) => {
       .catch((error) => {
         if (initial === undefined) throw error
         const hack = storageContext;
-        return hack.disklet.setText(path, initial).then(() => hack.disklet.getText(path))
+        return hack.disklet.setText(path, JSON.stringify(initial)).then(() => hack.disklet.getText(path))
       })
       .then((data) => dispatch({ type: 'READ_SUCCESS', data: JSON.parse(data) }))
       .catch((error) => dispatch({ type: 'READ_ERROR', error })); // mount with storageContext / null -> storageContext / storageContextA -> storageContextB

@@ -42,7 +42,7 @@ export const useSyncedStorageRead = (storageContext: ?StorageContext, path: ?str
       .catch((error: Error) => {
         if (initial === undefined) throw error
         const hack: any = storageContext
-        return hack.disklet.setText(path, initial).then(() => hack.disklet.getText(path))
+        return hack.disklet.setText(path, JSON.stringify(initial)).then(() => hack.disklet.getText(path))
       })
       .then((data: string) => dispatch({ type: 'READ_SUCCESS', data: JSON.parse(data) }))
       .catch((error: Error) => dispatch({ type: 'READ_ERROR', error })) // mount with storageContext / null -> storageContext / storageContextA -> storageContextB
