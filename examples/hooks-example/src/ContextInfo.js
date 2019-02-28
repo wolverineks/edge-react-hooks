@@ -1,30 +1,23 @@
 // @flow
 
-import React from "react";
-import { type EdgeContext, type EdgeUserInfo } from "edge-core-js";
-import { useLocalUsers } from "edge-react-hooks";
-
-const contextStyle = {
-  border: "1px solid red",
-  padding: "5px",
-  backgroundColor: "Salmon"
-};
+import { type EdgeContext } from 'edge-core-js'
+import { useEdgeContext } from 'edge-react-hooks'
+import React from 'react'
 
 export const ContextInfo = ({ context }: { context: EdgeContext }) => {
-  const { localUsers, deleteLocalUser, error: deleteLocalUserError } = useLocalUsers(context);
+  useEdgeContext(context, [])
 
   return (
-    <div style={contextStyle}>
-      {deleteLocalUserError && <div style={contextStyle}>{deleteLocalUserError.toString()}</div>}
-      <div style={contextStyle}>
-        Previous Users:
-        {localUsers &&
-          localUsers.map((localUser: EdgeUserInfo) => (
-            <div>
-              {localUser.username} - <button onClick={() => deleteLocalUser(localUser.username)}>X</button>
-            </div>
-          ))}
+    <div>
+      Context
+      <div>
+        Previously Logged-In Accounts
+        {context.localUsers.map(({ username }) => (
+          <div key={username}>
+            {username} - <button onClick={() => context.deleteLocalAccount(username)}>X</button>
+          </div>
+        ))}
       </div>
     </div>
-  );
-};
+  )
+}

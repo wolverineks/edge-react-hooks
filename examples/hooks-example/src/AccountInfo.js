@@ -1,83 +1,48 @@
 // @flow
 
-import React from "react";
-import { type EdgeAccount, type EdgeCurrencyWallet } from "edge-core-js";
-import {
-  useActiveWalletIds,
-  useArchivedWalletIds,
-  useDeletedWalletIds,
-  useOtpKey,
-  useOtpResetDate,
-  useSyncedStorage,
-  useCurrencyWallets
-} from "edge-react-hooks";
+import { type EdgeAccount } from 'edge-core-js'
+import { useEdgeAccount } from 'edge-react-hooks'
+import React from 'react'
 
-import { WalletInfo } from "./WalletInfo.js";
+import { ActiveWalletList } from './ActiveWalletList.js'
+import { ArchivedWalletList } from './ArchivedWalletList.js'
+import { DeletedWalletList } from './DeletedWalletList.js'
 
-const accountStyle = {
-  border: "1px solid green",
-  padding: "5px",
-  backgroundColor: "LightGreen"
-};
+export const AccountInfo = ({ account, onLogout }: { account: EdgeAccount, onLogout: () => mixed }) => {
+  useEdgeAccount(account, ['username'])
+  const restoreAllWallets = () => {
+    const newWalletStates = account.allKeys.reduce(
+      (changes, { id }) => ({ ...changes, [id]: { archived: false, deleted: false } }),
+      {},
+    )
+    account.changeWalletStates(newWalletStates)
+  }
 
-export const AccountInfo = ({ account }: { account: EdgeAccount }) => {
-  const activeWalletIds = useActiveWalletIds(account);
-  const archivedWalletIds = useArchivedWalletIds(account);
-  const deletedWalletIds = useDeletedWalletIds(account);
-  const currencyWallets = useCurrencyWallets(account);
-  const otpResetDate = useOtpResetDate(account);
-  const otpKey = useOtpKey(account);
-  const { data, setData, writePending, readPending } = useSyncedStorage(account, "QWEQWE");
+  const deleteAllWallets = () =>
+    account.allKeys.forEach(({ id }) => account.changeWalletStates({ [id]: { deleted: true } }))
+  const archiveAllWallets = () =>
+    account.allKeys.forEach(({ id }) => account.changeWalletStates({ [id]: { archived: true } }))
 
   return (
     <div>
-      {activeWalletIds && (
-        <div style={accountStyle}>
-          ActiveWalletIds: {activeWalletIds.length}
-          {activeWalletIds.map((id: string) => (
-            <div>{id}</div>
-          ))}
-        </div>
-      )}
-
-      {archivedWalletIds && (
-        <div style={accountStyle}>
-          ArchivedWalletIds: {archivedWalletIds.length}
-          {archivedWalletIds.map((id: string) => (
-            <div>{id}</div>
-          ))}
-        </div>
-      )}
-
-      {deletedWalletIds && (
-        <div style={accountStyle}>
-          DeletedWalletIds: {deletedWalletIds.length}
-          {deletedWalletIds.map((id: string) => (
-            <div>{id}</div>
-          ))}
-        </div>
-      )}
-
-      <div style={accountStyle}>otpResetDate: {otpResetDate}</div>
-      <div style={accountStyle}>otpKey: {otpKey}</div>
-
-      <div style={accountStyle}>
-        <button onClick={() => setData(Math.random().toString())}>save data</button>
-        <div>account data: {data && data.toString()}</div>
-        <div>write pending: {writePending.toString()}</div>
-        <div>read pending: {readPending.toString()}</div>
+      <div>
+        <button onClick={restoreAllWallets}>RESTORE ALL WALLETS</button>
       </div>
-
-      <div style={accountStyle}>
-        ActiveWallets:
-        {account && account.currencyWallets && (
-          <div>
-            {(Object.values(currencyWallets): any).map((wallet: EdgeCurrencyWallet) => (
-              <WalletInfo wallet={wallet} />
-            ))}
-          </div>
-        )}
+      <div>
+        <button onClick={archiveAllWallets}>ARCHIVE ALL WALLETS</button>
       </div>
+      <div>
+        <button onClick={deleteAllWallets}>DELETE ALL WALLETS</button>
+      </div>
+      <div>
+        Account: {account.username} - <button onClick={() => account.logout().then(onLogout)}>Logout</button>
+      </div>
+      <br />
+      {/* <ActiveWalletList account={account} /> */}
+      <br />
+      {/* <ArchivedWalletList account={account} /> */}
+      <br />
+      {/* <DeletedWalletList account={account} /> */}
     </div>
-  );
-};
+  )
+}

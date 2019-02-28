@@ -1,51 +1,64 @@
 // @flow
 
-import { makeEdgeContext, type EdgeAccount } from "edge-core-js";
-import { ethereumCurrencyPluginFactory } from "edge-currency-ethereum";
-import React, { useEffect, useState } from "react";
+import {} from 'ramda'
 
-import { ContextInfo } from "./ContextInfo.js";
-import { AccountInfo } from "./AccountInfo.js";
+import { type EdgeAccount } from 'edge-core-js'
+import { makeEdgeContext } from 'edge-core-js'
+import { useEdgeContext, useMakeEdgeContext } from 'edge-react-hooks'
+import React, { useEffect, useState } from 'react'
 
-type Props = {||};
-export const App = (props: Props) => {
-  const [context, setContext] = useState(null);
-  const [account, setAccount] = useState(null);
-  const [loading, setLoading] = useState(false);
+import { AccountInfo } from './AccountInfo.js'
+import { ContextInfo } from './ContextInfo.js'
+import { contextOptions } from './contextOptions.js'
+import { LoginForm } from './LoginForm.js'
 
-  const login = () => {
-    setLoading(true);
-    context &&
-      context.loginWithPassword("edgy43", "Test123456").then(
-        (account: EdgeAccount) => {
-          setAccount(account);
-          setLoading(false);
-        },
-        (error: Error) => alert(error)
-      );
-  };
+type Props = {||}
+export const App = () => {
+  useEdgeContext({}, [])
+  return <div>Hello, World!</div>
+}
+// export const App = (props: Props) => {
+//   // const { makeEdgeContext, context, pending } = useMakeEdgeContext()
+//   const [context, setContext] = useState<?EdgeContext>(null)
+//   useEffect(() => {
+//     makeEdgeContext(contextOptions).then(setContext)
+//   }, [])
 
-  const reset = () => {
-    account && account.logout();
-    setAccount(null);
-    context && context.deleteLocalAccount("edgy76");
-  };
+//   useEdgeContext(context, [])
 
-  useEffect(() => {
-    const plugins = [ethereumCurrencyPluginFactory];
-    const options = { apiKey: "cfcc4514d85fff7cb3e2e7ef5dee3b827270d030", appId: "", plugins: plugins };
-    makeEdgeContext(options).then(setContext);
-  }, []); // onMount
+//   const [account, setAccount] = useState<?EdgeAccount>(null)
 
+//   if (!context) {
+//     return <div>LOADING...</div>
+//   }
+
+//   return (
+//     <div>
+//       <div>
+//         <ContextInfo context={context} />
+//       </div>
+
+//       {/* {!account ? (
+//         <LoginForm context={context} onLogin={setAccount} />
+//       ) : (
+//         <div>
+//           <Buttons account={account} />
+//           <AccountInfo account={account} onLogout={() => setAccount(null)} />
+//         </div>
+//       )} */}
+//     </div>
+//   )
+// }
+
+export default App
+
+const Buttons = ({ account }: { account: EdgeAccount }) => {
   return (
-    <div className={"App"}>
-      {context && !loading && !account && <button onClick={login}>Login</button>}
-      {loading && <div>Loading...</div>}
-      {account && <button onClick={reset}>reset</button>}
-      {context && <ContextInfo context={context} />}
-      {account && <AccountInfo account={account} />}
+    <div>
+      <button onClick={() => account.disklet.delete('deletedWallets')}>DELETE DELETED WALLETS</button>
+      <button onClick={() => account.disklet.delete('archivedWallets')}>DELETE ARCHIVED WALLETS</button>
+      <button onClick={() => account.disklet.setText('deletedWallets', '{}')}>RESET DELETED WALLETS</button>
+      <button onClick={() => account.disklet.setText('archivedWallets', '{}')}>RESET ARCHIVED WALLETS</button>
     </div>
-  );
-};
-
-export default App;
+  )
+}
