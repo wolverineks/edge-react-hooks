@@ -1,6 +1,6 @@
 {
   "name": "edge-react-hooks",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "keywords": [
     "edge",
     "hooks",
@@ -13,22 +13,32 @@
     "build": "rimraf dist && mkdir dist && rollup -c",
     "flow": "node_modules/.bin/flow",
     "flow-coverage": "flow-coverage-report",
-    "format": "sort-package-json; import-sort -l --write '*.js' 'src/**/*.js'; prettier-eslint --write '*.js' 'src/**/*.js'",
+    "format": "sort-package-json && import-sort -l --write '*.js' 'src/**/*.js' && eslint --fix '*.js' 'src/**/*.js' && prettier --write --list-different '*.js' 'src/**/*.js'",
     "precommit": "yarn format && yarn flow && yarn build",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run precommit"
+      "pre-commit": "yarn precommit"
     }
   },
+  "prettier": {
+    "printWidth": 120,
+    "semi": false,
+    "singleQuote": true
+  },
   "dependencies": {
-    "react": "^16.8.0-alpha.1"
+    "react": "^16.8.0-alpha.1",
+    "react-use-async": "^0.0.5"
   },
   "devDependencies": {
+    "@babel/core": "^7.3.4",
+    "@babel/preset-env": "^7.3.4",
     "babel-eslint": "^10.0.1",
-    "edge-core-js": "^0.13.6",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "edge-core-js": "^0.15.3",
     "eslint": "^5.12.1",
+    "eslint-config-eslint": "^5.0.1",
     "eslint-config-react-app": "^3.0.6",
     "eslint-config-standard": "^12.0.0",
     "eslint-plugin-flowtype": "^3.2.1",
@@ -39,7 +49,7 @@
     "eslint-plugin-react": "^7.12.4",
     "eslint-plugin-react-hooks": "^0.0.0",
     "eslint-plugin-standard": "^4.0.0",
-    "flow-bin": "^0.91.0",
+    "flow-bin": "^0.93.0",
     "flow-coverage-report": "^0.6.1",
     "flow-typed": "^2.5.1",
     "husky": "^1.3.1",
@@ -47,8 +57,11 @@
     "import-sort-parser-babylon": "^5.2.0",
     "import-sort-style-module": "^5.0.0",
     "prettier-eslint-cli": "^4.7.1",
+    "react-dom": "^16.8.3",
+    "react-testing-library": "^5.9.0",
     "rimraf": "^2.6.3",
     "rollup": "^1.1.2",
+    "rollup-plugin-babel": "^4.3.2",
     "rollup-plugin-flow": "^1.1.1",
     "rollup-plugin-flow-entry": "^0.2.1",
     "sort-package-json": "^1.18.0"

@@ -1,4 +1,5 @@
 [ignore]
+.*/examples
 
 [include]
 
@@ -9,3 +10,6 @@
 [options]
 
 [strict]
+
+[untyped]
+.*/node_modules/yaob/src/data.js

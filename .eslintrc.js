@@ -2,18 +2,15 @@
 
 module.exports = {
   extends: [
-    'standard',
+    'eslint:recommended',
     'plugin:flowtype/recommended',
     'plugin:react/recommended',
     'plugin:import/recommended',
-    'plugin:promise/recommended',
-    'plugin:jsx-a11y/recommended',
-    'react-app'
+    'plugin:promise/recommended'
   ],
-  plugins: ['import', 'flowtype', 'standard', 'react', 'react-hooks'],
+  plugins: ['react-hooks', 'promise'],
   rules: {
     'flowtype/require-valid-file-annotation': [2, 'always'],
-    'flowtype/semi': [2, 'never'],
     'flowtype/newline-after-flow-annotation': [2, 'always'],
     'flowtype/sort-keys': [
       2,
@@ -29,5 +26,13 @@ module.exports = {
     'no-var': 'error',
     'prefer-const': 'error',
     'react-hooks/rules-of-hooks': 'error'
+  },
+  env: {
+    browser: true,
+    node: true,
+    es6: true
+  },
+  parserOptions: {
+    ecmaVersion: 6
   }
 }
