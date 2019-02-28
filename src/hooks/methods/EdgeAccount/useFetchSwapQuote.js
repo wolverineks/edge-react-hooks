@@ -4,7 +4,7 @@ import { type EdgeAccount, type EdgeSwapRequest } from 'edge-core-js'
 import { useAsync } from 'react-use-async'
 
 export const useFetchSwapQuote = () => {
-  const { onStart, onSuccess, onError, ...rest } = useAsync()
+  const { onStart, onSuccess, onError, pending, error, data } = useAsync()
 
   const fetchSwapQuote = (account: EdgeAccount, request: EdgeSwapRequest) => {
     onStart()
@@ -14,5 +14,10 @@ export const useFetchSwapQuote = () => {
       .catch(onError)
   }
 
-  return { fetchSwapQuote, ...rest }
+  return {
+    error,
+    fetchSwapQuote,
+    pending,
+    swapQuote: data,
+  }
 }

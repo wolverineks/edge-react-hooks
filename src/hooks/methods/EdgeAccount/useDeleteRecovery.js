@@ -4,7 +4,7 @@ import { type EdgeAccount } from 'edge-core-js'
 import { useAsync } from 'react-use-async'
 
 export const useDeleteRecovery = () => {
-  const { onStart, onSuccess, onError, ...rest } = useAsync()
+  const { onStart, onSuccess, onError, pending, error } = useAsync()
 
   const deleteRecovery = (account: EdgeAccount) => {
     onStart()
@@ -14,5 +14,9 @@ export const useDeleteRecovery = () => {
       .catch(onError)
   }
 
-  return { deleteRecovery, ...rest }
+  return {
+    deleteRecovery,
+    error,
+    pending,
+  }
 }

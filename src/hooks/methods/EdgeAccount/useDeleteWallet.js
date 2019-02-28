@@ -4,7 +4,7 @@ import { type EdgeAccount } from 'edge-core-js'
 import { useAsync } from 'react-use-async'
 
 export const useDeleteWallet = () => {
-  const { onStart, onSuccess, onError, ...rest } = useAsync()
+  const { onStart, onSuccess, onError, pending, error } = useAsync()
 
   const deleteWallet = (account: EdgeAccount, walletId: string) => {
     onStart()
@@ -14,5 +14,9 @@ export const useDeleteWallet = () => {
       .catch(onError)
   }
 
-  return { deleteWallet, ...rest }
+  return {
+    deleteWallet,
+    error,
+    pending,
+  }
 }

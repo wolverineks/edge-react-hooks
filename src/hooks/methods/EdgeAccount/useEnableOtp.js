@@ -4,7 +4,7 @@ import { type EdgeAccount } from 'edge-core-js'
 import { useAsync } from 'react-use-async'
 
 export const useEnableOtp = () => {
-  const { onStart, onSuccess, onError, ...rest } = useAsync()
+  const { onStart, onSuccess, onError, pending, error } = useAsync()
 
   const enableOtp = (account: EdgeAccount, timeout?: number) => {
     onStart()
@@ -14,5 +14,9 @@ export const useEnableOtp = () => {
       .catch(onError)
   }
 
-  return { enableOtp, ...rest }
+  return {
+    enableOtp,
+    error,
+    pending,
+  }
 }

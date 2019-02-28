@@ -4,7 +4,7 @@ import { type EdgeContext } from 'edge-core-js'
 import { useAsync } from 'react-use-async'
 
 export const useFetchRecovery2Questions = () => {
-  const { onStart, onSuccess, onError, ...rest } = useAsync()
+  const { onStart, onSuccess, onError, pending, error, data } = useAsync()
 
   const fetchRecovery2Questions = (context: EdgeContext, recovery2Key: string, username: string) => {
     onStart()
@@ -14,5 +14,10 @@ export const useFetchRecovery2Questions = () => {
       .catch(onError)
   }
 
-  return { fetchRecovery2Questions, ...rest }
+  return {
+    error,
+    fetchRecovery2Questions,
+    pending,
+    recovery2Questions: data,
+  }
 }

@@ -4,7 +4,7 @@ import { type EdgeAccount } from 'edge-core-js'
 import { useAsync } from 'react-use-async'
 
 export const useListSplittableWalletTypes = () => {
-  const { onStart, onSuccess, onError, ...rest } = useAsync()
+  const { onStart, onSuccess, onError, pending, error, data } = useAsync()
 
   const listSplittableWalletTypes = (account: EdgeAccount, id: string) => {
     onStart()
@@ -14,5 +14,10 @@ export const useListSplittableWalletTypes = () => {
       .catch(onError)
   }
 
-  return { listSplittableWalletTypes, ...rest }
+  return {
+    error,
+    listSplittableWalletTypes,
+    pending,
+    splittalbleWalletTypes: data,
+  }
 }

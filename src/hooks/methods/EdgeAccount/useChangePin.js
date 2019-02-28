@@ -4,7 +4,7 @@ import { type EdgeAccount } from 'edge-core-js'
 import { useAsync } from 'react-use-async'
 
 export const useChangePin = () => {
-  const { onStart, onSuccess, onError, ...rest } = useAsync()
+  const { onStart, onSuccess, onError, pending, error, data } = useAsync()
 
   const changePin = (account: EdgeAccount, options: { enableLogin?: boolean, pin?: string }) => {
     onStart()
@@ -14,5 +14,10 @@ export const useChangePin = () => {
       .catch(onError)
   }
 
-  return { changePin, ...rest }
+  return {
+    changePin,
+    error,
+    pending,
+    pin: data,
+  }
 }

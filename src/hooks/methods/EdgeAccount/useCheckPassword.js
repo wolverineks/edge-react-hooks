@@ -4,7 +4,7 @@ import { type EdgeAccount } from 'edge-core-js'
 import { useAsync } from 'react-use-async'
 
 export const useCheckPassword = () => {
-  const { onStart, onSuccess, onError, ...rest } = useAsync()
+  const { onStart, onSuccess, onError, pending, error, data } = useAsync()
 
   const checkPassword = (account: EdgeAccount, password: string) => {
     onStart()
@@ -14,5 +14,10 @@ export const useCheckPassword = () => {
       .catch(onError)
   }
 
-  return { checkPassword, ...rest }
+  return {
+    checkPassword,
+    error,
+    passwordVerified: data,
+    pending,
+  }
 }

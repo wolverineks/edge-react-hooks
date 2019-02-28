@@ -4,7 +4,7 @@ import { type EdgeContext } from 'edge-core-js'
 import { useAsync } from 'react-use-async'
 
 export const useListUsernames = () => {
-  const { onStart, onSuccess, onError, ...rest } = useAsync()
+  const { onStart, onSuccess, onError, pending, error, data } = useAsync()
 
   const listUsernames = (context: EdgeContext) => {
     onStart()
@@ -14,5 +14,10 @@ export const useListUsernames = () => {
       .catch(onError)
   }
 
-  return { listUsernames, ...rest }
+  return {
+    error,
+    listUsernames,
+    pending,
+    usernames: data,
+  }
 }

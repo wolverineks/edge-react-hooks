@@ -4,7 +4,7 @@ import { type EdgeAccountOptions, type EdgeContext } from 'edge-core-js'
 import { useAsync } from 'react-use-async'
 
 export const useCreateAccount = () => {
-  const { onStart, onSuccess, onError, ...rest } = useAsync()
+  const { onStart, onSuccess, onError, pending, error, data } = useAsync()
 
   const createAccount = (
     context: EdgeContext,
@@ -20,5 +20,10 @@ export const useCreateAccount = () => {
       .catch(onError)
   }
 
-  return { createAccount, ...rest }
+  return {
+    account: data,
+    createAccount,
+    error,
+    pending,
+  }
 }

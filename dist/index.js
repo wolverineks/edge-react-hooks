@@ -111,7 +111,8 @@ const useActivateWallet = () => {
     onStart,
     onSuccess,
     onError,
-    ...rest
+    pending,
+    error
   } = reactUseAsync.useAsync();
 
   const activateWallet = (account, walletId) => {
@@ -125,7 +126,8 @@ const useActivateWallet = () => {
 
   return {
     activateWallet,
-    ...rest
+    error,
+    pending
   };
 };
 
@@ -135,21 +137,23 @@ const useArchiveWallet = () => {
     onStart,
     onSuccess,
     onError,
-    ...rest
+    pending,
+    error
   } = reactUseAsync.useAsync();
 
   const archiveWallet = (account, walletId) => {
     onStart();
     return account.changeWalletStates({
       [walletId]: {
-        archived: false
+        archived: true
       }
     }).then(onSuccess).catch(onError);
   };
 
   return {
     archiveWallet,
-    ...rest
+    error,
+    pending
   };
 };
 
@@ -159,7 +163,8 @@ const useCancelOtpReset = () => {
     onStart,
     onSuccess,
     onError,
-    ...rest
+    pending,
+    error
   } = reactUseAsync.useAsync();
 
   const cancelOtpReset = account => {
@@ -169,7 +174,8 @@ const useCancelOtpReset = () => {
 
   return {
     cancelOtpReset,
-    ...rest
+    error,
+    pending
   };
 };
 
@@ -179,7 +185,8 @@ const useChangePassword = () => {
     onStart,
     onSuccess,
     onError,
-    ...rest
+    pending,
+    error
   } = reactUseAsync.useAsync();
 
   const changePassword = (account, password) => {
@@ -189,7 +196,8 @@ const useChangePassword = () => {
 
   return {
     changePassword,
-    ...rest
+    error,
+    pending
   };
 };
 
@@ -199,7 +207,9 @@ const useChangePin = () => {
     onStart,
     onSuccess,
     onError,
-    ...rest
+    pending,
+    error,
+    data
   } = reactUseAsync.useAsync();
 
   const changePin = (account, options) => {
@@ -209,7 +219,9 @@ const useChangePin = () => {
 
   return {
     changePin,
-    ...rest
+    error,
+    pending,
+    pin: data
   };
 };
 
@@ -219,7 +231,9 @@ const useChangeRecovery = () => {
     onStart,
     onSuccess,
     onError,
-    ...rest
+    pending,
+    error,
+    data
   } = reactUseAsync.useAsync();
 
   const changeRecovery = (account, questions, answers) => {
@@ -229,7 +243,9 @@ const useChangeRecovery = () => {
 
   return {
     changeRecovery,
-    ...rest
+    error,
+    pending,
+    recovery: data
   };
 };
 
@@ -239,7 +255,8 @@ const useChangeWalletStates = () => {
     onStart,
     onSuccess,
     onError,
-    ...rest
+    pending,
+    error
   } = reactUseAsync.useAsync();
 
   const changeWalletStates = (account, walletStates) => {
@@ -249,7 +266,8 @@ const useChangeWalletStates = () => {
 
   return {
     changeWalletStates,
-    ...rest
+    error,
+    pending
   };
 };
 
@@ -259,7 +277,9 @@ const useCheckPassword = () => {
     onStart,
     onSuccess,
     onError,
-    ...rest
+    pending,
+    error,
+    data
   } = reactUseAsync.useAsync();
 
   const checkPassword = (account, password) => {
@@ -269,7 +289,9 @@ const useCheckPassword = () => {
 
   return {
     checkPassword,
-    ...rest
+    error,
+    passwordVerified: data,
+    pending
   };
 };
 
@@ -279,7 +301,9 @@ const useCheckPin = () => {
     onStart,
     onSuccess,
     onError,
-    ...rest
+    pending,
+    error,
+    data
   } = reactUseAsync.useAsync();
 
   const checkPin = (account, pin) => {
@@ -289,7 +313,9 @@ const useCheckPin = () => {
 
   return {
     checkPin,
-    ...rest
+    error,
+    pending,
+    pinVerified: data
   };
 };
 
@@ -299,17 +325,21 @@ const useCreateCurrencyWallet = () => {
     onStart,
     onSuccess,
     onError,
-    ...rest
+    pending,
+    error,
+    data
   } = reactUseAsync.useAsync();
 
   const createCurrencyWallet = (account, type, options) => {
     onStart();
-    return account.createCurrencyWallet(type, options || undefined).then(onSuccess).catch(onError);
+    return account.createCurrencyWallet(type, options).then(onSuccess).catch(onError);
   };
 
   return {
     createCurrencyWallet,
-    ...rest
+    error,
+    pending,
+    wallet: data
   };
 };
 
@@ -319,7 +349,9 @@ const useCreateWallet = () => {
     onStart,
     onSuccess,
     onError,
-    ...rest
+    pending,
+    error,
+    data
   } = reactUseAsync.useAsync();
 
   const createWallet = (account, type, keys) => {
@@ -329,7 +361,9 @@ const useCreateWallet = () => {
 
   return {
     createWallet,
-    ...rest
+    data,
+    error,
+    pending
   };
 };
 
@@ -339,7 +373,8 @@ const useDeletePassword = () => {
     onStart,
     onSuccess,
     onError,
-    ...rest
+    pending,
+    error
   } = reactUseAsync.useAsync();
 
   const deletePassword = account => {
@@ -349,7 +384,8 @@ const useDeletePassword = () => {
 
   return {
     deletePassword,
-    ...rest
+    error,
+    pending
   };
 };
 
@@ -359,7 +395,8 @@ const useDeletePin = () => {
     onStart,
     onSuccess,
     onError,
-    ...rest
+    pending,
+    error
   } = reactUseAsync.useAsync();
 
   const deletePin = account => {
@@ -369,7 +406,8 @@ const useDeletePin = () => {
 
   return {
     deletePin,
-    ...rest
+    error,
+    pending
   };
 };
 
@@ -379,7 +417,8 @@ const useDeleteRecovery = () => {
     onStart,
     onSuccess,
     onError,
-    ...rest
+    pending,
+    error
   } = reactUseAsync.useAsync();
 
   const deleteRecovery = account => {
@@ -389,7 +428,8 @@ const useDeleteRecovery = () => {
 
   return {
     deleteRecovery,
-    ...rest
+    error,
+    pending
   };
 };
 
@@ -399,7 +439,8 @@ const useDeleteWallet = () => {
     onStart,
     onSuccess,
     onError,
-    ...rest
+    pending,
+    error
   } = reactUseAsync.useAsync();
 
   const deleteWallet = (account, walletId) => {
@@ -413,7 +454,8 @@ const useDeleteWallet = () => {
 
   return {
     deleteWallet,
-    ...rest
+    error,
+    pending
   };
 };
 
@@ -423,7 +465,8 @@ const useDisableOtp = () => {
     onStart,
     onSuccess,
     onError,
-    ...rest
+    pending,
+    error
   } = reactUseAsync.useAsync();
 
   const disableOtp = account => {
@@ -433,7 +476,8 @@ const useDisableOtp = () => {
 
   return {
     disableOtp,
-    ...rest
+    error,
+    pending
   };
 };
 
@@ -443,7 +487,8 @@ const useEnableOtp = () => {
     onStart,
     onSuccess,
     onError,
-    ...rest
+    pending,
+    error
   } = reactUseAsync.useAsync();
 
   const enableOtp = (account, timeout) => {
@@ -453,7 +498,8 @@ const useEnableOtp = () => {
 
   return {
     enableOtp,
-    ...rest
+    error,
+    pending
   };
 };
 
@@ -463,7 +509,9 @@ const useFetchLobby = () => {
     onStart,
     onSuccess,
     onError,
-    ...rest
+    pending,
+    error,
+    data
   } = reactUseAsync.useAsync();
 
   const fetchLobby = (account, lobbyId) => {
@@ -472,8 +520,10 @@ const useFetchLobby = () => {
   };
 
   return {
+    error,
     fetchLobby,
-    ...rest
+    lobby: data,
+    pending
   };
 };
 
@@ -483,7 +533,9 @@ const useFetchSwapQuote = () => {
     onStart,
     onSuccess,
     onError,
-    ...rest
+    pending,
+    error,
+    data
   } = reactUseAsync.useAsync();
 
   const fetchSwapQuote = (account, request) => {
@@ -492,8 +544,10 @@ const useFetchSwapQuote = () => {
   };
 
   return {
+    error,
     fetchSwapQuote,
-    ...rest
+    pending,
+    swapQuote: data
   };
 };
 
@@ -503,7 +557,9 @@ const useGetFirstWalletInfo = () => {
     onStart,
     onSuccess,
     onError,
-    ...rest
+    pending,
+    error,
+    data
   } = reactUseAsync.useAsync();
 
   const getFirstWalletInfo = (account, type) => {
@@ -512,8 +568,10 @@ const useGetFirstWalletInfo = () => {
   };
 
   return {
+    error,
     getFirstWalletInfo,
-    ...rest
+    pending,
+    walletInfo: data
   };
 };
 
@@ -523,7 +581,9 @@ const useGetWalletInfo = () => {
     onStart,
     onSuccess,
     onError,
-    ...rest
+    pending,
+    error,
+    data
   } = reactUseAsync.useAsync();
 
   const getWalletInfo = (account, id) => {
@@ -532,8 +592,10 @@ const useGetWalletInfo = () => {
   };
 
   return {
+    error,
     getWalletInfo,
-    ...rest
+    pending,
+    walletInfo: data
   };
 };
 
@@ -543,7 +605,9 @@ const useListSplittableWalletTypes = () => {
     onStart,
     onSuccess,
     onError,
-    ...rest
+    pending,
+    error,
+    data
   } = reactUseAsync.useAsync();
 
   const listSplittableWalletTypes = (account, id) => {
@@ -552,8 +616,10 @@ const useListSplittableWalletTypes = () => {
   };
 
   return {
+    error,
     listSplittableWalletTypes,
-    ...rest
+    pending,
+    splittalbleWalletTypes: data
   };
 };
 
@@ -563,7 +629,9 @@ const useListWalletIds = () => {
     onStart,
     onSuccess,
     onError,
-    ...rest
+    pending,
+    error,
+    data
   } = reactUseAsync.useAsync();
 
   const listWalletIds = account => {
@@ -572,8 +640,10 @@ const useListWalletIds = () => {
   };
 
   return {
+    error,
     listWalletIds,
-    ...rest
+    pending,
+    walletIds: data
   };
 };
 
@@ -583,7 +653,8 @@ const useLogout = () => {
     onStart,
     onSuccess,
     onError,
-    ...rest
+    pending,
+    error
   } = reactUseAsync.useAsync();
 
   const logout = account => {
@@ -592,8 +663,9 @@ const useLogout = () => {
   };
 
   return {
+    error,
     logout,
-    ...rest
+    pending
   };
 };
 
@@ -603,7 +675,8 @@ const useRestoreWallet = () => {
     onStart,
     onSuccess,
     onError,
-    ...rest
+    pending,
+    error
   } = reactUseAsync.useAsync();
 
   const restoreWallet = (account, walletId) => {
@@ -617,8 +690,9 @@ const useRestoreWallet = () => {
   };
 
   return {
-    restoreWallet,
-    ...rest
+    error,
+    pending,
+    restoreWallet
   };
 };
 
@@ -628,7 +702,9 @@ const useSignEthereumTransaction = () => {
     onStart,
     onSuccess,
     onError,
-    ...rest
+    pending,
+    error,
+    data
   } = reactUseAsync.useAsync();
 
   const signEthereumTransaction = (account, walletId, transaction) => {
@@ -637,8 +713,10 @@ const useSignEthereumTransaction = () => {
   };
 
   return {
-    signEthereumTransaction,
-    ...rest
+    data,
+    error,
+    pending,
+    signEthereumTransaction
   };
 };
 
@@ -648,7 +726,9 @@ const useSplitWalletInfo = () => {
     onStart,
     onSuccess,
     onError,
-    ...rest
+    pending,
+    error,
+    data
   } = reactUseAsync.useAsync();
 
   const splitWalletInfo = (account, id, newWalletType) => {
@@ -657,8 +737,10 @@ const useSplitWalletInfo = () => {
   };
 
   return {
-    splitWalletInfo,
-    ...rest
+    data,
+    error,
+    pending,
+    splitWalletInfo
   };
 };
 
@@ -668,7 +750,9 @@ const useWaitForCurrencyWallet = () => {
     onStart,
     onSuccess,
     onError,
-    ...rest
+    pending,
+    error,
+    data
   } = reactUseAsync.useAsync();
 
   const waitForCurrencyWallet = (account, id) => {
@@ -677,8 +761,10 @@ const useWaitForCurrencyWallet = () => {
   };
 
   return {
+    error,
+    pending,
     waitForCurrencyWallet,
-    ...rest
+    wallet: data
   };
 };
 
@@ -688,7 +774,9 @@ const useCheckPasswordRules = () => {
     onStart,
     onSuccess,
     onError,
-    ...rest
+    pending,
+    error,
+    data
   } = reactUseAsync.useAsync();
 
   const checkPasswordRules = (context, password) => {
@@ -698,7 +786,9 @@ const useCheckPasswordRules = () => {
 
   return {
     checkPasswordRules,
-    ...rest
+    error,
+    passwordRules: data,
+    pending
   };
 };
 
@@ -708,7 +798,8 @@ const useClose = () => {
     onStart,
     onSuccess,
     onError,
-    ...rest
+    pending,
+    error
   } = reactUseAsync.useAsync();
 
   const close = context => {
@@ -718,7 +809,8 @@ const useClose = () => {
 
   return {
     close,
-    ...rest
+    error,
+    pending
   };
 };
 
@@ -728,7 +820,9 @@ const useCreateAccount = () => {
     onStart,
     onSuccess,
     onError,
-    ...rest
+    pending,
+    error,
+    data
   } = reactUseAsync.useAsync();
 
   const createAccount = (context, username, password, pin, options) => {
@@ -737,8 +831,10 @@ const useCreateAccount = () => {
   };
 
   return {
+    account: data,
     createAccount,
-    ...rest
+    error,
+    pending
   };
 };
 
@@ -748,7 +844,8 @@ const useDeleteLocalAccount = () => {
     onStart,
     onSuccess,
     onError,
-    ...rest
+    pending,
+    error
   } = reactUseAsync.useAsync();
 
   const deleteLocalAccount = (context, username) => {
@@ -758,7 +855,8 @@ const useDeleteLocalAccount = () => {
 
   return {
     deleteLocalAccount,
-    ...rest
+    error,
+    pending
   };
 };
 
@@ -768,7 +866,9 @@ const useFetchLoginMessages = () => {
     onStart,
     onSuccess,
     onError,
-    ...rest
+    pending,
+    error,
+    data
   } = reactUseAsync.useAsync();
 
   const fetchLoginMessages = context => {
@@ -777,8 +877,10 @@ const useFetchLoginMessages = () => {
   };
 
   return {
+    error,
     fetchLoginMessages,
-    ...rest
+    loginMessages: data,
+    pending
   };
 };
 
@@ -788,7 +890,9 @@ const useFetchRecovery2Questions = () => {
     onStart,
     onSuccess,
     onError,
-    ...rest
+    pending,
+    error,
+    data
   } = reactUseAsync.useAsync();
 
   const fetchRecovery2Questions = (context, recovery2Key, username) => {
@@ -797,8 +901,10 @@ const useFetchRecovery2Questions = () => {
   };
 
   return {
+    error,
     fetchRecovery2Questions,
-    ...rest
+    pending,
+    recovery2Questions: data
   };
 };
 
@@ -808,7 +914,9 @@ const useFixUsername = () => {
     onStart,
     onSuccess,
     onError,
-    ...rest
+    pending,
+    error,
+    data
   } = reactUseAsync.useAsync();
 
   const fixUsername = (context, username) => {
@@ -817,8 +925,10 @@ const useFixUsername = () => {
   };
 
   return {
+    error,
     fixUsername,
-    ...rest
+    pending,
+    username: data
   };
 };
 
@@ -828,7 +938,9 @@ const useGetRecovery2Key = () => {
     onStart,
     onSuccess,
     onError,
-    ...rest
+    pending,
+    error,
+    data
   } = reactUseAsync.useAsync();
 
   const getRecovery2Key = (context, username) => {
@@ -837,8 +949,10 @@ const useGetRecovery2Key = () => {
   };
 
   return {
+    error,
     getRecovery2Key,
-    ...rest
+    pending,
+    recovery2Key: data
   };
 };
 
@@ -848,7 +962,9 @@ const useListRecoveryQuestionChoices = () => {
     onStart,
     onSuccess,
     onError,
-    ...rest
+    pending,
+    error,
+    data
   } = reactUseAsync.useAsync();
 
   const listRecoveryQuestionChoices = context => {
@@ -857,8 +973,10 @@ const useListRecoveryQuestionChoices = () => {
   };
 
   return {
+    error,
     listRecoveryQuestionChoices,
-    ...rest
+    pending,
+    recoveryQuestionChoices: data
   };
 };
 
@@ -868,7 +986,9 @@ const useListUsernames = () => {
     onStart,
     onSuccess,
     onError,
-    ...rest
+    pending,
+    error,
+    data
   } = reactUseAsync.useAsync();
 
   const listUsernames = context => {
@@ -877,8 +997,10 @@ const useListUsernames = () => {
   };
 
   return {
+    error,
     listUsernames,
-    ...rest
+    pending,
+    usernames: data
   };
 };
 
@@ -888,7 +1010,9 @@ const useLoginWithKey = () => {
     onStart,
     onSuccess,
     onError,
-    ...rest
+    pending,
+    error,
+    data
   } = reactUseAsync.useAsync();
 
   const loginWithKey = (context, username, loginKey, options) => {
@@ -897,8 +1021,10 @@ const useLoginWithKey = () => {
   };
 
   return {
+    account: data,
+    error,
     loginWithKey,
-    ...rest
+    pending
   };
 };
 
@@ -908,7 +1034,9 @@ const useLoginWithPassword = () => {
     onStart,
     onSuccess,
     onError,
-    ...rest
+    pending,
+    error,
+    data
   } = reactUseAsync.useAsync();
 
   const loginWithPassword = (context, username, password, options) => {
@@ -917,8 +1045,10 @@ const useLoginWithPassword = () => {
   };
 
   return {
+    account: data,
+    error,
     loginWithPassword,
-    ...rest
+    pending
   };
 };
 
@@ -928,7 +1058,9 @@ const useLoginWithPIN = () => {
     onStart,
     onSuccess,
     onError,
-    ...rest
+    pending,
+    error,
+    data
   } = reactUseAsync.useAsync();
 
   const loginWithPIN = (context, username, pin, options) => {
@@ -937,8 +1069,10 @@ const useLoginWithPIN = () => {
   };
 
   return {
+    account: data,
+    error,
     loginWithPIN,
-    ...rest
+    pending
   };
 };
 
@@ -948,7 +1082,9 @@ const useLoginWithRecovery2 = () => {
     onStart,
     onSuccess,
     onError,
-    ...rest
+    pending,
+    error,
+    data
   } = reactUseAsync.useAsync();
 
   const loginWithRecovery2 = (context, recovery2Key, username, answers, options) => {
@@ -957,8 +1093,10 @@ const useLoginWithRecovery2 = () => {
   };
 
   return {
+    account: data,
+    error,
     loginWithRecovery2,
-    ...rest
+    pending
   };
 };
 
@@ -968,7 +1106,9 @@ const usePinLoginEnabled = () => {
     onStart,
     onSuccess,
     onError,
-    ...rest
+    pending,
+    error,
+    data
   } = reactUseAsync.useAsync();
 
   const pinLoginEnabled = (context, username) => {
@@ -977,8 +1117,10 @@ const usePinLoginEnabled = () => {
   };
 
   return {
-    pinLoginEnabled,
-    ...rest
+    enabled: data,
+    error,
+    pending,
+    pinLoginEnabled
   };
 };
 
@@ -988,7 +1130,9 @@ const useRequestEdgeLogin = () => {
     onStart,
     onSuccess,
     onError,
-    ...rest
+    pending,
+    error,
+    data
   } = reactUseAsync.useAsync();
 
   const requestEdgeLogin = (context, options) => {
@@ -997,8 +1141,10 @@ const useRequestEdgeLogin = () => {
   };
 
   return {
-    requestEdgeLogin,
-    ...rest
+    error,
+    pending,
+    pendingLogin: data,
+    requestEdgeLogin
   };
 };
 
@@ -1008,7 +1154,9 @@ const useRequestOtpReset = () => {
     onStart,
     onSuccess,
     onError,
-    ...rest
+    pending,
+    error,
+    data
   } = reactUseAsync.useAsync();
 
   const requestOtpReset = (context, username, otpResetToken) => {
@@ -1017,8 +1165,10 @@ const useRequestOtpReset = () => {
   };
 
   return {
+    error,
+    pending,
     requestOtpReset,
-    ...rest
+    resetDate: data
   };
 };
 
@@ -1028,7 +1178,9 @@ const useUsernameAvailable = () => {
     onStart,
     onSuccess,
     onError,
-    ...rest
+    pending,
+    error,
+    data
   } = reactUseAsync.useAsync();
 
   const usernameAvailable = (context, username) => {
@@ -1037,8 +1189,10 @@ const useUsernameAvailable = () => {
   };
 
   return {
-    usernameAvailable,
-    ...rest
+    available: data,
+    error,
+    pending,
+    usernameAvailable
   };
 };
 

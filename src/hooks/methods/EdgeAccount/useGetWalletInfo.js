@@ -4,7 +4,7 @@ import { type EdgeAccount } from 'edge-core-js'
 import { useAsync } from 'react-use-async'
 
 export const useGetWalletInfo = () => {
-  const { onStart, onSuccess, onError, ...rest } = useAsync()
+  const { onStart, onSuccess, onError, pending, error, data } = useAsync()
 
   const getWalletInfo = (account: EdgeAccount, id: string) => {
     onStart()
@@ -13,5 +13,10 @@ export const useGetWalletInfo = () => {
       .catch(onError)
   }
 
-  return { getWalletInfo, ...rest }
+  return {
+    error,
+    getWalletInfo,
+    pending,
+    walletInfo: data,
+  }
 }

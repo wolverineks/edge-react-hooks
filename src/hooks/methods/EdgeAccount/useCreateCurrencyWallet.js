@@ -4,15 +4,20 @@ import { type EdgeAccount, type EdgeCreateCurrencyWalletOptions } from 'edge-cor
 import { useAsync } from 'react-use-async'
 
 export const useCreateCurrencyWallet = () => {
-  const { onStart, onSuccess, onError, ...rest } = useAsync()
+  const { onStart, onSuccess, onError, pending, error, data } = useAsync()
 
   const createCurrencyWallet = (account: EdgeAccount, type: string, options?: EdgeCreateCurrencyWalletOptions) => {
     onStart()
     return account
-      .createCurrencyWallet(type, options || undefined)
+      .createCurrencyWallet(type, options)
       .then(onSuccess)
       .catch(onError)
   }
 
-  return { createCurrencyWallet, ...rest }
+  return {
+    createCurrencyWallet,
+    error,
+    pending,
+    wallet: data,
+  }
 }

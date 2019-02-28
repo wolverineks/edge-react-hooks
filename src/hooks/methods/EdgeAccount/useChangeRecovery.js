@@ -4,7 +4,7 @@ import { type EdgeAccount } from 'edge-core-js'
 import { useAsync } from 'react-use-async'
 
 export const useChangeRecovery = () => {
-  const { onStart, onSuccess, onError, ...rest } = useAsync()
+  const { onStart, onSuccess, onError, pending, error, data } = useAsync()
 
   const changeRecovery = (account: EdgeAccount, questions: Array<string>, answers: Array<string>) => {
     onStart()
@@ -14,5 +14,10 @@ export const useChangeRecovery = () => {
       .catch(onError)
   }
 
-  return { changeRecovery, ...rest }
+  return {
+    changeRecovery,
+    error,
+    pending,
+    recovery: data,
+  }
 }

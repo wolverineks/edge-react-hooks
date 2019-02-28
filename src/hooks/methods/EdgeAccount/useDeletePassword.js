@@ -4,7 +4,7 @@ import { type EdgeAccount } from 'edge-core-js'
 import { useAsync } from 'react-use-async'
 
 export const useDeletePassword = () => {
-  const { onStart, onSuccess, onError, ...rest } = useAsync()
+  const { onStart, onSuccess, onError, pending, error } = useAsync()
 
   const deletePassword = (account: EdgeAccount) => {
     onStart()
@@ -14,5 +14,9 @@ export const useDeletePassword = () => {
       .catch(onError)
   }
 
-  return { deletePassword, ...rest }
+  return {
+    deletePassword,
+    error,
+    pending,
+  }
 }

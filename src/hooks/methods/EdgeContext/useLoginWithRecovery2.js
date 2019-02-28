@@ -4,7 +4,7 @@ import { type EdgeAccountOptions, type EdgeContext } from 'edge-core-js'
 import { useAsync } from 'react-use-async'
 
 export const useLoginWithRecovery2 = () => {
-  const { onStart, onSuccess, onError, ...rest } = useAsync()
+  const { onStart, onSuccess, onError, pending, error, data } = useAsync()
 
   const loginWithRecovery2 = (
     context: EdgeContext,
@@ -20,5 +20,10 @@ export const useLoginWithRecovery2 = () => {
       .catch(onError)
   }
 
-  return { loginWithRecovery2, ...rest }
+  return {
+    account: data,
+    error,
+    loginWithRecovery2,
+    pending,
+  }
 }

@@ -4,7 +4,7 @@ import { type EdgeAccount } from 'edge-core-js'
 import { useAsync } from 'react-use-async'
 
 export const useDeletePin = () => {
-  const { onStart, onSuccess, onError, ...rest } = useAsync()
+  const { onStart, onSuccess, onError, pending, error } = useAsync()
 
   const deletePin = (account: EdgeAccount) => {
     onStart()
@@ -14,5 +14,9 @@ export const useDeletePin = () => {
       .catch(onError)
   }
 
-  return { deletePin, ...rest }
+  return {
+    deletePin,
+    error,
+    pending,
+  }
 }

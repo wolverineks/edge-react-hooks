@@ -4,7 +4,7 @@ import { type EdgeAccount } from 'edge-core-js'
 import { useAsync } from 'react-use-async'
 
 export const useLogout = () => {
-  const { onStart, onSuccess, onError, ...rest } = useAsync()
+  const { onStart, onSuccess, onError, pending, error } = useAsync()
 
   const logout = (account: EdgeAccount) => {
     onStart()
@@ -14,5 +14,9 @@ export const useLogout = () => {
       .catch(onError)
   }
 
-  return { logout, ...rest }
+  return {
+    error,
+    logout,
+    pending,
+  }
 }

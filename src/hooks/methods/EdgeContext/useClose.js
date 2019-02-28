@@ -4,7 +4,7 @@ import { type EdgeContext } from 'edge-core-js'
 import { useAsync } from 'react-use-async'
 
 export const useClose = () => {
-  const { onStart, onSuccess, onError, ...rest } = useAsync()
+  const { onStart, onSuccess, onError, pending, error } = useAsync()
 
   const close = (context: EdgeContext) => {
     onStart()
@@ -14,5 +14,9 @@ export const useClose = () => {
       .catch(onError)
   }
 
-  return { close, ...rest }
+  return {
+    close,
+    error,
+    pending,
+  }
 }
