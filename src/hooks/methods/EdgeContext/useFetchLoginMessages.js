@@ -1,6 +1,6 @@
 // @flow
 
-import { type EdgeContext } from 'edge-core-js'
+import { type EdgeContext, type EdgeLoginMessages } from 'edge-core-js'
 import { useAsync } from 'react-use-async'
 
 export const useFetchLoginMessages = () => {
@@ -17,7 +17,7 @@ export const useFetchLoginMessages = () => {
   return {
     error,
     fetchLoginMessages,
-    loginMessages: data,
+    loginMessages: (data: ?EdgeLoginMessages),
     pending,
   }
 }

@@ -1,6 +1,6 @@
 // @flow
 
-import { type EdgeContext, type EdgeEdgeLoginOptions } from 'edge-core-js'
+import { type EdgeContext, type EdgeEdgeLoginOptions, type EdgePendingEdgeLogin } from 'edge-core-js'
 import { useAsync } from 'react-use-async'
 
 export const useRequestEdgeLogin = () => {
@@ -17,7 +17,7 @@ export const useRequestEdgeLogin = () => {
   return {
     error,
     pending,
-    pendingLogin: data,
+    pendingLogin: (data: ?EdgePendingEdgeLogin),
     requestEdgeLogin,
   }
 }

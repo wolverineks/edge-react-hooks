@@ -18,6 +18,6 @@ export const useEncodeUri = () => {
     encodeUri,
     error,
     pending,
-    uri: data,
+    uri: (data: ?string),
   }
 }

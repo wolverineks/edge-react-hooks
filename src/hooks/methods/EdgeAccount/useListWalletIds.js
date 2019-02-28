@@ -17,6 +17,6 @@ export const useListWalletIds = () => {
     error,
     listWalletIds,
     pending,
-    walletIds: data,
+    walletIds: (data: ?Array<string>),
   }
 }

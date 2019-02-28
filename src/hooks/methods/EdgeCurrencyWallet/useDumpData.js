@@ -1,6 +1,6 @@
 // @flow
 
-import { type EdgeCurrencyWallet } from 'edge-core-js'
+import { type EdgeCurrencyWallet, type EdgeDataDump } from 'edge-core-js'
 import { useAsync } from 'react-use-async'
 
 export const useDumpData = () => {
@@ -15,7 +15,7 @@ export const useDumpData = () => {
   }
 
   return {
-    data,
+    data: (data: ?EdgeDataDump),
     dumpData,
     error,
     pending,

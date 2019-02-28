@@ -18,6 +18,6 @@ export const useChangeRecovery = () => {
     changeRecovery,
     error,
     pending,
-    recovery: data,
+    recovery: (data: ?string),
   }
 }

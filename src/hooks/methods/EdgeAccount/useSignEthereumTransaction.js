@@ -15,7 +15,7 @@ export const useSignEthereumTransaction = () => {
   }
 
   return {
-    data,
+    data: (data: ?string),
     error,
     pending,
     signEthereumTransaction,

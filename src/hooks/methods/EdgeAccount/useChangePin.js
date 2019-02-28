@@ -18,6 +18,6 @@ export const useChangePin = () => {
     changePin,
     error,
     pending,
-    pin: data,
+    pin: (data: ?string),
   }
 }

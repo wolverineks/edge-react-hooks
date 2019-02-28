@@ -1,6 +1,6 @@
 // @flow
 
-import { type EdgeAccount } from 'edge-core-js'
+import { type EdgeAccount, type EdgeWalletInfo } from 'edge-core-js'
 import { useAsync } from 'react-use-async'
 
 export const useGetFirstWalletInfo = () => {
@@ -17,6 +17,6 @@ export const useGetFirstWalletInfo = () => {
     error,
     getFirstWalletInfo,
     pending,
-    walletInfo: data,
+    walletInfo: (data: ?EdgeWalletInfo),
   }
 }

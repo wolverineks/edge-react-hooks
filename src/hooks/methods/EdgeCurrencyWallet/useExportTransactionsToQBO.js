@@ -18,6 +18,6 @@ export const useExportTransactionsToQBO = () => {
     error,
     exportTransactionsToQBO,
     pending,
-    qbo: data,
+    qbo: (data: ?string),
   }
 }

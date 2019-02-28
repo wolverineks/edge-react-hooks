@@ -15,7 +15,7 @@ export const useExportTransactionsToCSV = () => {
   }
 
   return {
-    csv: data,
+    csv: (data: ?string),
     error,
     exportTransactionsToCSV,
     pending,

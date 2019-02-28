@@ -18,6 +18,6 @@ export const useBroadcastTx = () => {
     broadcastTx,
     error,
     pending,
-    transaction: data,
+    transaction: (data: ?EdgeTransaction),
   }
 }

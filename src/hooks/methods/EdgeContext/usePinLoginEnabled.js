@@ -15,7 +15,7 @@ export const usePinLoginEnabled = () => {
   }
 
   return {
-    enabled: data,
+    enabled: (data: ?boolean),
     error,
     pending,
     pinLoginEnabled,

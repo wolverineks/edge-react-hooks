@@ -20,7 +20,7 @@ export const useSyncedStorageRead = () => {
   return {
     error,
     pending,
-    syncedStorage: data,
+    syncedStorage: (data: ?string),
     syncedStorageRead,
   }
 }

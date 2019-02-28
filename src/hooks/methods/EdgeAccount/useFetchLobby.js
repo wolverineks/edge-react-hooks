@@ -1,6 +1,6 @@
 // @flow
 
-import { type EdgeAccount } from 'edge-core-js'
+import { type EdgeAccount, type EdgeLobby } from 'edge-core-js'
 import { useAsync } from 'react-use-async'
 
 export const useFetchLobby = () => {
@@ -17,7 +17,7 @@ export const useFetchLobby = () => {
   return {
     error,
     fetchLobby,
-    lobby: data,
+    lobby: (data: ?EdgeLobby),
     pending,
   }
 }

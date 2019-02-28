@@ -18,6 +18,6 @@ export const useListSplittableWalletTypes = () => {
     error,
     listSplittableWalletTypes,
     pending,
-    splittalbleWalletTypes: data,
+    splittalbleWalletTypes: (data: ?Array<string>),
   }
 }

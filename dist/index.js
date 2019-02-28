@@ -361,7 +361,7 @@ const useCreateWallet = () => {
 
   return {
     createWallet,
-    data,
+    data: data,
     error,
     pending
   };
@@ -713,7 +713,7 @@ const useSignEthereumTransaction = () => {
   };
 
   return {
-    data,
+    data: data,
     error,
     pending,
     signEthereumTransaction
@@ -737,7 +737,7 @@ const useSplitWalletInfo = () => {
   };
 
   return {
-    data,
+    data: data,
     error,
     pending,
     splitWalletInfo
@@ -1305,7 +1305,7 @@ const useDumpData = () => {
   };
 
   return {
-    data,
+    data: data,
     dumpData,
     error,
     pending

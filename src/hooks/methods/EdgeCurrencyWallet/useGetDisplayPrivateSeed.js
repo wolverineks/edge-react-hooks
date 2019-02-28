@@ -17,6 +17,6 @@ export const useGetDisplayPrivateSeed = () => {
     error,
     getDisplayPrivateSeed,
     pending,
-    privateSeed: data,
+    privateSeed: (data: ?string),
   }
 }

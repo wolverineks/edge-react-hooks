@@ -17,6 +17,6 @@ export const useGetDisplayPublicSeed = () => {
     error,
     getDisplayPublicSeed,
     pending,
-    publicSeed: data,
+    publicSeed: (data: ?string),
   }
 }

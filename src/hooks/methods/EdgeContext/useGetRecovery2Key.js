@@ -18,6 +18,6 @@ export const useGetRecovery2Key = () => {
     error,
     getRecovery2Key,
     pending,
-    recovery2Key: data,
+    recovery2Key: (data: ?string),
   }
 }

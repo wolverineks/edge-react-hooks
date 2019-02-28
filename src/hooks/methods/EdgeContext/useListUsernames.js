@@ -18,6 +18,6 @@ export const useListUsernames = () => {
     error,
     listUsernames,
     pending,
-    usernames: data,
+    usernames: (data: ?Array<string>),
   }
 }

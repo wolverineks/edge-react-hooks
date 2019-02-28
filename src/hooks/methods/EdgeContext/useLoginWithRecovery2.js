@@ -1,6 +1,6 @@
 // @flow
 
-import { type EdgeAccountOptions, type EdgeContext } from 'edge-core-js'
+import { type EdgeAccount, type EdgeAccountOptions, type EdgeContext } from 'edge-core-js'
 import { useAsync } from 'react-use-async'
 
 export const useLoginWithRecovery2 = () => {
@@ -21,7 +21,7 @@ export const useLoginWithRecovery2 = () => {
   }
 
   return {
-    account: data,
+    account: (data: ?EdgeAccount),
     error,
     loginWithRecovery2,
     pending,

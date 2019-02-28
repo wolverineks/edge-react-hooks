@@ -17,6 +17,6 @@ export const useSignTx = () => {
     error,
     pending,
     signTx,
-    transaction: data,
+    transaction: (data: ?EdgeTransaction),
   }
 }

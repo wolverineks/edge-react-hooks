@@ -17,7 +17,7 @@ export const useGetMaxSpendable = () => {
   return {
     error,
     getMaxSpendable,
-    maxSpendable: data,
+    maxSpendable: (data: ?string),
     pending,
   }
 }

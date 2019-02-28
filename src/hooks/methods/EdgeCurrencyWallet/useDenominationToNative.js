@@ -17,7 +17,7 @@ export const useDenominationToNative = () => {
   return {
     denominationToNative,
     error,
-    nativeAmount: data,
+    nativeAmount: (data: ?string),
     pending,
   }
 }

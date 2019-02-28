@@ -1,6 +1,6 @@
 // @flow
 
-import { type EdgeContextOptions, makeEdgeContext } from 'edge-core-js'
+import { type EdgeContext, type EdgeContextOptions, makeEdgeContext } from 'edge-core-js'
 import { useAsync } from 'react-use-async'
 
 export const useMakeEdgeContext = () => {
@@ -14,7 +14,7 @@ export const useMakeEdgeContext = () => {
   }
 
   return {
-    context: data,
+    context: (data: ?EdgeContext),
     error,
     makeEdgeContext: _makeEdgeContext,
     pending,

@@ -17,6 +17,6 @@ export const useFixUsername = () => {
     error,
     fixUsername,
     pending,
-    username: data,
+    username: (data: ?string),
   }
 }

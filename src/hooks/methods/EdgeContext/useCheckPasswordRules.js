@@ -1,6 +1,6 @@
 // @flow
 
-import { type EdgeContext } from 'edge-core-js'
+import { type EdgeContext, type EdgePasswordRules } from 'edge-core-js'
 import { useAsync } from 'react-use-async'
 
 export const useCheckPasswordRules = () => {
@@ -16,7 +16,7 @@ export const useCheckPasswordRules = () => {
   return {
     checkPasswordRules,
     error,
-    passwordRules: data,
+    passwordRules: (data: ?EdgePasswordRules),
     pending,
   }
 }

@@ -1,6 +1,6 @@
 // @flow
 
-import { type EdgeAccountOptions, type EdgeContext } from 'edge-core-js'
+import { type EdgeAccount, type EdgeAccountOptions, type EdgeContext } from 'edge-core-js'
 import { useAsync } from 'react-use-async'
 
 export const useLoginWithKey = () => {
@@ -15,7 +15,7 @@ export const useLoginWithKey = () => {
   }
 
   return {
-    account: data,
+    account: (data: ?EdgeAccount),
     error,
     loginWithKey,
     pending,

@@ -19,7 +19,7 @@ export const useLocalStorageRead = () => {
 
   return {
     error,
-    localStorage: data,
+    localStorage: (data: ?string),
     localStorageRead,
     pending,
   }

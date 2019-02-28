@@ -18,6 +18,6 @@ export const useFetchRecovery2Questions = () => {
     error,
     fetchRecovery2Questions,
     pending,
-    recovery2Questions: data,
+    recovery2Questions: (data: ?Array<string>),
   }
 }

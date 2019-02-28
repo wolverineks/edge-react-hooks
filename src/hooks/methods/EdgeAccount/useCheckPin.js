@@ -18,6 +18,6 @@ export const useCheckPin = () => {
     checkPin,
     error,
     pending,
-    pinVerified: data,
+    pinVerified: (data: ?boolean),
   }
 }
