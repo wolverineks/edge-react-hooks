@@ -11,7 +11,7 @@ export const useCreateAccount = () => {
     username: string,
     password?: string,
     pin?: string,
-    options?: EdgeAccountOptions
+    options?: EdgeAccountOptions,
   ) => {
     onStart()
     return context

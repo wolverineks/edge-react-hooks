@@ -14,5 +14,11 @@ export const useTransactions = () => {
       .catch(onError)
   }
 
-  return { pending, error, transactions: data, getTransactions, reset }
+  return {
+    error,
+    getTransactions,
+    pending,
+    reset,
+    transactions: data,
+  }
 }

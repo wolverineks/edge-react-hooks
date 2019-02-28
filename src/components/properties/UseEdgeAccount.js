@@ -6,7 +6,7 @@ import React, { type Node } from 'react'
 type Props = {|
   account: EdgeAccount,
   children: EdgeAccount => Node,
-  watch: Array<$Keys<EdgeAccount>>
+  watch: Array<$Keys<EdgeAccount>>,
 |}
 
 export class UseEdgeAccount extends React.Component<Props> {

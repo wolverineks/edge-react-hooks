@@ -4,7 +4,7 @@ import { type EdgeCurrencyWallet, type EdgeMetadata } from 'edge-core-js'
 import { useAsync } from 'react-use-async'
 
 export const useSaveTxMetadata = () => {
-  const { onStart, onSuccess, onError, ...rest } = useAsync()
+  const { onStart, onSuccess, onError, pending, error } = useAsync()
 
   const saveTxMetadata = (wallet: EdgeCurrencyWallet, txid: string, currencyCode: string, metadata: EdgeMetadata) => {
     onStart()
@@ -14,5 +14,9 @@ export const useSaveTxMetadata = () => {
       .catch(onError)
   }
 
-  return { saveTxMetadata, ...rest }
+  return {
+    error,
+    pending,
+    saveTxMetadata,
+  }
 }

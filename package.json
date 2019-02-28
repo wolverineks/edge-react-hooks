@@ -1,6 +1,6 @@
 {
   "name": "edge-react-hooks",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "keywords": [
     "edge",
     "hooks",
@@ -25,7 +25,8 @@
   "prettier": {
     "printWidth": 120,
     "semi": false,
-    "singleQuote": true
+    "singleQuote": true,
+    "trailingComma": "all"
   },
   "dependencies": {
     "react": "^16.8.0-alpha.1",

@@ -4,7 +4,7 @@ import { type EdgeCurrencyWallet } from 'edge-core-js'
 import { useAsync } from 'react-use-async'
 
 export const useResyncBlockchain = () => {
-  const { onStart, onSuccess, onError, ...rest } = useAsync()
+  const { onStart, onSuccess, onError, pending, error } = useAsync()
 
   const resyncBlockchain = (wallet: EdgeCurrencyWallet) => {
     onStart()
@@ -14,5 +14,9 @@ export const useResyncBlockchain = () => {
       .catch(onError)
   }
 
-  return { resyncBlockchain, ...rest }
+  return {
+    error,
+    pending,
+    resyncBlockchain,
+  }
 }

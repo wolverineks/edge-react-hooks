@@ -4,7 +4,7 @@ import { type EdgeCurrencyWallet } from 'edge-core-js'
 import { useAsync } from 'react-use-async'
 
 export const useDumpData = () => {
-  const { onStart, onSuccess, onError, ...rest } = useAsync()
+  const { onStart, onSuccess, onError, pending, error, data } = useAsync()
 
   const dumpData = (wallet: EdgeCurrencyWallet) => {
     onStart()
@@ -14,5 +14,10 @@ export const useDumpData = () => {
       .catch(onError)
   }
 
-  return { dumpData, ...rest }
+  return {
+    data,
+    dumpData,
+    error,
+    pending,
+  }
 }

@@ -1,17 +1,22 @@
 // @flow
 
-import { type EdgeCurrencyCodeOptions, type EdgeCurrencyWallet } from 'edge-core-js'
+import { type EdgeCurrencyWallet, type EdgeSpendInfo } from 'edge-core-js'
 import { useAsync } from 'react-use-async'
 
 export const useMakeSpend = () => {
-  const { onStart, onSuccess, onError, ...rest } = useAsync()
-  const getReceiveAddress = (wallet: EdgeCurrencyWallet, options?: EdgeCurrencyCodeOptions) => {
+  const { onStart, onSuccess, onError, pending, error, data } = useAsync()
+  const makeSpend = (wallet: EdgeCurrencyWallet, spendInfo: EdgeSpendInfo) => {
     onStart()
     return wallet
-      .getReceiveAddress(options)
+      .makeSpend(spendInfo)
       .then(onSuccess)
       .catch(onError)
   }
 
-  return { getReceiveAddress, ...rest }
+  return {
+    error,
+    makeSpend,
+    pending,
+    transaction: data,
+  }
 }

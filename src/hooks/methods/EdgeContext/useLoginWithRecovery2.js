@@ -11,7 +11,7 @@ export const useLoginWithRecovery2 = () => {
     recovery2Key: string,
     username: string,
     answers: Array<string>,
-    options: EdgeAccountOptions
+    options: EdgeAccountOptions,
   ) => {
     onStart()
     return context

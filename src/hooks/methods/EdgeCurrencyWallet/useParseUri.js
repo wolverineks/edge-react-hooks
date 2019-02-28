@@ -4,7 +4,7 @@ import { type EdgeCurrencyWallet } from 'edge-core-js'
 import { useAsync } from 'react-use-async'
 
 export const useParseUri = () => {
-  const { onStart, onSuccess, onError, ...rest } = useAsync()
+  const { onStart, onSuccess, onError, pending, error, data } = useAsync()
 
   const parseUri = (wallet: EdgeCurrencyWallet, uri: string) => {
     onStart()
@@ -14,5 +14,10 @@ export const useParseUri = () => {
       .catch(onError)
   }
 
-  return { parseUri, ...rest }
+  return {
+    error,
+    parseUri,
+    parsedUri: data,
+    pending,
+  }
 }

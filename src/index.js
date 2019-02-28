@@ -179,5 +179,5 @@ export {
   useSyncedStorageRead,
   useSyncedStorageWrite,
   useUsernameAvailable,
-  useWaitForCurrencyWallet
+  useWaitForCurrencyWallet,
 }

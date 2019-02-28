@@ -4,7 +4,7 @@ import { type EdgeCurrencyWallet } from 'edge-core-js'
 import { useAsync } from 'react-use-async'
 
 export const useGetDisplayPublicSeed = () => {
-  const { onStart, onSuccess, onError, ...rest } = useAsync()
+  const { onStart, onSuccess, onError, error, pending, data } = useAsync()
 
   const getDisplayPublicSeed = (wallet: EdgeCurrencyWallet) => {
     onStart()
@@ -13,5 +13,10 @@ export const useGetDisplayPublicSeed = () => {
       .catch(onError)
   }
 
-  return { getDisplayPublicSeed, ...rest }
+  return {
+    error,
+    getDisplayPublicSeed,
+    pending,
+    publicSeed: data,
+  }
 }

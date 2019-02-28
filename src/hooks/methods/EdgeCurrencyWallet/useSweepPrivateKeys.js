@@ -4,7 +4,7 @@ import { type EdgeCurrencyWallet, type EdgeSpendInfo } from 'edge-core-js'
 import { useAsync } from 'react-use-async'
 
 export const useSweepPrivateKeys = () => {
-  const { onStart, onSuccess, onError, ...rest } = useAsync()
+  const { onStart, onSuccess, onError, pending, error, data } = useAsync()
 
   const sweepPrivateKeys = (wallet: EdgeCurrencyWallet, spendInfo: EdgeSpendInfo) => {
     onStart()
@@ -14,5 +14,10 @@ export const useSweepPrivateKeys = () => {
       .catch(onError)
   }
 
-  return { sweepPrivateKeys, ...rest }
+  return {
+    error,
+    pending,
+    sweepPrivateKeys,
+    transaction: data,
+  }
 }

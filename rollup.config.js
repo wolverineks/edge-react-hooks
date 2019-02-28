@@ -13,7 +13,7 @@ export default [
     plugins: [
       flowEntry(),
       rollupPluginFlow({ all: true, pretty: true }),
-      babel({ exclude: 'node_modules/**', plugins: ['transform-class-properties'] })
-    ]
-  }
+      babel({ exclude: 'node_modules/**', plugins: ['transform-class-properties'] }),
+    ],
+  },
 ]

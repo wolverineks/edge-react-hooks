@@ -4,7 +4,7 @@ import { type EdgeCurrencyWallet } from 'edge-core-js'
 import { useAsync } from 'react-use-async'
 
 export const useGetEnabledTokens = () => {
-  const { onStart, onSuccess, onError, ...rest } = useAsync()
+  const { onStart, onSuccess, onError, error, pending, data } = useAsync()
 
   const getEnabledTokens = (wallet: EdgeCurrencyWallet) => {
     onStart()
@@ -14,5 +14,10 @@ export const useGetEnabledTokens = () => {
       .catch(onError)
   }
 
-  return { getEnabledTokens, ...rest }
+  return {
+    enabledTokens: data,
+    error,
+    getEnabledTokens,
+    pending,
+  }
 }

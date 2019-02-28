@@ -6,7 +6,7 @@ import React, { type Node } from 'react'
 type Props = {|
   children: EdgeContext => Node,
   context: EdgeContext,
-  watch: Array<$Keys<EdgeContext>>
+  watch: Array<$Keys<EdgeContext>>,
 |}
 
 export class UseEdgeContext extends React.Component<Props> {

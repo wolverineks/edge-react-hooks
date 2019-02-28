@@ -6,7 +6,7 @@ import React, { type Node } from 'react'
 type Props = {|
   children: EdgeCurrencyWallet => Node,
   wallet: EdgeCurrencyWallet,
-  watch: Array<$Keys<EdgeCurrencyWallet>>
+  watch: Array<$Keys<EdgeCurrencyWallet>>,
 |}
 
 export class UseEdgeCurrencyWallet extends React.Component<Props> {

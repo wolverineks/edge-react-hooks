@@ -4,7 +4,7 @@ import { type EdgeCurrencyWallet } from 'edge-core-js'
 import { useAsync } from 'react-use-async'
 
 export const useSetFiatCurrencyCode = () => {
-  const { onStart, onSuccess, onError, ...rest } = useAsync()
+  const { onStart, onSuccess, onError, pending, error } = useAsync()
 
   const setFiatCurrencyCode = (wallet: EdgeCurrencyWallet, fiatCurrencyCode: string) => {
     onStart()
@@ -14,5 +14,9 @@ export const useSetFiatCurrencyCode = () => {
       .catch(onError)
   }
 
-  return { setFiatCurrencyCode, ...rest }
+  return {
+    error,
+    pending,
+    setFiatCurrencyCode,
+  }
 }

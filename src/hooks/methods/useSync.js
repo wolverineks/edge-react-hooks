@@ -6,7 +6,7 @@ import { useAsync } from 'react-use-async'
 type Syncable = EdgeAccount | EdgeCurrencyWallet
 
 export const useSync = () => {
-  const { onStart, onSuccess, onError, ...rest } = useAsync()
+  const { onStart, onSuccess, onError, pending, error } = useAsync()
 
   const sync = (syncable: Syncable) => {
     onStart()
@@ -16,5 +16,9 @@ export const useSync = () => {
       .catch(onError)
   }
 
-  return { sync, ...rest }
+  return {
+    error,
+    pending,
+    sync,
+  }
 }

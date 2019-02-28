@@ -4,7 +4,7 @@ import { type EdgeCurrencyWallet } from 'edge-core-js'
 import { useAsync } from 'react-use-async'
 
 export const useNativeToDenomination = () => {
-  const { onStart, onSuccess, onError, ...rest } = useAsync()
+  const { onStart, onSuccess, onError, pending, error, data } = useAsync()
 
   const nativeToDenomination = (wallet: EdgeCurrencyWallet, nativeAmount: string, currencyCode: string) => {
     onStart()
@@ -14,5 +14,10 @@ export const useNativeToDenomination = () => {
       .catch(onError)
   }
 
-  return { nativeToDenomination, ...rest }
+  return {
+    denominatedAmount: data,
+    error,
+    nativeToDenomination,
+    pending,
+  }
 }
