@@ -2078,9 +2078,7 @@ const useEdgeCurrencyWallet = (wallet, properties) => {
   const forceUpdate = useForceUpdate();
 
   const effect = () => {
-    const unsubscribes = properties.reduce((unsubscribes, property) => {
-      return wallet ? [...unsubscribes, wallet.watch(property, forceUpdate)] : unsubscribes;
-    }, []);
+    const unsubscribes = properties.map(property => wallet.watch(property, forceUpdate));
     if (unsubscribes.length > 0) forceUpdate();
 
     const unsubscribe = () => unsubscribes.forEach(fn => fn());
