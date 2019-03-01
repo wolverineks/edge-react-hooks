@@ -29,7 +29,6 @@
     "trailingComma": "all"
   },
   "dependencies": {
-    "react": "^16.8.0-alpha.1",
     "react-use-async": "^0.0.5"
   },
   "devDependencies": {
@@ -58,7 +57,6 @@
     "import-sort-parser-babylon": "^5.2.0",
     "import-sort-style-module": "^5.0.0",
     "prettier-eslint-cli": "^4.7.1",
-    "react-dom": "^16.8.3",
     "react-testing-library": "^5.9.0",
     "rimraf": "^2.6.3",
     "rollup": "^1.1.2",
@@ -66,6 +64,10 @@
     "rollup-plugin-flow": "^1.1.1",
     "rollup-plugin-flow-entry": "^0.2.1",
     "sort-package-json": "^1.18.0"
+  },
+  "peerDependencies": {
+    "react": "^16.8.0",
+    "react-dom": "^16.8.0"
   },
   "flow-coverage-report": {
     "globIncludePatterns": [
