@@ -5,13 +5,11 @@ import { useEffect } from 'react'
 
 import { useForceUpdate } from '../../utils/useForceUpdate.js'
 
-export const useEdgeCurrencyWallet = (wallet: ?EdgeCurrencyWallet, properties: Array<$Keys<EdgeCurrencyWallet>>) => {
+export const useEdgeCurrencyWallet = (wallet: EdgeCurrencyWallet, properties: Array<$Keys<EdgeCurrencyWallet>>) => {
   const forceUpdate = useForceUpdate()
 
   const effect = () => {
-    const unsubscribes = properties.reduce((unsubscribes, property) => {
-      return wallet ? [...unsubscribes, wallet.watch(property, forceUpdate)] : unsubscribes
-    }, [])
+    const unsubscribes = properties.map(property => wallet.watch(property, forceUpdate))
 
     if (unsubscribes.length > 0) forceUpdate()
 
