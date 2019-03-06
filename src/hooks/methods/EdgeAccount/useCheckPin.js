@@ -4,7 +4,7 @@ import { type EdgeAccount } from 'edge-core-js'
 import { useAsync } from 'react-use-async'
 
 export const useCheckPin = () => {
-  const { onStart, onSuccess, onError, pending, error, data } = useAsync()
+  const { onStart, onSuccess, onError, reset, pending, error, data } = useAsync()
 
   const checkPin = (account: EdgeAccount, pin: string) => {
     onStart()
@@ -19,5 +19,6 @@ export const useCheckPin = () => {
     error,
     pending,
     pinVerified: (data: ?boolean),
+    reset,
   }
 }

@@ -4,7 +4,7 @@ import { type EdgeContext } from 'edge-core-js'
 import { useAsync } from 'react-use-async'
 
 export const useListRecoveryQuestionChoices = () => {
-  const { onStart, onSuccess, onError, pending, error, data } = useAsync()
+  const { onStart, onSuccess, onError, reset, pending, error, data } = useAsync()
 
   const listRecoveryQuestionChoices = (context: EdgeContext) => {
     onStart()
@@ -19,5 +19,6 @@ export const useListRecoveryQuestionChoices = () => {
     listRecoveryQuestionChoices,
     pending,
     recoveryQuestionChoices: (data: ?Array<string>),
+    reset,
   }
 }

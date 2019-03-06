@@ -4,7 +4,7 @@ import { type EdgeCurrencyWallet } from 'edge-core-js'
 import { useAsync } from 'react-use-async'
 
 export const useStopEngine = () => {
-  const { onStart, onSuccess, onError, pending, error } = useAsync()
+  const { onStart, onSuccess, onError, reset, pending, error } = useAsync()
 
   const stopEngine = (wallet: EdgeCurrencyWallet) => {
     onStart()
@@ -17,6 +17,7 @@ export const useStopEngine = () => {
   return {
     error,
     pending,
+    reset,
     stopEngine,
   }
 }

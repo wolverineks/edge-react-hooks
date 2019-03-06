@@ -4,7 +4,7 @@ import { type EdgeContext, type EdgeLoginMessages } from 'edge-core-js'
 import { useAsync } from 'react-use-async'
 
 export const useFetchLoginMessages = () => {
-  const { onStart, onSuccess, onError, pending, error, data } = useAsync()
+  const { onStart, onSuccess, onError, reset, pending, error, data } = useAsync()
 
   const fetchLoginMessages = (context: EdgeContext) => {
     onStart()
@@ -19,5 +19,6 @@ export const useFetchLoginMessages = () => {
     fetchLoginMessages,
     loginMessages: (data: ?EdgeLoginMessages),
     pending,
+    reset,
   }
 }

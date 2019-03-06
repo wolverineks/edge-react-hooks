@@ -4,7 +4,7 @@ import { type EdgeContext, type EdgeContextOptions, makeEdgeContext } from 'edge
 import { useAsync } from 'react-use-async'
 
 export const useMakeEdgeContext = () => {
-  const { onStart, onSuccess, onError, pending, error, data } = useAsync()
+  const { onStart, onSuccess, onError, reset, pending, error, data } = useAsync()
 
   const _makeEdgeContext = (contextOptions: EdgeContextOptions) => {
     onStart()
@@ -18,5 +18,6 @@ export const useMakeEdgeContext = () => {
     error,
     makeEdgeContext: _makeEdgeContext,
     pending,
+    reset,
   }
 }

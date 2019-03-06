@@ -4,7 +4,7 @@ import { type EdgeCurrencyWallet, type EdgeSpendInfo } from 'edge-core-js'
 import { useAsync } from 'react-use-async'
 
 export const useGetMaxSpendable = () => {
-  const { onStart, onSuccess, onError, pending, error, data } = useAsync()
+  const { onStart, onSuccess, onError, reset, pending, error, data } = useAsync()
 
   const getMaxSpendable = (wallet: EdgeCurrencyWallet, spendInfo: EdgeSpendInfo) => {
     onStart()
@@ -19,5 +19,6 @@ export const useGetMaxSpendable = () => {
     getMaxSpendable,
     maxSpendable: (data: ?string),
     pending,
+    reset,
   }
 }

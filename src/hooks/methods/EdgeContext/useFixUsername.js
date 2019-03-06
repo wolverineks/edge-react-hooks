@@ -4,7 +4,7 @@ import { type EdgeContext } from 'edge-core-js'
 import { useAsync } from 'react-use-async'
 
 export const useFixUsername = () => {
-  const { onStart, onSuccess, onError, pending, error, data } = useAsync()
+  const { onStart, onSuccess, onError, reset, pending, error, data } = useAsync()
 
   const fixUsername = (context: EdgeContext, username: string) => {
     onStart()
@@ -17,6 +17,7 @@ export const useFixUsername = () => {
     error,
     fixUsername,
     pending,
+    reset,
     username: (data: ?string),
   }
 }

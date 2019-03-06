@@ -4,7 +4,7 @@ import { type EdgeCurrencyWallet, type EdgeGetTransactionsOptions, type EdgeTran
 import { useAsync } from 'react-use-async'
 
 export const useGetTransactions = () => {
-  const { onStart, onSuccess, onError, pending, error, data } = useAsync()
+  const { onStart, onSuccess, onError, reset, pending, error, data } = useAsync()
 
   const getTransactions = (wallet: EdgeCurrencyWallet, options?: EdgeGetTransactionsOptions) => {
     onStart()
@@ -18,6 +18,7 @@ export const useGetTransactions = () => {
     error,
     getTransactions,
     pending,
+    reset,
     transactions: (data: ?Array<EdgeTransaction>),
   }
 }

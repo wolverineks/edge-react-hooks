@@ -4,7 +4,7 @@ import { type EdgeCurrencyWallet, type EdgePaymentProtocolInfo } from 'edge-core
 import { useAsync } from 'react-use-async'
 
 export const useGetPaymentProtocolInfo = () => {
-  const { onStart, onSuccess, onError, pending, error, data } = useAsync()
+  const { onStart, onSuccess, onError, reset, pending, error, data } = useAsync()
 
   const getPaymentProtocolInfo = (wallet: EdgeCurrencyWallet, url: string) => {
     onStart()
@@ -19,5 +19,6 @@ export const useGetPaymentProtocolInfo = () => {
     getPaymentProtocolInfo,
     paymentProtocolInfo: (data: ?EdgePaymentProtocolInfo),
     pending,
+    reset,
   }
 }

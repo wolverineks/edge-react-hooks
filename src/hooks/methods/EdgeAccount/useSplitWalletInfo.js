@@ -4,7 +4,7 @@ import { type EdgeAccount } from 'edge-core-js'
 import { useAsync } from 'react-use-async'
 
 export const useSplitWalletInfo = () => {
-  const { onStart, onSuccess, onError, pending, error, data } = useAsync()
+  const { onStart, onSuccess, onError, reset, pending, error, data } = useAsync()
 
   const splitWalletInfo = (account: EdgeAccount, id: string, newWalletType: string) => {
     onStart()
@@ -18,6 +18,7 @@ export const useSplitWalletInfo = () => {
     data: (data: ?string),
     error,
     pending,
+    reset,
     splitWalletInfo,
   }
 }

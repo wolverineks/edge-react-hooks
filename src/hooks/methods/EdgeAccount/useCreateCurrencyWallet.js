@@ -4,7 +4,7 @@ import { type EdgeAccount, type EdgeCreateCurrencyWalletOptions, type EdgeCurren
 import { useAsync } from 'react-use-async'
 
 export const useCreateCurrencyWallet = () => {
-  const { onStart, onSuccess, onError, pending, error, data } = useAsync()
+  const { onStart, onSuccess, onError, reset, pending, error, data } = useAsync()
 
   const createCurrencyWallet = (account: EdgeAccount, type: string, options?: EdgeCreateCurrencyWalletOptions) => {
     onStart()
@@ -18,6 +18,7 @@ export const useCreateCurrencyWallet = () => {
     createCurrencyWallet,
     error,
     pending,
+    reset,
     wallet: (data: ?EdgeCurrencyWallet),
   }
 }

@@ -4,7 +4,7 @@ import { type EdgeContext, type EdgePasswordRules } from 'edge-core-js'
 import { useAsync } from 'react-use-async'
 
 export const useCheckPasswordRules = () => {
-  const { onStart, onSuccess, onError, pending, error, data } = useAsync()
+  const { onStart, onSuccess, onError, reset, pending, error, data } = useAsync()
 
   const checkPasswordRules = (context: EdgeContext, password: string) => {
     onStart()
@@ -18,5 +18,6 @@ export const useCheckPasswordRules = () => {
     error,
     passwordRules: (data: ?EdgePasswordRules),
     pending,
+    reset,
   }
 }

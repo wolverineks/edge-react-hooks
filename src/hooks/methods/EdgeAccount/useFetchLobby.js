@@ -4,7 +4,7 @@ import { type EdgeAccount, type EdgeLobby } from 'edge-core-js'
 import { useAsync } from 'react-use-async'
 
 export const useFetchLobby = () => {
-  const { onStart, onSuccess, onError, pending, error, data } = useAsync()
+  const { onStart, onSuccess, onError, reset, pending, error, data } = useAsync()
 
   const fetchLobby = (account: EdgeAccount, lobbyId: string) => {
     onStart()
@@ -19,5 +19,6 @@ export const useFetchLobby = () => {
     fetchLobby,
     lobby: (data: ?EdgeLobby),
     pending,
+    reset,
   }
 }

@@ -6,7 +6,7 @@ import { useAsync } from 'react-use-async'
 type StorageContext = EdgeAccount | EdgeCurrencyWallet
 
 export const useSyncedStorageRead = () => {
-  const { onStart, onSuccess, onError, pending, error, data } = useAsync()
+  const { onStart, onSuccess, onError, reset, pending, error, data } = useAsync()
 
   const syncedStorageRead = (storageContext: StorageContext, path: string) => {
     onStart()
@@ -20,6 +20,7 @@ export const useSyncedStorageRead = () => {
   return {
     error,
     pending,
+    reset,
     syncedStorage: (data: ?string),
     syncedStorageRead,
   }

@@ -4,7 +4,8 @@ import { type EdgeCurrencyCodeOptions, type EdgeCurrencyWallet, type EdgeReceive
 import { useAsync } from 'react-use-async'
 
 export const useGetReceiveAddress = () => {
-  const { onStart, onSuccess, onError, pending, error, data } = useAsync()
+  const { onStart, onSuccess, onError, reset, pending, error, data } = useAsync()
+
   const getReceiveAddress = (wallet: EdgeCurrencyWallet, options?: EdgeCurrencyCodeOptions) => {
     onStart()
     return wallet
@@ -18,5 +19,6 @@ export const useGetReceiveAddress = () => {
     getReceiveAddress,
     pending,
     receiveAddress: (data: ?EdgeReceiveAddress),
+    reset,
   }
 }

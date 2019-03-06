@@ -4,7 +4,7 @@ import { type EdgeContext, type EdgeEdgeLoginOptions, type EdgePendingEdgeLogin 
 import { useAsync } from 'react-use-async'
 
 export const useRequestEdgeLogin = () => {
-  const { onStart, onSuccess, onError, pending, error, data } = useAsync()
+  const { onStart, onSuccess, onError, reset, pending, error, data } = useAsync()
 
   const requestEdgeLogin = (context: EdgeContext, options: EdgeEdgeLoginOptions) => {
     onStart()
@@ -19,5 +19,6 @@ export const useRequestEdgeLogin = () => {
     pending,
     pendingLogin: (data: ?EdgePendingEdgeLogin),
     requestEdgeLogin,
+    reset,
   }
 }

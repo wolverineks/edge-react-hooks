@@ -4,7 +4,7 @@ import { type EdgeAccount, type EdgeAccountOptions, type EdgeContext } from 'edg
 import { useAsync } from 'react-use-async'
 
 export const useLoginWithPassword = () => {
-  const { onStart, onSuccess, onError, pending, error, data } = useAsync()
+  const { onStart, onSuccess, onError, reset, pending, error, data } = useAsync()
 
   const loginWithPassword = (context: EdgeContext, username: string, password: string, options: EdgeAccountOptions) => {
     onStart()
@@ -19,5 +19,6 @@ export const useLoginWithPassword = () => {
     error,
     loginWithPassword,
     pending,
+    reset,
   }
 }

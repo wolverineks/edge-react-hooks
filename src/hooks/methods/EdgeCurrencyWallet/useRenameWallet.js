@@ -4,7 +4,7 @@ import { type EdgeCurrencyWallet } from 'edge-core-js'
 import { useAsync } from 'react-use-async'
 
 export const useRenameWallet = () => {
-  const { onStart, onSuccess, onError, pending, error } = useAsync()
+  const { onStart, onSuccess, onError, reset, pending, error } = useAsync()
 
   const renameWallet = (wallet: EdgeCurrencyWallet, name: string) => {
     onStart()
@@ -18,5 +18,6 @@ export const useRenameWallet = () => {
     error,
     pending,
     renameWallet,
+    reset,
   }
 }

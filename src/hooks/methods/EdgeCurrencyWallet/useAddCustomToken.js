@@ -4,7 +4,7 @@ import { type EdgeCurrencyWallet, type EdgeTokenInfo } from 'edge-core-js'
 import { useAsync } from 'react-use-async'
 
 export const useAddCustomToken = () => {
-  const { onStart, onSuccess, onError, pending, error } = useAsync()
+  const { onStart, onSuccess, onError, reset, pending, error } = useAsync()
 
   const addCustomToken = (wallet: EdgeCurrencyWallet, tokenInfo: EdgeTokenInfo) => {
     onStart()
@@ -18,5 +18,6 @@ export const useAddCustomToken = () => {
     addCustomToken,
     error,
     pending,
+    reset,
   }
 }

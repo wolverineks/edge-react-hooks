@@ -7,7 +7,7 @@ type StorageContext = EdgeAccount | EdgeCurrencyWallet
 type Stringifyable = string | number | { [string]: Stringifyable } | Array<Stringifyable>
 
 export const useLocalStorageWrite = () => {
-  const { onStart, onSuccess, onError, pending, error } = useAsync()
+  const { onStart, onSuccess, onError, reset, pending, error } = useAsync()
 
   const localStorageWrite = (storageContext: StorageContext, path: string, data: string) => {
     onStart()
@@ -21,5 +21,6 @@ export const useLocalStorageWrite = () => {
     error,
     localStorageWrite,
     pending,
+    reset,
   }
 }

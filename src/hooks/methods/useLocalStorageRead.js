@@ -6,7 +6,7 @@ import { useAsync } from 'react-use-async'
 type StorageContext = EdgeAccount | EdgeCurrencyWallet
 
 export const useLocalStorageRead = () => {
-  const { onStart, onSuccess, onError, pending, error, data } = useAsync()
+  const { onStart, onSuccess, onError, reset, pending, error, data } = useAsync()
 
   const localStorageRead = (storageContext: StorageContext, path: string) => {
     onStart()
@@ -22,5 +22,6 @@ export const useLocalStorageRead = () => {
     localStorage: (data: ?string),
     localStorageRead,
     pending,
+    reset,
   }
 }

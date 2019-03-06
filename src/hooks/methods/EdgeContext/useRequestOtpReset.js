@@ -4,7 +4,7 @@ import { type EdgeContext } from 'edge-core-js'
 import { useAsync } from 'react-use-async'
 
 export const useRequestOtpReset = () => {
-  const { onStart, onSuccess, onError, pending, error, data } = useAsync()
+  const { onStart, onSuccess, onError, reset, pending, error, data } = useAsync()
 
   const requestOtpReset = (context: EdgeContext, username: string, otpResetToken: string) => {
     onStart()
@@ -18,6 +18,7 @@ export const useRequestOtpReset = () => {
     error,
     pending,
     requestOtpReset,
+    reset,
     resetDate: (data: ?Date),
   }
 }

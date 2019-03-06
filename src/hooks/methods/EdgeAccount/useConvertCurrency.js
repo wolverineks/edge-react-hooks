@@ -3,19 +3,19 @@
 import { type EdgeAccount } from 'edge-core-js'
 import { useAsync } from 'react-use-async'
 
-export const useDisableOtp = () => {
+export const useConvertCurrency = () => {
   const { onStart, onSuccess, onError, reset, pending, error } = useAsync()
 
-  const disableOtp = (account: EdgeAccount) => {
+  const convertCurrency = (account: EdgeAccount, fromCurrency: string, toCurrency: string, amount: number) => {
     onStart()
-    return account
-      .disableOtp()
+    return account.rateCache
+      .convertCurrency(fromCurrency, toCurrency, amount)
       .then(onSuccess)
       .catch(onError)
   }
 
   return {
-    disableOtp,
+    convertCurrency,
     error,
     pending,
     reset,
