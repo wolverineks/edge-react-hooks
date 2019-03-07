@@ -1,106 +1,61 @@
 // @flow
 
-import { type EdgeAccount, type EdgeCurrencyWallet, type EdgeTransaction } from 'edge-core-js'
-import { useEdgeAccount, useEdgeCurrencyWallet, useTransactions } from 'edge-react-hooks'
-import React, { useEffect, useRef, useState } from 'react'
+import { type EdgeAccount, type EdgeCurrencyWallet } from 'edge-core-js'
+import { useArchiveWallet, useDeleteWallet, useEdgeAccount, useEdgeCurrencyWallet } from 'edge-react-hooks'
+import React, { useEffect, useState } from 'react'
 
-export const ActiveWalletList = ({ account }: { account: EdgeAccount }) => {
+import { WalletInfo } from './WalletInfo.js'
+
+export const ActiveWalletList = ({
+  account,
+  selectWallet,
+}: {
+  account: EdgeAccount,
+  selectWallet: EdgeCurrencyWallet => void,
+}) => {
   useEdgeAccount(account, ['activeWalletIds', 'currencyWallets'])
+  useEffect(() => {
+    console.log('activeWalletIds', JSON.stringify(account.activeWalletIds, null, 2))
+  })
+  const wallets = account.activeWalletIds.map(id => account.currencyWallets[id])
 
   return (
     <div>
       Active Wallets:
-      {account.activeWalletIds
-        .map(id => account.currencyWallets[id])
-        .map((wallet: ?EdgeCurrencyWallet, index: number) =>
-          wallet ? (
-            <ActiveWalletRow key={wallet.id} account={account} wallet={wallet} />
-          ) : (
-            <div key={index}>LOADING...</div>
-          ),
-        )}
+      {wallets.map((wallet: EdgeCurrencyWallet, index: number) =>
+        wallet ? (
+          <ActiveWalletRow account={account} wallet={wallet} key={wallet.id} selectWallet={selectWallet} />
+        ) : (
+          <div key={index}>Loading...</div>
+        ),
+      )}
     </div>
   )
 }
 
-const ActiveWalletRow = ({ account, wallet }: { wallet: EdgeCurrencyWallet, account: EdgeAccount }) => {
+const ActiveWalletRow = ({
+  account,
+  wallet,
+  selectWallet,
+}: {
+  wallet: EdgeCurrencyWallet,
+  selectWallet: EdgeCurrencyWallet => void,
+  account: EdgeAccount,
+}) => {
   useEdgeCurrencyWallet(wallet, ['name', 'syncRatio'])
-  const archiveWallet = useAsync()
-  const deleteWallet = useAsync()
-
-  const handleArchiveWallet = () => {
-    wallet && archiveWallet.async(() => account.changeWalletStates({ [wallet.id]: { archived: true } }))
-  }
-
-  const handleDeleteWallet = () => {
-    wallet && deleteWallet.async(() => account.changeWalletStates({ [wallet.id]: { deleted: true } }))
-  }
+  const { archiveWallet, pending: archivePending } = useArchiveWallet()
+  const { deleteWallet, pending: deletePending } = useDeleteWallet()
 
   return (
     <div>
-      <div>
-        {wallet.name} - {wallet.syncRatio.toString()}
-      </div>
-      <button disabled={!wallet} onClick={handleArchiveWallet}>
+      <button disabled={archivePending} onClick={() => archiveWallet(account, wallet.id)}>
         Archive
       </button>
-      <button disabled={!wallet} onClick={handleDeleteWallet}>
+      <button disabled={deletePending} onClick={() => deleteWallet(account, wallet.id)}>
         Delete
       </button>
-      <BalanceList wallet={wallet} />
-      <TransactionList wallet={wallet} />
+      <button onClick={() => selectWallet(wallet)}>Select</button>
+      {wallet.name} - {wallet.syncRatio.toString()}
     </div>
   )
-}
-
-const BalanceList = ({ wallet }) => {
-  return (
-    <div>
-      <div>Balances</div>
-      {Object.entries(wallet.balances).map(([currencyCode, balance]: [string, string]) => (
-        <div key={currencyCode}>
-          {currencyCode} - {balance}
-        </div>
-      ))}
-    </div>
-  )
-}
-
-const TransactionList = ({ wallet }) => {
-  const { transactions } = useTransactions(wallet)
-  return (
-    <div>
-      Transactions:
-      {transactions &&
-        transactions.map((transaction: EdgeTransaction) => (
-          <div id={transaction.txid}>
-            {transaction.date} - {transaction.currencyCode} - {transaction.nativeAmount}
-          </div>
-        ))}
-    </div>
-  )
-}
-
-const useAsync = () => {
-  const isMounted = useRef(false)
-  useEffect(() => {
-    isMounted.current = true
-    return () => (isMounted.current = false)
-  }, [])
-
-  const [state, setState] = useState({ pending: false, error: null, data: null })
-  const onStart = () => setState(state => ({ ...state, pending: true, error: null }))
-  const onSuccess = (data: any) => isMounted.current && setState(state => ({ ...state, pending: false, data }))
-  const onError = (error: Error) => isMounted.current && setState(state => ({ ...state, pending: false, error }))
-
-  const async = (asyncFunction: () => Promise<any>) => {
-    if (!isMounted.current) throw new Error('Attempting to call async in unmounted component')
-    if (state.pending) throw new Error("Use 'pending' to prevent multiple simultaneous async calls")
-    onStart()
-    asyncFunction()
-      .then(onSuccess)
-      .catch(onError)
-  }
-
-  return { async, ...state }
 }

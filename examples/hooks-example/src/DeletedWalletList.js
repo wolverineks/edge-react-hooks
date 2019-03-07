@@ -1,12 +1,11 @@
 // @flow
 
-import { type EdgeAccount, type EdgeWalletInfoFull } from "edge-core-js";
-import { useEdgeAccount } from "edge-react-hooks";
-import React from "react";
-import { useEffect, useRef, useState } from "react";
+import { type EdgeAccount, type EdgeWalletInfoFull } from 'edge-core-js'
+import { useEdgeAccount, useRestoreWallet } from 'edge-react-hooks'
+import React from 'react'
 
 export const DeletedWalletList = ({ account }: { account: EdgeAccount }) => {
-  useEdgeAccount(account, ["allKeys"]);
+  useEdgeAccount(account, ['allKeys'])
 
   return (
     <div>
@@ -14,49 +13,24 @@ export const DeletedWalletList = ({ account }: { account: EdgeAccount }) => {
       {account.allKeys
         .filter(walletInfo => walletInfo.deleted)
         .map((walletInfo: EdgeWalletInfoFull) => (
-          <DeletedWalletRow account={account} key={walletInfo.id} id={walletInfo.id} />
+          <DeletedWalletRow account={account} key={walletInfo.id} id={walletInfo.id} type={walletInfo.type} />
         ))}
     </div>
-  );
-};
+  )
+}
 
-const DeletedWalletRow = ({ account, id }) => {
-  const restoreWallet = useAsync();
-
-  const handleRestoreWallet = () => {
-    restoreWallet.async(() => account.changeWalletStates({ [id]: { deleted: false, archived: false } }));
-  };
+const DeletedWalletRow = ({ account, id, type }) => {
+  const { restoreWallet, pending } = useRestoreWallet()
 
   return (
     <div>
-      {id} -
-      <button disabled={restoreWallet.pending} onClick={handleRestoreWallet}>
+      <button disabled={pending} onClick={() => account.changeWalletStates({ [id]: { deleted: false } })}>
+        Undelete
+      </button>
+      <button disabled={pending} onClick={() => restoreWallet(account, id)}>
         Restore
       </button>
+      {id} - {type}
     </div>
-  );
-};
-
-const useAsync = () => {
-  const isMounted = useRef(false);
-  useEffect(() => {
-    isMounted.current = true;
-    return () => (isMounted.current = false);
-  }, []);
-
-  const [state, setState] = useState({ pending: false, error: null, data: null });
-  const onStart = () => setState(state => ({ ...state, pending: true, error: null }));
-  const onSuccess = (data: any) => isMounted.current && setState(state => ({ ...state, pending: false, data }));
-  const onError = (error: Error) => isMounted.current && setState(state => ({ ...state, pending: false, error }));
-
-  const async = (asyncFunction: () => Promise<any>) => {
-    if (!isMounted.current) throw new Error("Attempting to call async in unmounted component");
-    if (state.pending) throw new Error("Use 'pending' to prevent multiple simultaneous async calls");
-    onStart();
-    asyncFunction()
-      .then(onSuccess)
-      .catch(onError);
-  };
-
-  return { async, ...state };
-};
+  )
+}

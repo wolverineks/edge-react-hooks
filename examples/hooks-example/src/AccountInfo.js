@@ -1,48 +1,76 @@
 // @flow
 
-import { type EdgeAccount } from 'edge-core-js'
+import { type EdgeAccount, type EdgeCurrencyWallet } from 'edge-core-js'
 import { useEdgeAccount } from 'edge-react-hooks'
-import React from 'react'
+import React, { useState } from 'react'
 
 import { ActiveWalletList } from './ActiveWalletList.js'
 import { ArchivedWalletList } from './ArchivedWalletList.js'
 import { DeletedWalletList } from './DeletedWalletList.js'
+import { WalletInfo } from './WalletInfo.js'
 
-export const AccountInfo = ({ account, onLogout }: { account: EdgeAccount, onLogout: () => mixed }) => {
+export const AccountInfo = ({ account, logout }: { account: EdgeAccount, logout: () => mixed }) => {
   useEdgeAccount(account, ['username'])
-  const restoreAllWallets = () => {
-    const newWalletStates = account.allKeys.reduce(
-      (changes, { id }) => ({ ...changes, [id]: { archived: false, deleted: false } }),
-      {},
-    )
-    account.changeWalletStates(newWalletStates)
-  }
 
-  const deleteAllWallets = () =>
-    account.allKeys.forEach(({ id }) => account.changeWalletStates({ [id]: { deleted: true } }))
-  const archiveAllWallets = () =>
-    account.allKeys.forEach(({ id }) => account.changeWalletStates({ [id]: { archived: true } }))
+  const firstWallet = account.currencyWallets[account.activeWalletIds[0]]
+
+  const [selectedWallet, setSelectedWallet] = useState<?EdgeCurrencyWallet>(firstWallet)
 
   return (
     <div>
       <div>
-        <button onClick={restoreAllWallets}>RESTORE ALL WALLETS</button>
+        Account: {account.username} - <button onClick={logout}>Logout</button>
+        <Buttons account={account} />
+        <hr />
+        {selectedWallet && <WalletInfo account={account} wallet={selectedWallet} />}
+      </div>
+      <hr />
+      <ActiveWalletList account={account} selectWallet={setSelectedWallet} />
+      <hr />
+      <ArchivedWalletList account={account} />
+      <hr />
+      <DeletedWalletList account={account} />
+    </div>
+  )
+}
+
+const Buttons = ({ account }: { account: EdgeAccount }) => {
+  const restoreAllWallets = (account: EdgeAccount) => () => {
+    const newWalletStates = account.allKeys.reduce(
+      (changes, { id }) => ({ ...changes, [id]: { archived: false, deleted: false } }),
+      {},
+    )
+
+    return account.changeWalletStates(newWalletStates)
+  }
+
+  const deleteAllWallets = (account: EdgeAccount) => () => {
+    const walletStates = account.allKeys.reduce((walletStates, { id }) => {
+      return { ...walletStates, [id]: { deleted: true } }
+    }, {})
+
+    return account.changeWalletStates(walletStates)
+  }
+
+  const archiveAllWallets = (account: EdgeAccount) => () => {
+    const walletStates = account.allKeys.reduce((walletStates, { id }) => {
+      return { ...walletStates, [id]: { archived: true } }
+    }, {})
+
+    return account.changeWalletStates(walletStates)
+  }
+
+  return (
+    <div>
+      <div>
+        <button onClick={restoreAllWallets(account)}>RESTORE ALL WALLETS</button>
       </div>
       <div>
-        <button onClick={archiveAllWallets}>ARCHIVE ALL WALLETS</button>
+        <button onClick={archiveAllWallets(account)}>ARCHIVE ALL WALLETS</button>
       </div>
       <div>
-        <button onClick={deleteAllWallets}>DELETE ALL WALLETS</button>
+        <button onClick={deleteAllWallets(account)}>DELETE ALL WALLETS</button>
       </div>
-      <div>
-        Account: {account.username} - <button onClick={() => account.logout().then(onLogout)}>Logout</button>
-      </div>
-      <br />
-      {/* <ActiveWalletList account={account} /> */}
-      <br />
-      {/* <ArchivedWalletList account={account} /> */}
-      <br />
-      {/* <DeletedWalletList account={account} /> */}
     </div>
   )
 }

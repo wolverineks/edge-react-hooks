@@ -2,7 +2,7 @@
 
 import { type EdgeAccount, type EdgeContext } from 'edge-core-js'
 import { useLoginWithPassword } from 'edge-react-hooks'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 export const LoginForm = ({ context, onLogin }: { context: EdgeContext, onLogin: EdgeAccount => mixed }) => {
   const [username, setUsername] = useState('')
@@ -10,11 +10,11 @@ export const LoginForm = ({ context, onLogin }: { context: EdgeContext, onLogin:
 
   const { loginWithPassword, pending, account, error } = useLoginWithPassword()
 
-  const handleLogin = () => {
-    loginWithPassword(context, username, password, {}).then(() => {
-      account && onLogin(account)
-    })
-  }
+  const handleLogin = () => loginWithPassword(context, username, password, {})
+
+  useEffect(() => {
+    account && onLogin(account)
+  }, [account])
 
   return (
     <div>
