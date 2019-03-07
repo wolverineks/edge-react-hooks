@@ -2,3 +2,4 @@ node_modules
 yarn-error.log
 flow-coverage
 .DS_Store
+dist

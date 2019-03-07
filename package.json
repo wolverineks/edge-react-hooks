@@ -8,10 +8,10 @@
   ],
   "repository": "wolverineks/edge-react-hooks",
   "author": "Kevin Sullivan <wolverine.ks@gmail.com>",
-  "main": "dist/index.js",
   "files": [
     "dist"
   ],
+  "main": "dist/index.js",
   "scripts": {
     "build": "rimraf dist && mkdir dist && rollup -c",
     "flow": "node_modules/.bin/flow",

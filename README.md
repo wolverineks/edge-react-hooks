@@ -32,7 +32,7 @@ const { renameWallet, pending, error } = useRenameWallet()
 |      reset       | `() => mixed`                    |
 |     pending      | `boolean`                        |
 |      error       | `void | Error`                   |
-|       data       | `void | any`                     |
+|  `{named data}`  | `void | any`                     |
 
 Calling the `{named method}` is like dispatching a thunk to the redux store, and results in multiple changes of the state with accompanying re-renders of the consuming component.
 
