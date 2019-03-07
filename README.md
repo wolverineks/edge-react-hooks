@@ -31,8 +31,8 @@ const { renameWallet, pending, error } = useRenameWallet()
 | `{named method}` | `(EdgeObject, ...args) => mixed` |
 |      reset       | `() => mixed`                    |
 |     pending      | `boolean`                        |
-|      error       | `void | Error`                   |
-|  `{named data}`  | `void | any`                     |
+|      error       | `?Error`                         |
+|  `{named data}`  | `?any`                           |
 
 Calling the `{named method}` is like dispatching a thunk to the redux store, and results in multiple changes of the state with accompanying re-renders of the consuming component.
 
