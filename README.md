@@ -48,7 +48,7 @@ const WalletInfo = ({ wallet }: { wallet: EdgeCurrencyWallet }) => {
   return (
     <div>
       <div>{wallet.name}</div>
-      <button disable={pending} onClick={() => renameWallet('my other wallet')}>
+      <button disable={pending} onClick={() => renameWallet(wallet, 'my other wallet')}>
         {pending ? '...' ? "Rename"}
       </button>
     </div>
@@ -65,7 +65,7 @@ const WalletInfo = ({ wallet }: { wallet: EdgeCurrencyWallet }) => {
     <UseEdgeCurrencyWallet>{(wallet: EdgeCurrencyWallet) =>
       <div>
         <div>{wallet.name}</div>
-        <button disable={pending} onClick={() => renameWallet('my other wallet')}>
+        <button disable={pending} onClick={() => renameWallet(wallet, 'my other wallet')}>
           {pending ? '...' ? "Rename"}
         </button>
       </div>
