@@ -5,7 +5,7 @@ import { useEffect } from 'react'
 
 import { useForceUpdate } from '../../utils/useForceUpdate.js'
 
-export const useEdgeContext = (context: EdgeContext, properties: Array<$Keys<EdgeContext>>) => {
+export const useEdgeContext = (context: EdgeContext, properties?: Array<$Keys<EdgeContext>> = Object.keys(context)) => {
   const forceUpdate = useForceUpdate()
 
   const effect = () => {

@@ -5,7 +5,10 @@ import { useEffect } from 'react'
 
 import { useForceUpdate } from '../../utils/useForceUpdate.js'
 
-export const useEdgeCurrencyWallet = (wallet: EdgeCurrencyWallet, properties: Array<$Keys<EdgeCurrencyWallet>>) => {
+export const useEdgeCurrencyWallet = (
+  wallet: EdgeCurrencyWallet,
+  properties?: Array<$Keys<EdgeCurrencyWallet>> = Object.keys(wallet),
+) => {
   const forceUpdate = useForceUpdate()
 
   const effect = () => {

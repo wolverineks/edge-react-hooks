@@ -5,7 +5,7 @@ import { useEffect } from 'react'
 
 import { useForceUpdate } from '../../utils/useForceUpdate.js'
 
-export const useEdgeAccount = (account: EdgeAccount, properties: Array<$Keys<EdgeAccount>>) => {
+export const useEdgeAccount = (account: EdgeAccount, properties?: Array<$Keys<EdgeAccount>> = Object.keys(account)) => {
   const forceUpdate = useForceUpdate()
 
   const effect = () => {
