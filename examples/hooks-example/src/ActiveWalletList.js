@@ -1,10 +1,10 @@
 // @flow
 
-import { type EdgeAccount, type EdgeCurrencyWallet } from 'edge-core-js'
+import { type EdgeAccount, type EdgeCurrencyWallet, type EdgeTransaction } from 'edge-core-js'
 import { useArchiveWallet, useDeleteWallet, useEdgeAccount, useEdgeCurrencyWallet } from 'edge-react-hooks'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 
-import { WalletInfo } from './WalletInfo.js'
+import { useSelectWallet } from './useSelectedWallet.js'
 
 export const ActiveWalletList = ({
   account,
@@ -36,15 +36,24 @@ export const ActiveWalletList = ({
 const ActiveWalletRow = ({
   account,
   wallet,
-  selectWallet,
-}: {
+}: // selectWallet,
+{
   wallet: EdgeCurrencyWallet,
-  selectWallet: EdgeCurrencyWallet => void,
+  // selectWallet: EdgeCurrencyWallet => void,
   account: EdgeAccount,
 }) => {
   useEdgeCurrencyWallet(wallet, ['name', 'syncRatio'])
+  const selectWallet = useSelectWallet()
   const { archiveWallet, pending: archivePending } = useArchiveWallet()
   const { deleteWallet, pending: deletePending } = useDeleteWallet()
+
+  useOnNewtransactions(wallet, (transactions: Array<EdgeTransaction>) => {
+    alert(
+      wallet.name
+        ? `${wallet.name} - transactions.length > 1 ? 'New Transactions' : 'New Transaction'`
+        : `transactions.length > 1 ? 'New Transactions' : 'New Transaction'`,
+    )
+  })
 
   return (
     <div>
@@ -58,4 +67,13 @@ const ActiveWalletRow = ({
       {wallet.name} - {wallet.syncRatio.toString()}
     </div>
   )
+}
+
+export const useOnNewtransactions = (
+  wallet: EdgeCurrencyWallet,
+  callback: (transactions: Array<EdgeTransaction>) => mixed,
+) => {
+  useEffect(() => {
+    wallet.on('newTransactions', callback)
+  }, [wallet])
 }

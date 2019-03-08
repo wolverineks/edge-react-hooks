@@ -10,6 +10,7 @@
     "edge-currency-monero": "^0.2.0",
     "edge-currency-ripple": "^0.0.8",
     "edge-react-hooks": "^1.5.4",
+    "qrcode.react": "^0.9.3",
     "ramda": "^0.26.1",
     "react": "^16.8.0",
     "react-dom": "^16.8.0",

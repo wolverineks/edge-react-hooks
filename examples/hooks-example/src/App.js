@@ -2,24 +2,68 @@
 
 import {} from 'ramda'
 
-import {
-  type EdgeAccount,
-  addEdgeCorePlugins,
-  lockEdgeCorePlugins,
-  makeEdgeContext,
-  makeFakeEdgeWorld,
-} from 'edge-core-js'
+import { type EdgeAccount, addEdgeCorePlugins, lockEdgeCorePlugins } from 'edge-core-js'
 import AccountBased from 'edge-currency-accountbased'
 import Bitcoin from 'edge-currency-bitcoin'
 import { useLogout, useMakeEdgeContext } from 'edge-react-hooks'
-import React, { useEffect, useReducer, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 import { AccountInfo } from './AccountInfo.js'
 import { ContextInfo } from './ContextInfo.js'
 import { contextOptions } from './contextOptions.js'
 import { LoginForm } from './LoginForm.js'
+import { ContextContext } from './useContext.js'
+import { SelectedWalletProvider } from './useSelectedWallet.js'
+
+const plugins = [Bitcoin, AccountBased]
 
 type Props = {||}
+
+export const App = (props: Props) => {
+  const { logout } = useLogout()
+  const [account, setAccount] = useState<?EdgeAccount>(void 0)
+  const { makeEdgeContext, context } = useMakeEdgeContext()
+  const pluginsLoaded = useRef(false)
+
+  useEffect(() => {
+    setTimeout(() => makeEdgeContext(contextOptions), 1000)
+  }, [])
+
+  useEffect(() => {
+    if (!context || pluginsLoaded) return
+    plugins.forEach(plugin => addEdgeCorePlugins(plugin))
+    lockEdgeCorePlugins()
+    pluginsLoaded.current = true
+  }, [context])
+
+  if (!context) return 'Loading...'
+
+  return (
+    <div>
+      <ContextContext.Provider value={context}>
+        <div>
+          <ContextInfo context={context} />
+        </div>
+        <div>
+          <hr />
+
+          {!account || !account.loggedIn ? (
+            <LoginForm context={context} onLogin={setAccount} />
+          ) : (
+            <div>
+              <SelectedWalletProvider>
+                <AccountInfo account={account} logout={() => logout(account)} />
+              </SelectedWalletProvider>
+            </div>
+          )}
+        </div>
+        }
+      </ContextContext.Provider>
+    </div>
+  )
+}
+
+export default App
 
 // const App = () => {
 //   const [count, setCount] = useState(0)
@@ -79,47 +123,3 @@ type Props = {||}
 
 //   return interval
 // }
-
-const plugins = [Bitcoin, AccountBased]
-
-export const App = (props: Props) => {
-  const { makeEdgeContext, context, error, pending } = useMakeEdgeContext()
-  const [pluginsLoaded, setPluginsLoaded] = useState(false)
-
-  useEffect(() => {
-    makeEdgeContext(contextOptions)
-  }, [])
-
-  useEffect(() => {
-    if (!context) return
-    plugins.forEach(plugin => addEdgeCorePlugins(plugin))
-    lockEdgeCorePlugins()
-    setPluginsLoaded(true)
-  }, [context])
-
-  const { logout } = useLogout()
-  const [account, setAccount] = useState<?EdgeAccount>(null)
-
-  if (error) return <div>{error.message}</div>
-  if (pending || !context || !pluginsLoaded) return <div>LOADING...</div>
-
-  return (
-    <div>
-      <div>
-        <ContextInfo context={context} />
-      </div>
-
-      <hr />
-
-      {!account || !account.loggedIn ? (
-        <LoginForm context={context} onLogin={setAccount} />
-      ) : (
-        <div>
-          <AccountInfo account={account} logout={() => logout(account)} />
-        </div>
-      )}
-    </div>
-  )
-}
-
-export default App

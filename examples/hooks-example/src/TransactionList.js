@@ -4,9 +4,12 @@ import { type EdgeAccount, type EdgeCurrencyWallet, type EdgeTransaction } from 
 import { useGetTransactions } from 'edge-react-hooks'
 import React, { useEffect, useState } from 'react'
 
+const INITIAL_TRANSACTION_COUNT = 10
+const TRANSACTION_COUNTS = [1, 5, 10, 15, 20, 25]
+
 export const TransactionList = ({ wallet, account }: { account: EdgeAccount, wallet: EdgeCurrencyWallet }) => {
   const [currencyCode, setCurrencyCode] = useState<string>(wallet.currencyInfo.currencyCode)
-  const [startEntries, setStartEntries] = useState<number>(10)
+  const [startEntries, setStartEntries] = useState<number>(INITIAL_TRANSACTION_COUNT)
   const { transactions, getTransactions, pending } = useGetTransactions()
 
   useEffect(() => {
@@ -22,7 +25,6 @@ export const TransactionList = ({ wallet, account }: { account: EdgeAccount, wal
     <div>
       <form>
         <label>
-          Choose a currency code
           <select onChange={(event: SyntheticInputEvent<HTMLInputElement>) => setCurrencyCode(event.target.value)}>
             <option
               selected={wallet.currencyInfo.currencyCode === currencyCode}
@@ -42,7 +44,7 @@ export const TransactionList = ({ wallet, account }: { account: EdgeAccount, wal
         <label>
           # of transactions
           <select onChange={(event: SyntheticInputEvent<HTMLInputElement>) => setStartEntries(+event.target.value)}>
-            {[1, 5, 10, 15, 20].map((num: number) => (
+            {TRANSACTION_COUNTS.map((num: number) => (
               <option key={num} selected={num === startEntries} value={num}>
                 {num}
               </option>

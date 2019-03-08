@@ -1,17 +1,14 @@
 // @flow
 
 import { type EdgeAccount } from 'edge-core-js'
-import { useAsync } from 'react-use-async'
+
+import { useChangeWalletStates } from './useChangeWalletStates'
 
 export const useActivateWallet = () => {
-  const { onStart, onSuccess, onError, reset, pending, error } = useAsync()
+  const { changeWalletStates, error, pending, reset } = useChangeWalletStates()
 
   const activateWallet = (account: EdgeAccount, walletId: string) => {
-    onStart()
-    return account
-      .changeWalletStates({ [walletId]: { archived: false } })
-      .then(onSuccess)
-      .catch(onError)
+    return changeWalletStates(account, { [walletId]: { archived: false, deleted: false } })
   }
 
   return {

@@ -9,7 +9,7 @@ export const useRestoreWallet = () => {
   const restoreWallet = (account: EdgeAccount, walletId: string) => {
     onStart()
     return account
-      .changeWalletStates({ [walletId]: { archived: false, deleted: false } })
+      .changeWalletStates({ [walletId]: { deleted: false } })
       .then(onSuccess)
       .catch(onError)
   }

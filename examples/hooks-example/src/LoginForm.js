@@ -18,6 +18,7 @@ export const LoginForm = ({ context, onLogin }: { context: EdgeContext, onLogin:
 
   return (
     <div>
+      <h1>Login</h1>
       <div>
         <label>Username</label>
         <input

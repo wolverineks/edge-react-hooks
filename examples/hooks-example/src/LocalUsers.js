@@ -1,16 +1,18 @@
 // @flow
 
 import { type EdgeContext } from 'edge-core-js'
-import { useDeleteLocalAccount } from 'edge-react-hooks'
+import { useDeleteLocalAccount, useEdgeContext } from 'edge-react-hooks'
 import React, { useEffect, useState } from 'react'
 
-type Props = { context: EdgeContext, localUsers: $PropertyType<EdgeContext, 'localUsers'> }
+type Props = { context: EdgeContext }
 
-export const LocalUsers = ({ context, localUsers }: Props) => {
+export const LocalUsers = ({ context }: Props) => {
+  useEdgeContext(context, ['localUsers'])
+
   return (
     <div>
       <div>Previously Logged-In Accounts</div>
-      {localUsers.map(({ username }) => (
+      {context.localUsers.map(({ username }) => (
         <LocalUserRow context={context} username={username} key={username} />
       ))}
     </div>
