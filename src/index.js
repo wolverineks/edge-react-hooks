@@ -3,6 +3,9 @@
 import { UseEdgeAccount } from './components/properties/UseEdgeAccount.js'
 import { UseEdgeContext } from './components/properties/UseEdgeContext.js'
 import { UseEdgeCurrencyWallet } from './components/properties/UseEdgeCurrencyWallet.js'
+import { useEdgeAccountEvents } from './hooks/events/useEdgeAccountEvents.js'
+import { useEdgeContextEvents } from './hooks/events/useEdgeContextEvents.js'
+import { useEdgeCurrencyWalletEvents } from './hooks/events/useEdgeCurrencyWalletEvents.js'
 import { useActivateWallet } from './hooks/methods/EdgeAccount/useActivateWallet.js'
 import { useArchiveWallet } from './hooks/methods/EdgeAccount/useArchiveWallet.js'
 import { useCancelOtpReset } from './hooks/methods/EdgeAccount/useCancelOtpReset.js'
@@ -118,10 +121,13 @@ export {
   useDumpData,
   useEdgeAccount,
   UseEdgeAccount,
-  UseEdgeContext,
+  useEdgeAccountEvents,
   useEdgeContext,
-  UseEdgeCurrencyWallet,
+  UseEdgeContext,
+  useEdgeContextEvents,
   useEdgeCurrencyWallet,
+  UseEdgeCurrencyWallet,
+  useEdgeCurrencyWalletEvents,
   useEnableOtp,
   useEnableTokens,
   useEncodeUri,
