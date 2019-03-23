@@ -40,6 +40,10 @@ import { useLoginWithKey } from './hooks/EdgeContext/useLoginWithKey.js'
 import { useLoginWithPassword } from './hooks/EdgeContext/useLoginWithPassword.js'
 import { useLoginWithPIN } from './hooks/EdgeContext/useLoginWithPIN.js'
 import { useLoginWithRecovery2 } from './hooks/EdgeContext/useLoginWithRecovery2.js'
+import { useOnError } from './hooks/EdgeContext/useOnError.js'
+import { useOnLogin } from './hooks/EdgeContext/useOnLogin.js'
+import { useOnLoginError } from './hooks/EdgeContext/useOnLoginError.js'
+import { useOnLoginStart } from './hooks/EdgeContext/useOnLoginStart.js'
 import { usePinLoginEnabled } from './hooks/EdgeContext/usePinLoginEnabled.js'
 import { useRequestEdgeLogin } from './hooks/EdgeContext/useRequestEdgeLogin.js'
 import { useRequestOtpReset } from './hooks/EdgeContext/useRequestOtpReset.js'
@@ -65,6 +69,8 @@ import { useGetTransactions } from './hooks/EdgeCurrencyWallet/useGetTransaction
 import { useLockReceiveAddress } from './hooks/EdgeCurrencyWallet/useLockReceiveAddress'
 import { useMakeSpend } from './hooks/EdgeCurrencyWallet/useMakeSpend'
 import { useNativeToDenomination } from './hooks/EdgeCurrencyWallet/useNativeToDenomination'
+import { useOnNewTransactions } from './hooks/EdgeCurrencyWallet/useOnNewTransactions.js'
+import { useOnTransactionsChanged } from './hooks/EdgeCurrencyWallet/useOnTransactionsChanged.js'
 import { useParseUri } from './hooks/EdgeCurrencyWallet/useParseUri'
 import { useRenameWallet } from './hooks/EdgeCurrencyWallet/useRenameWallet'
 import { useResyncBlockchain } from './hooks/EdgeCurrencyWallet/useResyncBlockchain'
@@ -145,6 +151,12 @@ export {
   useMakeEdgeContext,
   useMakeSpend,
   useNativeToDenomination,
+  useOnError,
+  useOnLogin,
+  useOnLoginError,
+  useOnLoginStart,
+  useOnNewTransactions,
+  useOnTransactionsChanged,
   useParseUri,
   usePinLoginEnabled,
   useRenameWallet,
