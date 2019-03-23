@@ -8,7 +8,7 @@ export const useDisableOtp = () => {
 
   const disableOtp = (account: EdgeAccount) => {
     onStart()
-    return account
+    account
       .disableOtp()
       .then(onSuccess)
       .catch(onError)

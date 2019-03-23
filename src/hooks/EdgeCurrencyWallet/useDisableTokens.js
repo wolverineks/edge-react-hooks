@@ -8,7 +8,7 @@ export const useDisableTokens = () => {
 
   const disableTokens = (wallet: EdgeCurrencyWallet, tokens: Array<string>) => {
     onStart()
-    return wallet
+    wallet
       .disableTokens(tokens)
       .then(onSuccess)
       .catch(onError)

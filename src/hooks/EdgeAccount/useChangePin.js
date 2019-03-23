@@ -8,7 +8,7 @@ export const useChangePin = () => {
 
   const changePin = (account: EdgeAccount, options: { enableLogin?: boolean, pin?: string }) => {
     onStart()
-    return account
+    account
       .changePin(options)
       .then(onSuccess)
       .catch(onError)

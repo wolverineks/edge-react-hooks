@@ -8,7 +8,7 @@ export const useListRecoveryQuestionChoices = () => {
 
   const listRecoveryQuestionChoices = (context: EdgeContext) => {
     onStart()
-    return context
+    context
       .listRecoveryQuestionChoices()
       .then(onSuccess)
       .catch(onError)

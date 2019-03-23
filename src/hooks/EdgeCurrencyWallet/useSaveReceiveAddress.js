@@ -8,7 +8,7 @@ export const useSaveReceiveAddress = () => {
 
   const saveReceiveAddress = (wallet: EdgeCurrencyWallet, receiveAddress: EdgeReceiveAddress) => {
     onStart()
-    return wallet
+    wallet
       .saveReceiveAddress(receiveAddress)
       .then(onSuccess)
       .catch(onError)

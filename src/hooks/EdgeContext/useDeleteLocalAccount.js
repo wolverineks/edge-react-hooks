@@ -8,7 +8,7 @@ export const useDeleteLocalAccount = () => {
 
   const deleteLocalAccount = (context: EdgeContext, username: string) => {
     onStart()
-    return context
+    context
       .deleteLocalAccount(username)
       .then(onSuccess)
       .catch(onError)

@@ -8,7 +8,7 @@ export const useMakeSpend = () => {
 
   const makeSpend = (wallet: EdgeCurrencyWallet, spendInfo: EdgeSpendInfo) => {
     onStart()
-    return wallet
+    wallet
       .makeSpend(spendInfo)
       .then(onSuccess)
       .catch(onError)

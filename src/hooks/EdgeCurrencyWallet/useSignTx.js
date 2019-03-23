@@ -8,7 +8,7 @@ export const useSignTx = () => {
 
   const signTx = (wallet: EdgeCurrencyWallet, tx: EdgeTransaction) => {
     onStart()
-    return wallet
+    wallet
       .signTx(tx)
       .then(onSuccess)
       .catch(onError)

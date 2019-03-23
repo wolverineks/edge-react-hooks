@@ -8,7 +8,7 @@ export const useRequestOtpReset = () => {
 
   const requestOtpReset = (context: EdgeContext, username: string, otpResetToken: string) => {
     onStart()
-    return context
+    context
       .requestOtpReset(username, otpResetToken)
       .then(onSuccess)
       .catch(onError)

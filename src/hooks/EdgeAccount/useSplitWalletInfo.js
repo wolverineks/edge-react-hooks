@@ -8,7 +8,7 @@ export const useSplitWalletInfo = () => {
 
   const splitWalletInfo = (account: EdgeAccount, id: string, newWalletType: string) => {
     onStart()
-    return account
+    account
       .splitWalletInfo(id, newWalletType)
       .then(onSuccess)
       .catch(onError)

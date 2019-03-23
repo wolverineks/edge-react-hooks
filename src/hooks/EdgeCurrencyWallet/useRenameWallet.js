@@ -8,7 +8,7 @@ export const useRenameWallet = () => {
 
   const renameWallet = (wallet: EdgeCurrencyWallet, name: string) => {
     onStart()
-    return wallet
+    wallet
       .renameWallet(name)
       .then(onSuccess)
       .catch(onError)

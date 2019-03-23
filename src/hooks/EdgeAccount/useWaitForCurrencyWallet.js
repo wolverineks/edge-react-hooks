@@ -8,7 +8,7 @@ export const useWaitForCurrencyWallet = () => {
 
   const waitForCurrencyWallet = (account: EdgeAccount, id: string) => {
     onStart()
-    return account
+    account
       .waitForCurrencyWallet(id)
       .then(onSuccess)
       .catch(onError)

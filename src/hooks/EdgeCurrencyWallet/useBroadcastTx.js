@@ -8,7 +8,7 @@ export const useBroadcastTx = () => {
 
   const broadcastTx = (wallet: EdgeCurrencyWallet, tx: EdgeTransaction) => {
     onStart()
-    return wallet
+    wallet
       .broadcastTx(tx)
       .then(onSuccess)
       .catch(onError)

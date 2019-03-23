@@ -8,7 +8,7 @@ export const useGetFirstWalletInfo = () => {
 
   const getFirstWalletInfo = (account: EdgeAccount, type: string) => {
     onStart()
-    return Promise.resolve(account.getFirstWalletInfo(type))
+    Promise.resolve(account.getFirstWalletInfo(type))
       .then(onSuccess)
       .catch(onError)
   }

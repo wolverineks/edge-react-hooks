@@ -8,7 +8,7 @@ export const useConvertCurrency = () => {
 
   const convertCurrency = (account: EdgeAccount, fromCurrency: string, toCurrency: string, amount: number) => {
     onStart()
-    return account.rateCache
+    account.rateCache
       .convertCurrency(fromCurrency, toCurrency, amount)
       .then(onSuccess)
       .catch(onError)

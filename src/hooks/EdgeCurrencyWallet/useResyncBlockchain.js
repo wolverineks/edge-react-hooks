@@ -8,7 +8,7 @@ export const useResyncBlockchain = () => {
 
   const resyncBlockchain = (wallet: EdgeCurrencyWallet) => {
     onStart()
-    return wallet
+    wallet
       .resyncBlockchain()
       .then(onSuccess)
       .catch(onError)

@@ -8,7 +8,7 @@ export const useGetNumTransactions = () => {
 
   const getNumTransactions = (wallet: EdgeCurrencyWallet, options?: EdgeCurrencyCodeOptions) => {
     onStart()
-    return wallet
+    wallet
       .getNumTransactions(options)
       .then(onSuccess)
       .catch(onError)

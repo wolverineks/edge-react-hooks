@@ -8,7 +8,7 @@ export const useLoginWithKey = () => {
 
   const loginWithKey = (context: EdgeContext, username: string, loginKey: string, options: EdgeAccountOptions) => {
     onStart()
-    return context
+    context
       .loginWithKey(username, loginKey, options)
       .then(onSuccess)
       .catch(onError)

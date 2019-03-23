@@ -8,7 +8,7 @@ export const useExportTransactionsToQBO = () => {
 
   const exportTransactionsToQBO = (wallet: EdgeCurrencyWallet, options: EdgeGetTransactionsOptions) => {
     onStart()
-    return wallet
+    wallet
       .exportTransactionsToQBO(options)
       .then(onSuccess)
       .catch(onError)

@@ -8,7 +8,7 @@ export const useGetPaymentProtocolInfo = () => {
 
   const getPaymentProtocolInfo = (wallet: EdgeCurrencyWallet, url: string) => {
     onStart()
-    return wallet
+    wallet
       .getPaymentProtocolInfo(url)
       .then(onSuccess)
       .catch(onError)

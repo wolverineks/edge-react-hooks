@@ -8,7 +8,7 @@ export const useListSplittableWalletTypes = () => {
 
   const listSplittableWalletTypes = (account: EdgeAccount, id: string) => {
     onStart()
-    return account
+    account
       .listSplittableWalletTypes(id)
       .then(onSuccess)
       .catch(onError)

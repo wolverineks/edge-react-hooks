@@ -8,7 +8,7 @@ export const useUsernameAvailable = () => {
 
   const usernameAvailable = (context: EdgeContext, username: string) => {
     onStart()
-    return context
+    context
       .usernameAvailable(username)
       .then(onSuccess)
       .catch(onError)

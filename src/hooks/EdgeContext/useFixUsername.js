@@ -8,7 +8,7 @@ export const useFixUsername = () => {
 
   const fixUsername = (context: EdgeContext, username: string) => {
     onStart()
-    return Promise.resolve(context.fixUsername(username))
+    Promise.resolve(context.fixUsername(username))
       .then(onSuccess)
       .catch(onError)
   }

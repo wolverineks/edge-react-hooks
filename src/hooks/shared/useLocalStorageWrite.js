@@ -11,7 +11,7 @@ export const useLocalStorageWrite = () => {
 
   const localStorageWrite = (storageContext: StorageContext, path: string, data: string) => {
     onStart()
-    return storageContext.localDisklet
+    storageContext.localDisklet
       .setText(path, JSON.stringify(data))
       .then(onSuccess)
       .catch(onError)

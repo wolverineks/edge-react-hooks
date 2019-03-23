@@ -8,7 +8,7 @@ export const useListWalletIds = () => {
 
   const listWalletIds = (account: EdgeAccount) => {
     onStart()
-    return Promise.resolve(account.listWalletIds())
+    Promise.resolve(account.listWalletIds())
       .then(onSuccess)
       .catch(onError)
   }

@@ -8,7 +8,7 @@ export const useDeletePin = () => {
 
   const deletePin = (account: EdgeAccount) => {
     onStart()
-    return account
+    account
       .deletePin()
       .then(onSuccess)
       .catch(onError)

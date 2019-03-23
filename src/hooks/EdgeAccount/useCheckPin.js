@@ -8,7 +8,7 @@ export const useCheckPin = () => {
 
   const checkPin = (account: EdgeAccount, pin: string) => {
     onStart()
-    return account
+    account
       .checkPin(pin)
       .then(onSuccess)
       .catch(onError)

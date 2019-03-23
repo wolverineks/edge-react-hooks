@@ -8,7 +8,7 @@ export const useCancelOtpReset = () => {
 
   const cancelOtpReset = (account: EdgeAccount) => {
     onStart()
-    return account
+    account
       .cancelOtpReset()
       .then(onSuccess)
       .catch(onError)

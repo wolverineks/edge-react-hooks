@@ -11,7 +11,7 @@ export const useSyncedStorageWrite = () => {
 
   const syncedStorageWrite = (storageContext: StorageContext, path: string, data: string) => {
     onStart()
-    return storageContext.disklet
+    storageContext.disklet
       .setText(path, JSON.stringify(data))
       .then(onSuccess)
       .catch(onError)

@@ -8,7 +8,7 @@ export const useAddCustomToken = () => {
 
   const addCustomToken = (wallet: EdgeCurrencyWallet, tokenInfo: EdgeTokenInfo) => {
     onStart()
-    return wallet
+    wallet
       .addCustomToken(tokenInfo)
       .then(onSuccess)
       .catch(onError)

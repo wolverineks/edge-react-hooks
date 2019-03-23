@@ -8,7 +8,7 @@ export const useSaveTx = () => {
 
   const saveTx = (wallet: EdgeCurrencyWallet, tx: EdgeTransaction) => {
     onStart()
-    return wallet
+    wallet
       .saveTx(tx)
       .then(onSuccess)
       .catch(onError)

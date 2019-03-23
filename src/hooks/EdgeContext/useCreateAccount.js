@@ -14,7 +14,7 @@ export const useCreateAccount = () => {
     options?: EdgeAccountOptions,
   ) => {
     onStart()
-    return context
+    context
       .createAccount(username, password, pin, options)
       .then(onSuccess)
       .catch(onError)

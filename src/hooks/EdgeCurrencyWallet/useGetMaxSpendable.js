@@ -8,7 +8,7 @@ export const useGetMaxSpendable = () => {
 
   const getMaxSpendable = (wallet: EdgeCurrencyWallet, spendInfo: EdgeSpendInfo) => {
     onStart()
-    return wallet
+    wallet
       .getMaxSpendable(spendInfo)
       .then(onSuccess)
       .catch(onError)

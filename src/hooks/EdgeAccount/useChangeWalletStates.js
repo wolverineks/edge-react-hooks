@@ -8,7 +8,7 @@ export const useChangeWalletStates = () => {
 
   const changeWalletStates = (account: EdgeAccount, walletStates: EdgeWalletStates) => {
     onStart()
-    return account
+    account
       .changeWalletStates(walletStates)
       .then(onSuccess)
       .catch(onError)

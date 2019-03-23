@@ -8,7 +8,7 @@ export const useLoginWithPIN = () => {
 
   const loginWithPIN = (context: EdgeContext, username: string, pin: string, options: EdgeAccountOptions) => {
     onStart()
-    return context
+    context
       .loginWithPIN(username, pin, options)
       .then(onSuccess)
       .catch(onError)

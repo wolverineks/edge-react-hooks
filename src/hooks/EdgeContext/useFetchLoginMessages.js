@@ -8,7 +8,7 @@ export const useFetchLoginMessages = () => {
 
   const fetchLoginMessages = (context: EdgeContext) => {
     onStart()
-    return context
+    context
       .fetchLoginMessages()
       .then(onSuccess)
       .catch(onError)

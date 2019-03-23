@@ -8,7 +8,7 @@ export const useLoginWithPassword = () => {
 
   const loginWithPassword = (context: EdgeContext, username: string, password: string, options: EdgeAccountOptions) => {
     onStart()
-    return context
+    context
       .loginWithPassword(username, password, options)
       .then(onSuccess)
       .catch(onError)

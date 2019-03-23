@@ -8,7 +8,7 @@ export const useExportTransactionsToCSV = () => {
 
   const exportTransactionsToCSV = (wallet: EdgeCurrencyWallet, options: EdgeGetTransactionsOptions) => {
     onStart()
-    return wallet
+    wallet
       .exportTransactionsToCSV(options)
       .then(onSuccess)
       .catch(onError)

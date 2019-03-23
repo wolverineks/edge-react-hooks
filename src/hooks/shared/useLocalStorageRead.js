@@ -10,7 +10,7 @@ export const useLocalStorageRead = () => {
 
   const localStorageRead = (storageContext: StorageContext, path: string) => {
     onStart()
-    return storageContext.localDisklet
+    storageContext.localDisklet
       .getText(path)
       .then(JSON.parse)
       .then(onSuccess)

@@ -8,7 +8,7 @@ export const useChangePassword = () => {
 
   const changePassword = (account: EdgeAccount, password: string) => {
     onStart()
-    return account
+    account
       .changePassword(password)
       .then(onSuccess)
       .catch(onError)

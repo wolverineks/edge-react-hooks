@@ -8,7 +8,7 @@ export const useStartEngine = () => {
 
   const startEngine = (wallet: EdgeCurrencyWallet) => {
     onStart()
-    return wallet
+    wallet
       .startEngine()
       .then(onSuccess)
       .catch(onError)

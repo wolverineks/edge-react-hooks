@@ -8,7 +8,7 @@ export const useSignEthereumTransaction = () => {
 
   const signEthereumTransaction = (account: EdgeAccount, walletId: string, transaction: EthereumTransaction) => {
     onStart()
-    return account
+    account
       .signEthereumTransaction(walletId, transaction)
       .then(onSuccess)
       .catch(onError)

@@ -8,7 +8,7 @@ export const useDumpData = () => {
 
   const dumpData = (wallet: EdgeCurrencyWallet) => {
     onStart()
-    return wallet
+    wallet
       .dumpData()
       .then(onSuccess)
       .catch(onError)

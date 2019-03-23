@@ -8,7 +8,7 @@ export const useFetchSwapQuote = () => {
 
   const fetchSwapQuote = (account: EdgeAccount, request: EdgeSwapRequest) => {
     onStart()
-    return account
+    account
       .fetchSwapQuote(request)
       .then(onSuccess)
       .catch(onError)

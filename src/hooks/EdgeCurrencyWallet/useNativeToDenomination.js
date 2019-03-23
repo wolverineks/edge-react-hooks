@@ -8,7 +8,7 @@ export const useNativeToDenomination = () => {
 
   const nativeToDenomination = (wallet: EdgeCurrencyWallet, nativeAmount: string, currencyCode: string) => {
     onStart()
-    return wallet
+    wallet
       .nativeToDenomination(nativeAmount, currencyCode)
       .then(onSuccess)
       .catch(onError)

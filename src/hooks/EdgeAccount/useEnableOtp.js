@@ -8,7 +8,7 @@ export const useEnableOtp = () => {
 
   const enableOtp = (account: EdgeAccount, timeout?: number) => {
     onStart()
-    return account
+    account
       .enableOtp(timeout)
       .then(onSuccess)
       .catch(onError)

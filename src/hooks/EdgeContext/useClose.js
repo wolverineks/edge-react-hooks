@@ -8,7 +8,7 @@ export const useClose = () => {
 
   const close = (context: EdgeContext) => {
     onStart()
-    return context
+    context
       .close()
       .then(onSuccess)
       .catch(onError)

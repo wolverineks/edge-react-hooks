@@ -8,7 +8,7 @@ export const useGetRecovery2Key = () => {
 
   const getRecovery2Key = (context: EdgeContext, username: string) => {
     onStart()
-    return context
+    context
       .getRecovery2Key(username)
       .then(onSuccess)
       .catch(onError)

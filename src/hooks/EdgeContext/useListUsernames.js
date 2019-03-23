@@ -8,7 +8,7 @@ export const useListUsernames = () => {
 
   const listUsernames = (context: EdgeContext) => {
     onStart()
-    return context
+    context
       .listUsernames()
       .then(onSuccess)
       .catch(onError)

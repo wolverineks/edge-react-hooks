@@ -8,7 +8,7 @@ export const useChangeRecovery = () => {
 
   const changeRecovery = (account: EdgeAccount, questions: Array<string>, answers: Array<string>) => {
     onStart()
-    return account
+    account
       .changeRecovery(questions, answers)
       .then(onSuccess)
       .catch(onError)

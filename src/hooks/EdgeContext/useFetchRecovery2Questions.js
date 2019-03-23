@@ -8,7 +8,7 @@ export const useFetchRecovery2Questions = () => {
 
   const fetchRecovery2Questions = (context: EdgeContext, recovery2Key: string, username: string) => {
     onStart()
-    return context
+    context
       .fetchRecovery2Questions(recovery2Key, username)
       .then(onSuccess)
       .catch(onError)

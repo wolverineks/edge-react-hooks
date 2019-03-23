@@ -8,7 +8,7 @@ export const useSetFiatCurrencyCode = () => {
 
   const setFiatCurrencyCode = (wallet: EdgeCurrencyWallet, fiatCurrencyCode: string) => {
     onStart()
-    return wallet
+    wallet
       .setFiatCurrencyCode(fiatCurrencyCode)
       .then(onSuccess)
       .catch(onError)

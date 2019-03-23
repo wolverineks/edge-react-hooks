@@ -8,7 +8,7 @@ export const useSaveTxMetadata = () => {
 
   const saveTxMetadata = (wallet: EdgeCurrencyWallet, txid: string, currencyCode: string, metadata: EdgeMetadata) => {
     onStart()
-    return wallet
+    wallet
       .saveTxMetadata(txid, currencyCode, metadata)
       .then(onSuccess)
       .catch(onError)

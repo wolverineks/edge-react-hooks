@@ -8,7 +8,7 @@ export const useEncodeUri = () => {
 
   const encodeUri = (wallet: EdgeCurrencyWallet, encodeUri: EdgeEncodeUri) => {
     onStart()
-    return wallet
+    wallet
       .encodeUri(encodeUri)
       .then(onSuccess)
       .catch(onError)

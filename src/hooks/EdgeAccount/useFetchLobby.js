@@ -8,7 +8,7 @@ export const useFetchLobby = () => {
 
   const fetchLobby = (account: EdgeAccount, lobbyId: string) => {
     onStart()
-    return account
+    account
       .fetchLobby(lobbyId)
       .then(onSuccess)
       .catch(onError)

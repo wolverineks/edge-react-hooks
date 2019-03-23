@@ -8,7 +8,7 @@ export const useLockReceiveAddress = () => {
 
   const lockReceiveAddress = (wallet: EdgeCurrencyWallet, receiveAddress: EdgeReceiveAddress) => {
     onStart()
-    return wallet
+    wallet
       .lockReceiveAddress(receiveAddress)
       .then(onSuccess)
       .catch(onError)

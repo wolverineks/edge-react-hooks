@@ -8,7 +8,7 @@ export const useEnableTokens = () => {
 
   const enableTokens = (wallet: EdgeCurrencyWallet, tokens: Array<string>) => {
     onStart()
-    return wallet
+    wallet
       .enableTokens(tokens)
       .then(onSuccess)
       .catch(onError)

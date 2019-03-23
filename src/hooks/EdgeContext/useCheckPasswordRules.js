@@ -8,7 +8,7 @@ export const useCheckPasswordRules = () => {
 
   const checkPasswordRules = (context: EdgeContext, password: string) => {
     onStart()
-    return Promise.resolve(context.checkPasswordRules(password))
+    Promise.resolve(context.checkPasswordRules(password))
       .then(onSuccess)
       .catch(onError)
   }

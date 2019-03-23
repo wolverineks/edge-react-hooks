@@ -8,7 +8,7 @@ export const useCreateCurrencyWallet = () => {
 
   const createCurrencyWallet = (account: EdgeAccount, type: string, options?: EdgeCreateCurrencyWalletOptions) => {
     onStart()
-    return account
+    account
       .createCurrencyWallet(type, options)
       .then(onSuccess)
       .catch(onError)

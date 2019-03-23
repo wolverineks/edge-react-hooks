@@ -8,7 +8,7 @@ export const useParseUri = () => {
 
   const parseUri = (wallet: EdgeCurrencyWallet, uri: string) => {
     onStart()
-    return wallet
+    wallet
       .parseUri(uri)
       .then(onSuccess)
       .catch(onError)

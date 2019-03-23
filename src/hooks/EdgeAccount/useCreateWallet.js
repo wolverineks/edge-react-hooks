@@ -8,7 +8,7 @@ export const useCreateWallet = () => {
 
   const createWallet = (account: EdgeAccount, type: string, keys: any) => {
     onStart()
-    return account
+    account
       .createWallet(type, keys)
       .then(onSuccess)
       .catch(onError)

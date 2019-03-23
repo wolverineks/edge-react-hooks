@@ -8,7 +8,7 @@ export const useLogout = () => {
 
   const logout = (account: EdgeAccount) => {
     onStart()
-    return account
+    account
       .logout()
       .then(onSuccess)
       .catch(onError)

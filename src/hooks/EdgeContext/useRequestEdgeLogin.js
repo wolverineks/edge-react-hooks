@@ -8,7 +8,7 @@ export const useRequestEdgeLogin = () => {
 
   const requestEdgeLogin = (context: EdgeContext, options: EdgeEdgeLoginOptions) => {
     onStart()
-    return context
+    context
       .requestEdgeLogin(options)
       .then(onSuccess)
       .catch(onError)

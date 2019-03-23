@@ -8,7 +8,7 @@ export const useGetDisplayPrivateSeed = () => {
 
   const getDisplayPrivateSeed = (wallet: EdgeCurrencyWallet) => {
     onStart()
-    return Promise.resolve(wallet.getDisplayPrivateSeed())
+    Promise.resolve(wallet.getDisplayPrivateSeed())
       .then(onSuccess)
       .catch(onError)
   }

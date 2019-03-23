@@ -8,7 +8,7 @@ export const useMakeEdgeContext = () => {
 
   const _makeEdgeContext = (contextOptions: EdgeContextOptions) => {
     onStart()
-    return makeEdgeContext(contextOptions)
+    makeEdgeContext(contextOptions)
       .then(onSuccess)
       .catch(onError)
   }

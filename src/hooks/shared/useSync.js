@@ -10,7 +10,7 @@ export const useSync = () => {
 
   const sync = (syncable: Syncable) => {
     onStart()
-    return syncable
+    syncable
       .sync()
       .then(onSuccess)
       .catch(onError)

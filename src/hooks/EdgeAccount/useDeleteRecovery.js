@@ -8,7 +8,7 @@ export const useDeleteRecovery = () => {
 
   const deleteRecovery = (account: EdgeAccount) => {
     onStart()
-    return account
+    account
       .deleteRecovery()
       .then(onSuccess)
       .catch(onError)

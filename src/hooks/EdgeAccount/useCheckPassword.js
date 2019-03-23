@@ -8,7 +8,7 @@ export const useCheckPassword = () => {
 
   const checkPassword = (account: EdgeAccount, password: string) => {
     onStart()
-    return account
+    account
       .checkPassword(password)
       .then(onSuccess)
       .catch(onError)

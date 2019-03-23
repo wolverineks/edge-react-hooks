@@ -8,7 +8,7 @@ export const useDeletePassword = () => {
 
   const deletePassword = (account: EdgeAccount) => {
     onStart()
-    return account
+    account
       .deletePassword()
       .then(onSuccess)
       .catch(onError)

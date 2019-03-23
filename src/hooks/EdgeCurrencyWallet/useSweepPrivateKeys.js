@@ -8,7 +8,7 @@ export const useSweepPrivateKeys = () => {
 
   const sweepPrivateKeys = (wallet: EdgeCurrencyWallet, spendInfo: EdgeSpendInfo) => {
     onStart()
-    return wallet
+    wallet
       .sweepPrivateKeys(spendInfo)
       .then(onSuccess)
       .catch(onError)

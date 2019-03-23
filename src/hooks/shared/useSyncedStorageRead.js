@@ -10,7 +10,7 @@ export const useSyncedStorageRead = () => {
 
   const syncedStorageRead = (storageContext: StorageContext, path: string) => {
     onStart()
-    return storageContext.disklet
+    storageContext.disklet
       .getText(path)
       .then(JSON.parse)
       .then(onSuccess)
