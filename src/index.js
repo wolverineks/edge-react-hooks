@@ -1,7 +1,5 @@
 // @flow
 
-import { useActivateWallet } from './hooks/EdgeAccount/useActivateWallet.js'
-import { useArchiveWallet } from './hooks/EdgeAccount/useArchiveWallet.js'
 import { useCancelOtpReset } from './hooks/EdgeAccount/useCancelOtpReset.js'
 import { useChangePassword } from './hooks/EdgeAccount/useChangePassword.js'
 import { useChangePin } from './hooks/EdgeAccount/useChangePin.js'
@@ -14,7 +12,6 @@ import { useCreateWallet } from './hooks/EdgeAccount/useCreateWallet.js'
 import { useDeletePassword } from './hooks/EdgeAccount/useDeletePassword.js'
 import { useDeletePin } from './hooks/EdgeAccount/useDeletePin.js'
 import { useDeleteRecovery } from './hooks/EdgeAccount/useDeleteRecovery.js'
-import { useDeleteWallet } from './hooks/EdgeAccount/useDeleteWallet.js'
 import { useDisableOtp } from './hooks/EdgeAccount/useDisableOtp.js'
 import { useEdgeAccount } from './hooks/EdgeAccount/useEdgeAccount.js'
 import { useEnableOtp } from './hooks/EdgeAccount/useEnableOtp.js'
@@ -25,7 +22,6 @@ import { useGetWalletInfo } from './hooks/EdgeAccount/useGetWalletInfo.js'
 import { useListSplittableWalletTypes } from './hooks/EdgeAccount/useListSplittableWalletTypes.js'
 import { useListWalletIds } from './hooks/EdgeAccount/useListWalletIds.js'
 import { useLogout } from './hooks/EdgeAccount/useLogout.js'
-import { useRestoreWallet } from './hooks/EdgeAccount/useRestoreWallet.js'
 import { useSignEthereumTransaction } from './hooks/EdgeAccount/useSignEthereumTransaction.js'
 import { useSplitWalletInfo } from './hooks/EdgeAccount/useSplitWalletInfo.js'
 import { useWaitForCurrencyWallet } from './hooks/EdgeAccount/useWaitForCurrencyWallet.js'
@@ -88,9 +84,7 @@ import { useSyncedStorageWrite } from './hooks/shared/useSyncedStorageWrite.js'
 import { useMakeEdgeContext } from './hooks/useMakeEdgeContext.js'
 
 export {
-  useActivateWallet,
   useAddCustomToken,
-  useArchiveWallet,
   useBroadcastTx,
   useCancelOtpReset,
   useChangePassword,
@@ -108,7 +102,6 @@ export {
   useDeletePassword,
   useDeletePin,
   useDeleteRecovery,
-  useDeleteWallet,
   useDenominationToNative,
   useDisableOtp,
   useDisableTokens,
@@ -157,7 +150,6 @@ export {
   useRenameWallet,
   useRequestEdgeLogin,
   useRequestOtpReset,
-  useRestoreWallet,
   useResyncBlockchain,
   useSaveReceiveAddress,
   useSaveTx,

@@ -10,10 +10,9 @@ export const useEdgeContext = (context: EdgeContext, properties?: Array<$Keys<Ed
 
   const effect = () => {
     const unsubscribes = properties.map(property => context.watch(property, forceUpdate), [])
-
     if (unsubscribes.length > 0) forceUpdate()
-
     const unsubscribe = () => unsubscribes.forEach(fn => fn())
+
     return unsubscribe
   }
 

@@ -10,10 +10,9 @@ export const useEdgeAccount = (account: EdgeAccount, properties?: Array<$Keys<Ed
 
   const effect = () => {
     const unsubscribes = properties.map(property => account.watch(property, forceUpdate))
-
     if (unsubscribes.length > 0) forceUpdate()
-
     const unsubscribe = () => unsubscribes.forEach(fn => fn())
+
     return unsubscribe
   }
 
