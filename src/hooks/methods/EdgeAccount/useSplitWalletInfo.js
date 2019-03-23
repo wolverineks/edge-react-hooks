@@ -15,7 +15,7 @@ export const useSplitWalletInfo = () => {
   }
 
   return {
-    data: (data: ?string),
+    data: data,
     error,
     pending,
     reset,

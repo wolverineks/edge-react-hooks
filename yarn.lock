@@ -4433,10 +4433,10 @@ react-testing-library@^5.9.0:
     "@babel/runtime" "^7.3.1"
     dom-testing-library "^3.13.1"
 
-react-use-async@^0.0.5:
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/react-use-async/-/react-use-async-0.0.5.tgz#44a971981d918b701092faf752d233d93ceec7c6"
-  integrity sha512-qtrutTkQ8t4KOiE967Fwvk0YxJ91wtJ49xTLxwKvuvxwFGd8ijP+RFN9BTbVtgavnkh2Elhi+ezPszQLnPU7zQ==
+react-use-async@^0.0.9:
+  version "0.0.9"
+  resolved "https://registry.yarnpkg.com/react-use-async/-/react-use-async-0.0.9.tgz#094cbe58d7050ed85dc2bc4a2f355f1004e509d3"
+  integrity sha512-4IVBPWlih2TZADNKlgAtiXN/1tmXIpCKetVbna8rwdJS7wGRu3dibZJg/On3Nx4SLsB/EDN226fBKN5WjmOi4Q==
 
 react@15.5.4:
   version "15.5.4"

@@ -19,6 +19,6 @@ export const useRequestOtpReset = () => {
     pending,
     requestOtpReset,
     reset,
-    resetDate: (data: ?Date),
+    resetDate: data,
   }
 }

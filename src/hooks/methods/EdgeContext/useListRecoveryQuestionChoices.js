@@ -18,7 +18,7 @@ export const useListRecoveryQuestionChoices = () => {
     error,
     listRecoveryQuestionChoices,
     pending,
-    recoveryQuestionChoices: (data: ?Array<string>),
+    recoveryQuestionChoices: data,
     reset,
   }
 }

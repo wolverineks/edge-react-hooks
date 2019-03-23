@@ -18,6 +18,6 @@ export const useListWalletIds = () => {
     listWalletIds,
     pending,
     reset,
-    walletIds: (data: ?Array<string>),
+    walletIds: data,
   }
 }

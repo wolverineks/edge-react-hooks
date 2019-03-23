@@ -32,7 +32,7 @@
     "trailingComma": "all"
   },
   "dependencies": {
-    "react-use-async": "^0.0.5"
+    "react-use-async": "^0.0.9"
   },
   "devDependencies": {
     "@babel/core": "^7.3.4",

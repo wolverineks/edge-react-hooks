@@ -18,7 +18,7 @@ export const useChangePin = () => {
     changePin,
     error,
     pending,
-    pin: (data: ?string),
+    pin: data,
     reset,
   }
 }

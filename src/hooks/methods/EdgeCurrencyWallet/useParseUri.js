@@ -1,6 +1,6 @@
 // @flow
 
-import { type EdgeCurrencyWallet, type EdgeParsedUri } from 'edge-core-js'
+import { type EdgeCurrencyWallet } from 'edge-core-js'
 import { useAsync } from 'react-use-async'
 
 export const useParseUri = () => {
@@ -17,7 +17,7 @@ export const useParseUri = () => {
   return {
     error,
     parseUri,
-    parsedUri: (data: ?EdgeParsedUri),
+    parsedUri: data,
     pending,
     reset,
   }

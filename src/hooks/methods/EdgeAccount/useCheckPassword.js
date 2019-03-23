@@ -17,7 +17,7 @@ export const useCheckPassword = () => {
   return {
     checkPassword,
     error,
-    passwordVerified: (data: ?boolean),
+    passwordVerified: data,
     pending,
     reset,
   }

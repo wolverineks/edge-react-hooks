@@ -1,6 +1,6 @@
 // @flow
 
-import { type EdgeAccount, type EdgeAccountOptions, type EdgeContext } from 'edge-core-js'
+import { type EdgeAccountOptions, type EdgeContext } from 'edge-core-js'
 import { useAsync } from 'react-use-async'
 
 export const useCreateAccount = () => {
@@ -21,7 +21,7 @@ export const useCreateAccount = () => {
   }
 
   return {
-    account: (data: ?EdgeAccount),
+    account: data,
     createAccount,
     error,
     pending,

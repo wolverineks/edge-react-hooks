@@ -18,7 +18,7 @@ export const useChangeRecovery = () => {
     changeRecovery,
     error,
     pending,
-    recovery: (data: ?string),
+    recovery: data,
     reset,
   }
 }

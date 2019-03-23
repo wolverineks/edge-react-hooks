@@ -18,7 +18,7 @@ export const useGetRecovery2Key = () => {
     error,
     getRecovery2Key,
     pending,
-    recovery2Key: (data: ?string),
+    recovery2Key: data,
     reset,
   }
 }

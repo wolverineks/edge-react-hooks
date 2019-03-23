@@ -15,7 +15,7 @@ export const useGetEnabledTokens = () => {
   }
 
   return {
-    enabledTokens: (data: ?Array<string>),
+    enabledTokens: data,
     error,
     getEnabledTokens,
     pending,

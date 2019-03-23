@@ -18,7 +18,7 @@ export const useExportTransactionsToQBO = () => {
     error,
     exportTransactionsToQBO,
     pending,
-    qbo: (data: ?string),
+    qbo: data,
     reset,
   }
 }

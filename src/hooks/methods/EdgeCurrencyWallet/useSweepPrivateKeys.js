@@ -1,6 +1,6 @@
 // @flow
 
-import { type EdgeCurrencyWallet, type EdgeSpendInfo, type EdgeTransaction } from 'edge-core-js'
+import { type EdgeCurrencyWallet, type EdgeSpendInfo } from 'edge-core-js'
 import { useAsync } from 'react-use-async'
 
 export const useSweepPrivateKeys = () => {
@@ -19,6 +19,6 @@ export const useSweepPrivateKeys = () => {
     pending,
     reset,
     sweepPrivateKeys,
-    transaction: (data: ?EdgeTransaction),
+    transaction: data,
   }
 }

@@ -16,7 +16,7 @@ export const useCreateWallet = () => {
 
   return {
     createWallet,
-    data: (data: ?string),
+    data,
     error,
     pending,
     reset,

@@ -19,6 +19,6 @@ export const useListUsernames = () => {
     listUsernames,
     pending,
     reset,
-    usernames: (data: ?Array<string>),
+    usernames: data,
   }
 }

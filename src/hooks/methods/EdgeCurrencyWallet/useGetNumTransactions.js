@@ -17,7 +17,7 @@ export const useGetNumTransactions = () => {
   return {
     error,
     getNumTransactions,
-    numTransactions: (data: ?number),
+    numTransactions: data,
     pending,
     reset,
   }

@@ -1,6 +1,6 @@
 // @flow
 
-import { type EdgeCurrencyCodeOptions, type EdgeCurrencyWallet, type EdgeReceiveAddress } from 'edge-core-js'
+import { type EdgeCurrencyCodeOptions, type EdgeCurrencyWallet } from 'edge-core-js'
 import { useAsync } from 'react-use-async'
 
 export const useGetReceiveAddress = () => {
@@ -18,7 +18,7 @@ export const useGetReceiveAddress = () => {
     error,
     getReceiveAddress,
     pending,
-    receiveAddress: (data: ?EdgeReceiveAddress),
+    receiveAddress: data,
     reset,
   }
 }

@@ -1,6 +1,6 @@
 // @flow
 
-import { type EdgeAccount, type EdgeSwapQuote, type EdgeSwapRequest } from 'edge-core-js'
+import { type EdgeAccount, type EdgeSwapRequest } from 'edge-core-js'
 import { useAsync } from 'react-use-async'
 
 export const useFetchSwapQuote = () => {
@@ -19,6 +19,6 @@ export const useFetchSwapQuote = () => {
     fetchSwapQuote,
     pending,
     reset,
-    swapQuote: (data: ?EdgeSwapQuote),
+    swapQuote: data,
   }
 }

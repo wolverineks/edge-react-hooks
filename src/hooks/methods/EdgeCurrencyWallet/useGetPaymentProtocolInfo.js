@@ -1,6 +1,6 @@
 // @flow
 
-import { type EdgeCurrencyWallet, type EdgePaymentProtocolInfo } from 'edge-core-js'
+import { type EdgeCurrencyWallet } from 'edge-core-js'
 import { useAsync } from 'react-use-async'
 
 export const useGetPaymentProtocolInfo = () => {
@@ -17,7 +17,7 @@ export const useGetPaymentProtocolInfo = () => {
   return {
     error,
     getPaymentProtocolInfo,
-    paymentProtocolInfo: (data: ?EdgePaymentProtocolInfo),
+    paymentProtocolInfo: data,
     pending,
     reset,
   }

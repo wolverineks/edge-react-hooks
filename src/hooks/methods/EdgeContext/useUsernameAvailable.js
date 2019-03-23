@@ -15,7 +15,7 @@ export const useUsernameAvailable = () => {
   }
 
   return {
-    available: (data: ?boolean),
+    available: data,
     error,
     pending,
     reset,

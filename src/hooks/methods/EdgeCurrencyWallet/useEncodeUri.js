@@ -19,6 +19,6 @@ export const useEncodeUri = () => {
     error,
     pending,
     reset,
-    uri: (data: ?string),
+    uri: data,
   }
 }

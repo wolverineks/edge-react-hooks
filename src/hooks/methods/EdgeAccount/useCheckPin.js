@@ -18,7 +18,7 @@ export const useCheckPin = () => {
     checkPin,
     error,
     pending,
-    pinVerified: (data: ?boolean),
+    pinVerified: data,
     reset,
   }
 }
