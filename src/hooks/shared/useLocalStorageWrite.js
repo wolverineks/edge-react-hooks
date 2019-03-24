@@ -4,12 +4,11 @@ import { type EdgeAccount, type EdgeCurrencyWallet } from 'edge-core-js'
 import { useAsync } from 'react-use-async'
 
 type StorageContext = EdgeAccount | EdgeCurrencyWallet
-type Stringifyable = string | number | { [string]: Stringifyable } | Array<Stringifyable>
 
 export const useLocalStorageWrite = () => {
   const { onStart, onSuccess, onError, reset, pending, error } = useAsync()
 
-  const localStorageWrite = (storageContext: StorageContext, path: string, data: string) => {
+  const localStorageWrite = (storageContext: StorageContext, path: string, data: any) => {
     onStart()
     storageContext.localDisklet
       .setText(path, JSON.stringify(data))
