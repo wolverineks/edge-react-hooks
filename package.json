@@ -1,6 +1,6 @@
 {
   "name": "edge-react-hooks",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "keywords": [
     "edge",
     "hooks",
@@ -29,7 +29,7 @@
     "trailingComma": "all"
   },
   "dependencies": {
-    "react-use-async": "^0.0.9"
+    "react-use-async": "^0.0.10"
   },
   "devDependencies": {
     "@babel/core": "^7.3.4",
