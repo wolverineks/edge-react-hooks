@@ -59,7 +59,7 @@
     "prettier-eslint-cli": "^4.7.1",
     "react-testing-library": "^5.9.0",
     "rimraf": "^2.6.3",
-    "rollup": "^1.1.2",
+    "rollup": "^1.27.3",
     "rollup-plugin-babel": "^4.3.2",
     "rollup-plugin-flow": "^1.1.1",
     "rollup-plugin-flow-entry": "^0.2.1",
