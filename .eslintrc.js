@@ -1,39 +1,40 @@
-// @flow
-
 module.exports = {
-  extends: [
-    'eslint:recommended',
-    'plugin:flowtype/recommended',
-    'plugin:react/recommended',
-    'plugin:import/recommended',
-    'plugin:promise/recommended',
-  ],
-  plugins: ['react-hooks', 'promise'],
-  rules: {
-    'sort-keys': 'error',
-    'flowtype/require-valid-file-annotation': [2, 'always'],
-    'flowtype/newline-after-flow-annotation': [2, 'always'],
-    'flowtype/sort-keys': [
-      2,
-      'asc',
-      {
-        caseSensitive: true,
-        natural: false,
-      },
-    ],
-    'flowtype/no-dupe-keys': 2,
-    'flowtype/require-exact-type': [2, 'always'],
-    'no-throw-literal': 'error',
-    'no-var': 'error',
-    'prefer-const': 'error',
-    'react-hooks/rules-of-hooks': 'error',
-  },
   env: {
     browser: true,
-    node: true,
     es6: true,
+    node: true,
   },
+  extends: [
+    'eslint:recommended',
+    'plugin:@typescript-eslint/eslint-recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:react/recommended',
+    'prettier',
+  ],
+  globals: {
+    Atomics: 'readonly',
+    SharedArrayBuffer: 'readonly',
+  },
+  parser: '@typescript-eslint/parser',
   parserOptions: {
-    ecmaVersion: 6,
+    ecmaFeatures: {
+      jsx: true,
+    },
+    ecmaVersion: 2018,
+    sourceType: 'module',
+  },
+  plugins: ['react', '@typescript-eslint', 'eslint-plugin-prettier', 'react-hooks'],
+  rules: {
+    'prettier/prettier': 'error',
+    'react-hooks/rules-of-hooks': 'error',
+    'react-hooks/exhaustive-deps': 'error',
+    '@typescript-eslint/explicit-function-return-type': 0,
+    '@typescript-eslint/member-delimiter-style': 0,
+    '@typescript-eslint/no-explicit-any': 0,
+  },
+  settings: {
+    react: {
+      version: 'latest',
+    },
   },
 }
