@@ -1,7 +1,7 @@
 import * as React from 'react'
 
-import { useForceUpdate } from '../../utils/useForceUpdate.js'
-import { EdgeContext } from '../../types.js'
+import { useForceUpdate } from '../../utils/useForceUpdate'
+import { EdgeContext } from '../../types'
 
 type ContextProperties = (keyof EdgeContext)[]
 
@@ -12,7 +12,7 @@ export const useEdgeContext = (
   const forceUpdate = useForceUpdate()
 
   const effect = () => {
-    const unsubscribes = properties.map((property) => context.watch(property, forceUpdate), [])
+    const unsubscribes = properties.map((property) => context.watch(property, forceUpdate))
     if (unsubscribes.length > 0) forceUpdate()
     const unsubscribe = () => unsubscribes.forEach((fn) => fn())
 

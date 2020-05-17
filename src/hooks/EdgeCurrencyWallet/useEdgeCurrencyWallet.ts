@@ -1,7 +1,7 @@
 import * as React from 'react'
 
-import { useForceUpdate } from '../../utils/useForceUpdate.js'
-import { EdgeCurrencyWallet } from '../../types.js'
+import { useForceUpdate } from '../../utils/useForceUpdate'
+import { EdgeCurrencyWallet } from '../../types'
 
 type WalletProperties = (keyof EdgeCurrencyWallet)[]
 

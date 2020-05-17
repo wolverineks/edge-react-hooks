@@ -1,7 +1,7 @@
 import * as React from 'react'
 
-import { useForceUpdate } from '../../utils/useForceUpdate.js'
-import { EdgeAccount } from '../../types.js'
+import { useForceUpdate } from '../../utils/useForceUpdate'
+import { EdgeAccount } from '../../types'
 
 type AccountProperties = (keyof EdgeAccount)[]
 

@@ -1,6 +1,6 @@
 {
   "name": "edge-react-hooks",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "keywords": [
     "edge",
     "hooks",
@@ -35,10 +35,10 @@
     "trailingComma": "all"
   },
   "dependencies": {
-    "@types/react": "^16.9.35",
-    "react-use-async": "^0.0.15"
+    "react-use-async": "^0.0.16"
   },
   "devDependencies": {
+    "@types/react": "^16.9.35",
     "@typescript-eslint/eslint-plugin": "^2.33.0",
     "@typescript-eslint/parser": "^2.33.0",
     "edge-core-js": "^0.17.1",

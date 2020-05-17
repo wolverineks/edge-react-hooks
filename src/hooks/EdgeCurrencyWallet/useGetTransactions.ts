@@ -1,9 +1,9 @@
 import * as React from 'react'
 import { useAsync } from 'react-use-async'
-import { EdgeCurrencyWallet } from '../../types'
+import { EdgeCurrencyWallet, EdgeTransaction } from '../../types'
 
 export const useGetTransactions = (wallet: EdgeCurrencyWallet) => {
-  const { onStart, onSuccess, onError, reset, pending, error } = useAsync()
+  const { data, onStart, onSuccess, onError, reset, pending, error } = useAsync<EdgeTransaction[]>()
 
   const getTransactions = React.useCallback(
     (...args: Parameters<EdgeCurrencyWallet['getTransactions']>) => {
@@ -21,5 +21,6 @@ export const useGetTransactions = (wallet: EdgeCurrencyWallet) => {
     error,
     pending,
     reset,
+    transactions: data,
   }
 }

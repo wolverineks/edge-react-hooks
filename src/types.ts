@@ -9,12 +9,12 @@ type Subscriber<Events> = (name: keyof Events, callback: (value: Events[typeof n
 
 /** A JSON object (as opposed to an array or primitive). */
 export type JsonObject = {
-  [name: string]: any // TODO: this needs to become `unknown`
+  [name: string]: any // TODO: this needs to become `mixed`
 }
 
 /** A collection of unknown extra methods exposed by a plugin. */
 export type EdgeOtherMethods = {
-  [name: string]: any
+  readonly [name: string]: any
 }
 
 /** We frequently index things by pluginId, so provide a helper. */
@@ -45,7 +45,9 @@ export type EdgeScryptFunction = (
 export type EdgeFetchOptions = {
   method?: string
   body?: ArrayBuffer | string
-  headers?: { [header: string]: string }
+  headers?: {
+    [header: string]: string
+  }
 }
 
 /**
@@ -61,9 +63,9 @@ export type EdgeFetchHeaders = {
  * The subset of the `Response` DOM object we guarantee to support.
  */
 export type EdgeFetchResponse = {
-  headers: EdgeFetchHeaders
-  ok: boolean
-  status: number
+  readonly headers: EdgeFetchHeaders
+  readonly ok: boolean
+  readonly status: number
   arrayBuffer(): Promise<ArrayBuffer>
   json(): Promise<any>
   text(): Promise<string>
@@ -82,19 +84,19 @@ export type EdgeFetchFunction = (uri: string, opts?: EdgeFetchOptions) => Promis
  */
 export type EdgeIo = {
   // Crypto:
-  random: EdgeRandomFunction
-  scrypt: EdgeScryptFunction
+  readonly random: EdgeRandomFunction
+  readonly scrypt: EdgeScryptFunction
 
   // Local io:
-  disklet: Disklet
-  fetch: EdgeFetchFunction
+  readonly disklet: Disklet
+  readonly fetch: EdgeFetchFunction
 
   // This is only present if the platform has some way to avoid CORS:
-  fetchCors?: EdgeFetchFunction
+  readonly fetchCors?: EdgeFetchFunction
 
   // Deprecated:
   // eslint-disable-next-line no-use-before-define
-  console: EdgeConsole
+  readonly console: EdgeConsole
 }
 
 // logging -------------------------------------------------------------
@@ -106,8 +108,8 @@ export type EdgeLogMethod = (...args: any[]) => void
  * or `log.warn(message)` / `log.error(message)` for something more severe.
  */
 export type EdgeLog = EdgeLogMethod & {
-  warn: EdgeLogMethod
-  error: EdgeLogMethod
+  readonly warn: EdgeLogMethod
+  readonly error: EdgeLogMethod
 }
 
 // plugins -------------------------------------------------------------
@@ -116,7 +118,9 @@ export type EdgeLog = EdgeLogMethod & {
  * On React Native, each plugin can provide a bridge to whatever native
  * io it needs.
  */
-export type EdgeNativeIo = { [packageName: string]: EdgeOtherMethods }
+export type EdgeNativeIo = {
+  [packageName: string]: EdgeOtherMethods
+}
 
 /**
  * All core plugins receive these options at creation time.
@@ -202,7 +206,7 @@ type EdgeObjectTemplate = Array<
 
 export type EdgeCurrencyInfo = {
   // Basic currency information:
-  pluginId: string
+  readonly pluginId: string
   displayName: string
   walletType: string
 
@@ -244,8 +248,8 @@ export type EdgeMetadata = {
 }
 
 export type EdgeNetworkFee = {
-  currencyCode: string
-  nativeAmount: string
+  readonly currencyCode: string
+  readonly nativeAmount: string
 }
 
 export type EdgeTransaction = {
@@ -325,7 +329,9 @@ export type EdgeTokenInfo = {
   multiplier: string
 }
 
-export type EdgeTxidMap = { [txid: string]: number }
+export type EdgeTxidMap = {
+  [txid: string]: number
+}
 
 // URI -----------------------------------------------------------------
 
@@ -380,11 +386,11 @@ export type EdgeGetTransactionsOptions = {
 // engine --------------------------------------------------------------
 
 export type EdgeCurrencyEngineCallbacks = {
-  onBlockHeightChanged: (blockHeight: number) => void
-  onTransactionsChanged: (transactions: EdgeTransaction[]) => void
-  onBalanceChanged: (currencyCode: string, nativeBalance: string) => void
-  onAddressesChecked: (progressRatio: number) => void
-  onTxidsChanged: (txids: EdgeTxidMap) => void
+  readonly onBlockHeightChanged: (blockHeight: number) => void
+  readonly onTransactionsChanged: (transactions: EdgeTransaction[]) => void
+  readonly onBalanceChanged: (currencyCode: string, nativeBalance: string) => void
+  readonly onAddressesChecked: (progressRatio: number) => void
+  readonly onTxidsChanged: (txids: EdgeTxidMap) => void
 }
 
 export type EdgeCurrencyEngineOptions = {
@@ -432,21 +438,21 @@ export type EdgeCurrencyEngine = {
   signTx(transaction: EdgeTransaction): Promise<EdgeTransaction>
   broadcastTx(transaction: EdgeTransaction): Promise<EdgeTransaction>
   saveTx(transaction: EdgeTransaction): Promise<unknown>
-  sweepPrivateKeys?: (spendInfo: EdgeSpendInfo) => Promise<EdgeTransaction>
-  getPaymentProtocolInfo?: (paymentProtocolUrl: string) => Promise<EdgePaymentProtocolInfo>
+  readonly sweepPrivateKeys?: (spendInfo: EdgeSpendInfo) => Promise<EdgeTransaction>
+  readonly getPaymentProtocolInfo?: (paymentProtocolUrl: string) => Promise<EdgePaymentProtocolInfo>
 
   // Escape hatch:
-  otherMethods?: EdgeOtherMethods
+  readonly otherMethods?: EdgeOtherMethods
 }
 
 // currency plugin -----------------------------------------------------
 
 export type EdgeCurrencyTools = {
   // Keys:
-  importPrivateKey?: (key: string, opts?: JsonObject) => Promise<JsonObject>
+  readonly importPrivateKey?: (key: string, opts?: JsonObject) => Promise<JsonObject>
   createPrivateKey(walletType: string, opts?: JsonObject): Promise<JsonObject>
   derivePublicKey(walletInfo: EdgeWalletInfo): Promise<JsonObject>
-  getSplittableTypes?: (walletInfo: EdgeWalletInfo) => string[]
+  readonly getSplittableTypes?: (walletInfo: EdgeWalletInfo) => string[]
 
   // URIs:
   parseUri(uri: string, currencyCode?: string, customTokens?: EdgeMetaToken[]): Promise<EdgeParsedUri>
@@ -454,18 +460,20 @@ export type EdgeCurrencyTools = {
 }
 
 export type EdgeCurrencyPlugin = {
-  currencyInfo: EdgeCurrencyInfo
+  readonly currencyInfo: EdgeCurrencyInfo
 
   makeCurrencyTools(): Promise<EdgeCurrencyTools>
   makeCurrencyEngine(walletInfo: EdgeWalletInfo, opts: EdgeCurrencyEngineOptions): Promise<EdgeCurrencyEngine>
 
   // Escape hatch:
-  otherMethods?: EdgeOtherMethods
+  readonly otherMethods?: EdgeOtherMethods
 }
 
 // wallet --------------------------------------------------------------
 
-export type EdgeBalances = { [currencyCode: string]: string }
+export type EdgeBalances = {
+  [currencyCode: string]: string
+}
 
 export type EdgeReceiveAddress = EdgeFreshAddress & {
   metadata: EdgeMetadata
@@ -479,39 +487,39 @@ export type EdgeCurrencyWalletEvents = {
 }
 
 export type EdgeCurrencyWallet = {
-  on: Subscriber<EdgeCurrencyWalletEvents>
-  watch: Subscriber<EdgeCurrencyWallet>
+  readonly on: Subscriber<EdgeCurrencyWalletEvents>
+  readonly watch: Subscriber<EdgeCurrencyWallet>
 
   // Data store:
-  id: string
-  keys: JsonObject
-  type: string
-  publicWalletInfo: EdgeWalletInfo
-  disklet: Disklet
-  localDisklet: Disklet
+  readonly id: string
+  readonly keys: JsonObject
+  readonly type: string
+  readonly publicWalletInfo: EdgeWalletInfo
+  readonly disklet: Disklet
+  readonly localDisklet: Disklet
   sync(): Promise<void>
 
   // Wallet keys:
-  displayPrivateSeed: string | null
-  displayPublicSeed: string | null
+  readonly displayPrivateSeed: string | null
+  readonly displayPublicSeed: string | null
 
   // Wallet name:
-  name: string | null
+  readonly name: string | null
   renameWallet(name: string): Promise<void>
 
   // Fiat currency option:
-  fiatCurrencyCode: string
+  readonly fiatCurrencyCode: string
   setFiatCurrencyCode(fiatCurrencyCode: string): Promise<void>
 
   // Currency info:
-  currencyInfo: EdgeCurrencyInfo
+  readonly currencyInfo: EdgeCurrencyInfo
   nativeToDenomination(nativeAmount: string, currencyCode: string): Promise<string>
   denominationToNative(denominatedAmount: string, currencyCode: string): Promise<string>
 
   // Chain state:
-  balances: EdgeBalances
-  blockHeight: number
-  syncRatio: number
+  readonly balances: EdgeBalances
+  readonly blockHeight: number
+  readonly syncRatio: number
 
   // Running state:
   startEngine(): Promise<void>
@@ -557,7 +565,7 @@ export type EdgeCurrencyWallet = {
   parseUri(uri: string, currencyCode?: string): Promise<EdgeParsedUri>
   encodeUri(obj: EdgeEncodeUri): Promise<string>
 
-  otherMethods: EdgeOtherMethods
+  readonly otherMethods: EdgeOtherMethods
 
   // Deprecated API's:
   getBalance(opts?: EdgeCurrencyCodeOptions): string
@@ -572,11 +580,11 @@ export type EdgeCurrencyWallet = {
  * Static data about a swap plugin.
  */
 export type EdgeSwapInfo = {
-  pluginId: string
-  displayName: string
+  readonly pluginId: string
+  readonly displayName: string
 
-  orderUri?: string // The orderId would be appended to this
-  supportEmail: string
+  readonly orderUri?: string // The orderId would be appended to this
+  readonly supportEmail: string
 }
 
 export type EdgeSwapRequest = {
@@ -598,22 +606,22 @@ export type EdgeSwapRequest = {
  * and returns this as the result.
  */
 export type EdgeSwapResult = {
-  orderId?: string
-  destinationAddress?: string
-  transaction: EdgeTransaction
+  readonly orderId?: string
+  readonly destinationAddress?: string
+  readonly transaction: EdgeTransaction
 }
 
 /**
  * If a provider can satisfy a request, what is their price?
  */
 export type EdgeSwapQuote = {
-  isEstimate: boolean
-  fromNativeAmount: string
-  toNativeAmount: string
-  networkFee: EdgeNetworkFee
+  readonly isEstimate: boolean
+  readonly fromNativeAmount: string
+  readonly toNativeAmount: string
+  readonly networkFee: EdgeNetworkFee
 
-  pluginId: string
-  expirationDate?: Date
+  readonly pluginId: string
+  readonly expirationDate?: Date
 
   approve(): Promise<EdgeSwapResult>
   close(): Promise<void>
@@ -624,7 +632,7 @@ export type EdgeSwapPluginStatus = {
 }
 
 export type EdgeSwapPlugin = {
-  swapInfo: EdgeSwapInfo
+  readonly swapInfo: EdgeSwapInfo
 
   checkSettings?: (userSettings: JsonObject) => EdgeSwapPluginStatus
   fetchSwapQuote(
@@ -644,8 +652,8 @@ export type EdgeRateHint = {
 }
 
 export type EdgeRateInfo = {
-  pluginId: string
-  displayName: string
+  readonly pluginId: string
+  readonly displayName: string
 }
 
 export type EdgeRatePair = {
@@ -655,7 +663,7 @@ export type EdgeRatePair = {
 }
 
 export type EdgeRatePlugin = {
-  rateInfo: EdgeRateInfo
+  readonly rateInfo: EdgeRateInfo
 
   fetchRates(hints: EdgeRateHint[]): Promise<EdgeRatePair[]>
 }
@@ -685,11 +693,11 @@ export type EdgeCreateCurrencyWalletOptions = {
 }
 
 export type EdgeCurrencyConfig = {
-  watch: Subscriber<EdgeCurrencyConfig>
+  readonly watch: Subscriber<EdgeCurrencyConfig>
 
-  currencyInfo: EdgeCurrencyInfo
-  otherMethods: EdgeOtherMethods
-  userSettings: JsonObject | void
+  readonly currencyInfo: EdgeCurrencyInfo
+  readonly otherMethods: EdgeOtherMethods
+  readonly userSettings: JsonObject | void
 
   changeUserSettings(settings: JsonObject): Promise<void>
   importKey(userInput: string): Promise<JsonObject>
@@ -717,11 +725,13 @@ export type EdgeRateCacheEvents = {
 }
 
 export type EdgeConvertCurrencyOpts = {
-  biases: { [name: string]: number }
+  biases: {
+    [name: string]: number
+  }
 }
 
 export type EdgeRateCache = {
-  on: Subscriber<EdgeRateCacheEvents>
+  readonly on: Subscriber<EdgeRateCacheEvents>
 
   convertCurrency(
     fromCurrency: string,
@@ -737,12 +747,12 @@ export type EdgeRateCache = {
  * Information and settings for a currency swap plugin.
  */
 export type EdgeSwapConfig = {
-  watch: Subscriber<EdgeSwapConfig>
+  readonly watch: Subscriber<EdgeSwapConfig>
 
-  enabled: boolean
-  needsActivation: boolean
-  swapInfo: EdgeSwapInfo
-  userSettings: JsonObject | void
+  readonly enabled: boolean
+  readonly needsActivation: boolean
+  readonly swapInfo: EdgeSwapInfo
+  readonly userSettings: JsonObject | void
 
   changeEnabled(enabled: boolean): Promise<void>
   changeUserSettings(settings: JsonObject): Promise<void>
@@ -757,15 +767,15 @@ export type EdgeSwapRequestOptions = {
 // edge login ----------------------------------------------------------
 
 export type EdgeLoginRequest = {
-  appId: string
+  readonly appId: string
   approve(): Promise<void>
 
-  displayName: string
-  displayImageUrl: string | void
+  readonly displayName: string
+  readonly displayImageUrl: string | void
 }
 
 export type EdgeLobby = {
-  loginRequest: EdgeLoginRequest | void
+  readonly loginRequest: EdgeLoginRequest | void
   // walletRequest: EdgeWalletRequest | void
 }
 
@@ -789,37 +799,37 @@ export type EdgeAccountEvents = {
 }
 
 export type EdgeAccount = {
-  on: Subscriber<EdgeAccountEvents>
-  watch: Subscriber<EdgeAccount>
+  readonly on: Subscriber<EdgeAccountEvents>
+  readonly watch: Subscriber<EdgeAccount>
 
   // Data store:
-  id: string
-  keys: JsonObject
-  type: string
-  disklet: Disklet
-  localDisklet: Disklet
+  readonly id: string
+  readonly keys: JsonObject
+  readonly type: string
+  readonly disklet: Disklet
+  readonly localDisklet: Disklet
   sync(): Promise<void>
 
   // Basic login information:
-  appId: string
-  loggedIn: boolean
-  loginKey: string
-  recoveryKey: string | void // For email backup
-  username: string
+  readonly appId: string
+  readonly loggedIn: boolean
+  readonly loginKey: string
+  readonly recoveryKey: string | void // For email backup
+  readonly username: string
 
   // Special-purpose API's:
-  currencyConfig: EdgePluginMap<EdgeCurrencyConfig>
-  rateCache: EdgeRateCache
-  swapConfig: EdgePluginMap<EdgeSwapConfig>
-  dataStore: EdgeDataStore
+  readonly currencyConfig: EdgePluginMap<EdgeCurrencyConfig>
+  readonly rateCache: EdgeRateCache
+  readonly swapConfig: EdgePluginMap<EdgeSwapConfig>
+  readonly dataStore: EdgeDataStore
 
   // What login method was used?
-  edgeLogin: boolean
-  keyLogin: boolean
-  newAccount: boolean
-  passwordLogin: boolean
-  pinLogin: boolean
-  recoveryLogin: boolean
+  readonly edgeLogin: boolean
+  readonly keyLogin: boolean
+  readonly newAccount: boolean
+  readonly passwordLogin: boolean
+  readonly pinLogin: boolean
+  readonly recoveryLogin: boolean
 
   // Change or create credentials:
   changePassword(password: string): Promise<void>
@@ -839,8 +849,8 @@ export type EdgeAccount = {
   deleteRecovery(): Promise<void>
 
   // OTP:
-  otpKey: string | void // OTP is enabled if this exists
-  otpResetDate: string | void // A reset is requested if this exists
+  readonly otpKey: string | void // OTP is enabled if this exists
+  readonly otpResetDate: string | void // A reset is requested if this exists
   cancelOtpReset(): Promise<void>
   disableOtp(): Promise<void>
   enableOtp(timeout?: number): Promise<void>
@@ -852,7 +862,7 @@ export type EdgeAccount = {
   logout(): Promise<void>
 
   // Master wallet list:
-  allKeys: EdgeWalletInfoFull[]
+  readonly allKeys: EdgeWalletInfoFull[]
   changeWalletStates(walletStates: EdgeWalletStates): Promise<void>
   createWallet(type: string, keys?: JsonObject): Promise<string>
   getFirstWalletInfo(type: string): EdgeWalletInfo | void
@@ -862,10 +872,12 @@ export type EdgeAccount = {
   splitWalletInfo(walletId: string, newWalletType: string): Promise<string>
 
   // Currency wallets:
-  activeWalletIds: string[]
-  archivedWalletIds: string[]
-  hiddenWalletIds: string[]
-  currencyWallets: { [walletId: string]: EdgeCurrencyWallet }
+  readonly activeWalletIds: string[]
+  readonly archivedWalletIds: string[]
+  readonly hiddenWalletIds: string[]
+  readonly currencyWallets: {
+    [walletId: string]: EdgeCurrencyWallet
+  }
   createCurrencyWallet(type: string, opts?: EdgeCreateCurrencyWalletOptions): Promise<EdgeCurrencyWallet>
   waitForCurrencyWallet(walletId: string): Promise<EdgeCurrencyWallet>
 
@@ -876,7 +888,7 @@ export type EdgeAccount = {
   fetchSwapQuote(request: EdgeSwapRequest, opts?: EdgeSwapRequestOptions): Promise<EdgeSwapQuote>
 
   // Deprecated names:
-  exchangeCache: EdgeRateCache
+  readonly exchangeCache: EdgeRateCache
 }
 
 // ---------------------------------------------------------------------
@@ -925,7 +937,7 @@ export type EdgePasswordRules = {
 }
 
 export type EdgePendingEdgeLogin = {
-  id: string
+  readonly id: string
   cancelRequest(): void
 }
 
@@ -946,11 +958,11 @@ export type EdgeContextEvents = {
 }
 
 export type EdgeContext = {
-  on: Subscriber<EdgeContextEvents>
-  watch: Subscriber<EdgeContext>
+  readonly on: Subscriber<EdgeContextEvents>
+  readonly watch: Subscriber<EdgeContext>
   close(): Promise<void>
 
-  appId: string
+  readonly appId: string
 
   // Local user management:
   localUsers: EdgeUserInfo[]
@@ -992,7 +1004,7 @@ export type EdgeContext = {
   fetchLoginMessages(): Promise<EdgeLoginMessages>
 
   // Background mode:
-  paused: boolean
+  readonly paused: boolean
   changePaused(paused: boolean, opts?: { secondsDelay?: number }): Promise<void>
 
   // Deprecated API's:
@@ -1007,7 +1019,11 @@ export type EdgeFakeUser = {
   username: string
   loginId: string
   loginKey: string
-  repos: { [repo: string]: { [path: string]: any /* EdgeBox */ } }
+  repos: {
+    [repo: string]: {
+      [path: string]: any /* EdgeBox */
+    }
+  }
   server: any /* DbLogin & { children?: DbLogin[] } */
 }
 
