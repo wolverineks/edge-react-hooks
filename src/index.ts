@@ -33,6 +33,7 @@ import { useFetchLoginMessages } from './hooks/EdgeContext/useFetchLoginMessages
 import { useFetchRecovery2Questions } from './hooks/EdgeContext/useFetchRecovery2Questions'
 import { useFetchSwapQuote } from './hooks/EdgeAccount/useFetchSwapQuote'
 import { useFile } from './hooks/shared/useFile'
+import { useFolder } from './hooks/shared/useFolder'
 import { useFixUsername } from './hooks/EdgeContext/useFixUsername'
 import { useGetDisplayPrivateSeed } from './hooks/EdgeCurrencyWallet/useGetDisplayPrivateSeed'
 import { useGetDisplayPublicSeed } from './hooks/EdgeCurrencyWallet/useGetDisplayPublicSeed'
@@ -62,6 +63,7 @@ import { useOnLogin, useOnLoginError, useOnLoginStart, useOnError } from './hook
 import { useOnNewTransactions, useOnTransactionsChanged } from './hooks/EdgeCurrencyWallet/useOn'
 import { useParseUri } from './hooks/EdgeCurrencyWallet/useParseUri'
 import { usePinLoginEnabled } from './hooks/EdgeContext/usePinLoginEnabled'
+import { useReceiveAddressAndEncodeUri } from './hooks/EdgeCurrencyWallet/useReceiveAddressAndEncodeUri'
 import { useRenameWallet } from './hooks/EdgeCurrencyWallet/useRenameWallet'
 import { useRequestEdgeLogin } from './hooks/EdgeContext/useRequestEdgeLogin'
 import { useRequestOtpReset } from './hooks/EdgeContext/useRequestOtpReset'
@@ -117,6 +119,7 @@ export {
   useFetchRecovery2Questions,
   useFetchSwapQuote,
   useFile,
+  useFolder,
   useFixUsername,
   useGetDisplayPrivateSeed,
   useGetDisplayPublicSeed,
@@ -150,6 +153,7 @@ export {
   useOnTransactionsChanged,
   useParseUri,
   usePinLoginEnabled,
+  useReceiveAddressAndEncodeUri,
   useRenameWallet,
   useRequestEdgeLogin,
   useRequestOtpReset,

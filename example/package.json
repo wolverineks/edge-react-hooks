@@ -1,0 +1,55 @@
+{
+  "name": "example",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "react-scripts build",
+    "copy": "cp -r ../dist ./node_modules/edge-react-hooks && cp -r ../src ./node_modules/edge-react-hooks",
+    "eject": "react-scripts eject",
+    "fix": "yarn sort-package-json && yarn lint",
+    "format": "sort-package-json && prettier --write --list-different 'src/**/*.tsx'",
+    "lint": "yarn eslint ./src/**/*.tsx --fix",
+    "start": "react-scripts start",
+    "test": "react-scripts test"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "dependencies": {
+    "disklet": "^0.4.4",
+    "edge-currency-bitcoin": "^4.7.7",
+    "edge-currency-monero": "^0.2.4",
+    "edge-react-hooks": "^2.0.4",
+    "qrcode.react": "^1.0.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-json-pretty": "^2.2.0",
+    "react-scripts": "3.4.1",
+    "typescript": "~3.7.2"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.3.2",
+    "@testing-library/user-event": "^7.1.2",
+    "@types/jest": "^24.0.0",
+    "@types/node": "^12.0.0",
+    "@types/qrcode.react": "^1.0.1",
+    "@types/react": "^16.9.0",
+    "@types/react-dom": "^16.9.0",
+    "prettier": "^2.0.5",
+    "sort-package-json": "^1.42.2",
+    "stop-runaway-react-effects": "^2.0.0"
+  }
+}
