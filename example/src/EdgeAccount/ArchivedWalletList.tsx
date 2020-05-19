@@ -1,12 +1,9 @@
-import { useChangeWalletStates, useEdgeAccount } from 'edge-react-hooks'
+import { EdgeAccount } from 'edge-core-js'
+import { useChangeWalletStates, useWatch } from 'edge-react-hooks'
 import * as React from 'react'
 
-import { EdgeAccount } from '../../../src/types'
-
-const accountProperties: (keyof EdgeAccount)[] = ['archivedWalletIds']
-
 export const ArchivedWalletList: React.FC<{ account: EdgeAccount }> = ({ account }) => {
-  useEdgeAccount(account, accountProperties)
+  useWatch(account, 'archivedWalletIds')
 
   return (
     <div>
@@ -21,6 +18,7 @@ export const ArchivedWalletList: React.FC<{ account: EdgeAccount }> = ({ account
 const ArchivedWalletRow: React.FC<{ account: EdgeAccount; id: string }> = ({ account, id }) => {
   const walletInfo = account.allKeys.find((walletInfo) => walletInfo.id === id)
   const { changeWalletStates, pending, error } = useChangeWalletStates(account)
+  useWatch(account, 'allKeys')
 
   if (!walletInfo) return <div>Wallet not found</div>
 

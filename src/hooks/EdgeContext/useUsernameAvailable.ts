@@ -1,11 +1,11 @@
+import { EdgeContext } from 'edge-core-js'
 import * as React from 'react'
 import { useAsync } from 'react-use-async'
-import { EdgeContext } from '../../types'
 
 export const useUsernameAvailable = (context: EdgeContext) => {
-  const { onStart, onSuccess, onError, reset, pending, error, data } = useAsync()
+  const { onStart, onSuccess, onError, reset, pending, error, data } = useAsync<boolean>()
 
-  const usernameAvailable = React.useCallback(
+  const isUsernameAvailable = React.useCallback(
     (...args: Parameters<EdgeContext['usernameAvailable']>) => {
       onStart()
       context
@@ -17,8 +17,8 @@ export const useUsernameAvailable = (context: EdgeContext) => {
   )
 
   return {
-    account: data,
-    usernameAvailable,
+    usernameAvailable: data,
+    isUsernameAvailable,
     error,
     pending,
     reset,

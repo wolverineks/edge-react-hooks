@@ -1,19 +1,35 @@
-import { useDeleteLocalAccount, useEdgeContext } from 'edge-react-hooks'
+import { EdgeContext } from 'edge-core-js'
+import { useDeleteLocalAccount, useLoginMessages, useWatch } from 'edge-react-hooks'
 import * as React from 'react'
 
-import { EdgeContext } from '../../../src/types'
-
-const properties: (keyof EdgeContext)[] = ['localUsers']
+import { useTimeout } from '../utils'
 
 export const LocalUsers: React.FC<{ context: EdgeContext }> = ({ context }) => {
-  useEdgeContext(context, properties)
+  useWatch(context, 'localUsers')
+
+  if (!context.localUsers) {
+    return (
+      <div>
+        <div>Previously Logged-In Accounts</div>
+        <div> Loading.... </div>
+      </div>
+    )
+  }
+
+  if (context.localUsers.length <= 0) {
+    return (
+      <div>
+        <div>Previously Logged-In Accounts</div>
+        <div> ------ </div>
+      </div>
+    )
+  }
 
   return (
     <div>
       <div>Previously Logged-In Accounts</div>
-      {context.localUsers.map(({ username }) => (
-        <LocalUserRow context={context} username={username} key={username} />
-      ))}
+      {context.localUsers &&
+        context.localUsers.map(({ username }) => <LocalUserRow context={context} username={username} key={username} />)}
     </div>
   )
 }
@@ -33,21 +49,30 @@ const LocalUserRow: React.FC<{ context: EdgeContext; username: string }> = ({ co
         {pending ? 0 : 'X'}
       </button>
       {error && <div>{error.message}</div>}
+      <LoginMessages context={context} username={username} />
     </div>
   )
 }
 
-const useTimeout = () => {
-  const [{ callback, delay }, set] = React.useState({ callback: () => null, delay: 0 })
+const LoginMessages: React.FC<{ context: EdgeContext; username: string }> = ({ context, username }) => {
+  const { loginMessages } = useLoginMessages(context)
 
-  React.useEffect(() => {
-    const id = setTimeout(callback, delay)
-    return () => clearTimeout(id)
-  }, [callback, delay])
+  if (!loginMessages) {
+    return <div>Loading...</div>
+  }
 
-  const timeout = React.useCallback((callback: () => any, delay: number) => {
-    set({ callback, delay })
-  }, [])
+  if (Object.keys(loginMessages[username]).length <= 0) {
+    return <div>No messages</div>
+  }
 
-  return timeout
+  const { otpResetPending, recovery2Corrupt } = loginMessages[username]
+
+  return (
+    <div>
+      <div key={username}>
+        <div>otpResetPending: {otpResetPending.toString()}</div>
+        <div>recovery2Corrupt: {recovery2Corrupt.toString()}</div>
+      </div>
+    </div>
+  )
 }

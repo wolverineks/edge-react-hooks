@@ -1,10 +1,9 @@
+import { EdgeAccount } from 'edge-core-js'
 import * as React from 'react'
 import { useAsync } from 'react-use-async'
 
-import { EdgeAccount } from '../../types'
-
 export const useConvertCurrency = (account: EdgeAccount) => {
-  const { onStart, onSuccess, onError, reset, pending, error } = useAsync()
+  const { onStart, onSuccess, onError, reset, pending, error, data } = useAsync<number>()
 
   const convertCurrency = React.useCallback(
     (...args: Parameters<EdgeAccount['rateCache']['convertCurrency']>) => {
@@ -18,6 +17,7 @@ export const useConvertCurrency = (account: EdgeAccount) => {
   )
 
   return {
+    amount: data,
     convertCurrency,
     error,
     pending,

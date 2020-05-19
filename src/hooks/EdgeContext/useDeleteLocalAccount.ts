@@ -1,9 +1,9 @@
+import { EdgeContext } from 'edge-core-js'
 import * as React from 'react'
 import { useAsync } from 'react-use-async'
-import { EdgeContext } from '../../types'
 
 export const useDeleteLocalAccount = (context: EdgeContext) => {
-  const { onStart, onSuccess, onError, reset, pending, error, data } = useAsync()
+  const { onStart, onSuccess, onError, reset, pending, error } = useAsync()
 
   const deleteLocalAccount = React.useCallback(
     (...args: Parameters<EdgeContext['deleteLocalAccount']>) => {
@@ -17,7 +17,6 @@ export const useDeleteLocalAccount = (context: EdgeContext) => {
   )
 
   return {
-    account: data,
     deleteLocalAccount,
     error,
     pending,

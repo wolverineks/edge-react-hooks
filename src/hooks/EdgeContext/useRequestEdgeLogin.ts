@@ -1,9 +1,9 @@
+import { EdgeContext, EdgePendingEdgeLogin } from 'edge-core-js'
 import * as React from 'react'
 import { useAsync } from 'react-use-async'
-import { EdgeContext } from '../../types'
 
 export const useRequestEdgeLogin = (context: EdgeContext) => {
-  const { onStart, onSuccess, onError, reset, pending, error, data } = useAsync()
+  const { onStart, onSuccess, onError, reset, pending, error, data } = useAsync<EdgePendingEdgeLogin>()
 
   const requestEdgeLogin = React.useCallback(
     (...args: Parameters<EdgeContext['requestEdgeLogin']>) => {
@@ -17,7 +17,7 @@ export const useRequestEdgeLogin = (context: EdgeContext) => {
   )
 
   return {
-    account: data,
+    pendingEdgeLogin: data,
     requestEdgeLogin,
     error,
     pending,

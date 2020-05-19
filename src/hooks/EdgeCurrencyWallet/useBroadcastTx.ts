@@ -1,9 +1,9 @@
+import { EdgeCurrencyWallet, EdgeTransaction } from 'edge-core-js'
 import * as React from 'react'
 import { useAsync } from 'react-use-async'
-import { EdgeCurrencyWallet } from '../../types'
 
 export const useBroadcastTx = (wallet: EdgeCurrencyWallet) => {
-  const { onStart, onSuccess, onError, reset, pending, error } = useAsync()
+  const { onStart, onSuccess, onError, reset, pending, error, data } = useAsync<EdgeTransaction>()
 
   const broadcastTx = React.useCallback(
     (...args: Parameters<EdgeCurrencyWallet['broadcastTx']>) => {
@@ -17,6 +17,7 @@ export const useBroadcastTx = (wallet: EdgeCurrencyWallet) => {
   )
 
   return {
+    transaction: data,
     broadcastTx,
     error,
     pending,

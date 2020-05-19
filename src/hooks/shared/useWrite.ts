@@ -1,5 +1,5 @@
-import * as React from 'react'
 import { Disklet } from 'disklet'
+import * as React from 'react'
 import { useAsync } from 'react-use-async'
 
 export const useWrite = (disklet: Disklet, path: string) => {

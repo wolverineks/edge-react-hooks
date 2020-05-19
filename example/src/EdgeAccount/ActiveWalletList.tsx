@@ -1,32 +1,28 @@
-import { useEdgeAccount, useEdgeCurrencyWallet, useChangeWalletStates } from 'edge-react-hooks'
+import { EdgeAccount, EdgeCurrencyWallet } from 'edge-core-js'
+import { useChangeWalletStates, useWatch } from 'edge-react-hooks'
 import * as React from 'react'
 
 import { useSelectWallet, useSelectedWallet } from '../EdgeCurrencyWallet/useSelectedWallet'
 
-import { EdgeAccount, EdgeCurrencyWallet } from '../../../src/types'
-
-const accountProperties: (keyof EdgeAccount)[] = ['activeWalletIds', 'currencyWallets']
-
 export const ActiveWalletList: React.FC<{ account: EdgeAccount }> = ({ account }) => {
-  useEdgeAccount(account, accountProperties)
+  useWatch(account, 'activeWalletIds')
+  useWatch(account, 'currencyWallets')
 
   return (
     <div>
       Active Wallets:
       {account.activeWalletIds
         .map((id) => account.currencyWallets[id])
-        .map((wallet: EdgeCurrencyWallet) =>
+        .map((wallet, index) =>
           wallet ? (
             <ActiveWalletRow account={account} wallet={wallet} key={wallet.id} />
           ) : (
-            <div key={Math.random()}>Loading...</div>
+            <div key={index}>Loading...</div>
           ),
         )}
     </div>
   )
 }
-
-const walletProperties: (keyof EdgeCurrencyWallet)[] = ['name', 'syncRatio']
 
 const ActiveWalletRow: React.FC<{ wallet: EdgeCurrencyWallet; account: EdgeAccount }> = ({ account, wallet }) => {
   const selectWallet = useSelectWallet()
@@ -36,7 +32,8 @@ const ActiveWalletRow: React.FC<{ wallet: EdgeCurrencyWallet; account: EdgeAccou
   const archiveWallet = () => changeWalletStates({ [wallet.id]: { deleted: false, archived: true } })
   const deleteWallet = () => changeWalletStates({ [wallet.id]: { deleted: true, archived: false } })
 
-  useEdgeCurrencyWallet(wallet, walletProperties)
+  useWatch(wallet, 'name')
+  useWatch(wallet, 'syncRatio')
 
   React.useEffect(() => {
     wallet.on('newTransactions', (transactions) => {

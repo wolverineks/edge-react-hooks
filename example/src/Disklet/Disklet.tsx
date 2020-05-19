@@ -1,8 +1,8 @@
+import { Disklet as DiskletType } from 'disklet'
+import { useFile, useFolder } from 'edge-react-hooks'
 import * as React from 'react'
 import Json from 'react-json-pretty'
-import { Disklet as DiskletType } from 'disklet'
 
-import { useFile, useFolder } from 'edge-react-hooks'
 import { fileName, useInterval } from './utils'
 
 const ToggleRow: React.FC<{ title: string }> = ({ children, title }) => {

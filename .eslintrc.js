@@ -25,12 +25,12 @@ module.exports = {
   },
   plugins: ['react', '@typescript-eslint', 'eslint-plugin-prettier', 'react-hooks'],
   rules: {
-    'prettier/prettier': 'error',
-    'react-hooks/rules-of-hooks': 'error',
-    'react-hooks/exhaustive-deps': 'error',
     '@typescript-eslint/explicit-function-return-type': 0,
     '@typescript-eslint/member-delimiter-style': 0,
     '@typescript-eslint/no-explicit-any': 0,
+    'prettier/prettier': 'error',
+    'react-hooks/exhaustive-deps': 'error',
+    'react-hooks/rules-of-hooks': 'error',
   },
   settings: {
     react: {

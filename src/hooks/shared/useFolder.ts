@@ -1,6 +1,6 @@
 import { Disklet } from 'disklet'
-import { useAsync } from 'react-use-async'
 import * as React from 'react'
+import { useAsync } from 'react-use-async'
 
 export const useFolder = (disklet: Disklet, path: string) => {
   const { onSuccess, onError, data, error, pending } = useAsync<Record<string, any>>({ pending: true })

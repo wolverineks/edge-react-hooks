@@ -1,12 +1,10 @@
-import { useEdgeCurrencyWallet } from 'edge-react-hooks'
+import { EdgeCurrencyWallet } from 'edge-core-js'
+import { useWatch } from 'edge-react-hooks'
 import * as React from 'react'
 
-import { EdgeCurrencyWallet } from '../../../src/types'
-
-const properties: (keyof EdgeCurrencyWallet)[] = ['fiatCurrencyCode', 'balances']
-
 export const BalanceList: React.FC<{ wallet: EdgeCurrencyWallet }> = ({ wallet }) => {
-  useEdgeCurrencyWallet(wallet, properties)
+  useWatch(wallet, 'fiatCurrencyCode')
+  useWatch(wallet, 'balances')
 
   return (
     <div>

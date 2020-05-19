@@ -1,12 +1,9 @@
-import { useEdgeAccount, useChangeWalletStates } from 'edge-react-hooks'
+import { EdgeAccount, EdgeWalletInfoFull } from 'edge-core-js'
+import { useChangeWalletStates, useWatch } from 'edge-react-hooks'
 import * as React from 'react'
 
-import { EdgeAccount, EdgeWalletInfoFull } from '../../../src/types'
-
-const accountProperties: (keyof EdgeAccount)[] = ['allKeys']
-
 export const DeletedWalletList: React.FC<{ account: EdgeAccount }> = ({ account }) => {
-  useEdgeAccount(account, accountProperties)
+  useWatch(account, 'allKeys')
 
   return (
     <div>

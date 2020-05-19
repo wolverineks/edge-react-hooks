@@ -1,24 +1,21 @@
-import { useEdgeAccount } from 'edge-react-hooks'
+import { EdgeAccount } from 'edge-core-js'
+import { useWatch } from 'edge-react-hooks'
 import * as React from 'react'
 
-import { ActiveWalletList } from './ActiveWalletList'
-import { ArchivedWalletList } from './ArchivedWalletList'
-import { DeletedWalletList } from './DeletedWalletList'
-import { CreateWallet } from './CreateWallet'
-
-import { EdgeAccount } from '../../../src/types'
-
-import { useSetAccount } from './useAccount'
+import { Disklet } from '../Disklet/Disklet'
 import { useSelectedWallet } from '../EdgeCurrencyWallet/useSelectedWallet'
 import { WalletInfo } from '../EdgeCurrencyWallet/WalletInfo'
-import { Disklet } from '../Disklet/Disklet'
-
-const accountProperties: (keyof EdgeAccount)[] = ['username', 'activeWalletIds']
+import { ActiveWalletList } from './ActiveWalletList'
+import { ArchivedWalletList } from './ArchivedWalletList'
+import { CreateWallet } from './CreateWallet'
+import { DeletedWalletList } from './DeletedWalletList'
+import { useSetAccount } from './useAccount'
 
 export const AccountInfo = ({ account }: { account: EdgeAccount }) => {
   const selectedWallet = useSelectedWallet()
   const setAccount = useSetAccount()
-  useEdgeAccount(account, accountProperties)
+  useWatch(account, 'username')
+  useWatch(account, 'activeWalletIds')
 
   return (
     <div>

@@ -1,8 +1,7 @@
+import { EdgeContext } from 'edge-core-js'
 import * as React from 'react'
 
 import { LocalUsers } from './LocalUsers'
-
-import { EdgeContext } from '../../../src/types'
 
 export const ContextInfo: React.FC<{ context: EdgeContext }> = ({ context }) => (
   <div>

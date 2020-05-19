@@ -1,5 +1,5 @@
+import { EdgeCurrencyWallet, EdgeTransaction } from 'edge-core-js'
 import * as React from 'react'
-import { EdgeCurrencyWallet, EdgeTransaction } from '../../types'
 
 export const useOnNewTransactions = (
   wallet: EdgeCurrencyWallet,
@@ -23,6 +23,4 @@ export const useOnTransactionsChanged = (
       unsubscribe()
     }
   }, [wallet, callback])
-
-  return void 0
 }

@@ -1,7 +1,6 @@
-import * as React from 'react'
+import { EdgeContext } from 'edge-core-js'
 import { useLoginWithPassword } from 'edge-react-hooks'
-
-import { EdgeContext } from '../../../src/types'
+import * as React from 'react'
 
 const onChange = (cb: Function) => (event: React.SyntheticEvent<HTMLInputElement>) => cb(event.currentTarget.value)
 

@@ -1,7 +1,6 @@
+import { EdgeAccount, EdgeContext } from 'edge-core-js'
 import { useCreateAccount } from 'edge-react-hooks'
 import React from 'react'
-
-import { EdgeAccount, EdgeContext } from '../../../src/types'
 
 const onChange = (cb: Function) => (event: React.SyntheticEvent<HTMLInputElement>) => cb(event.currentTarget.value)
 

@@ -1,6 +1,6 @@
+import { EdgeAccount, EdgeCurrencyWallet } from 'edge-core-js'
 import * as React from 'react'
 import { useAsync } from 'react-use-async'
-import { EdgeAccount, EdgeCurrencyWallet } from '../../types'
 
 type Syncable = EdgeAccount | EdgeCurrencyWallet
 

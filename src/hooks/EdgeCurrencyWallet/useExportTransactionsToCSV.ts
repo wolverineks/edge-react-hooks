@@ -1,9 +1,9 @@
+import { EdgeCurrencyWallet } from 'edge-core-js'
 import * as React from 'react'
 import { useAsync } from 'react-use-async'
-import { EdgeCurrencyWallet } from '../../types'
 
 export const useExportTransactionsToCSV = (wallet: EdgeCurrencyWallet) => {
-  const { onStart, onSuccess, onError, reset, pending, error } = useAsync()
+  const { onStart, onSuccess, onError, reset, pending, error } = useAsync<string>()
 
   const exportTransactionsToCSV = React.useCallback(
     (...args: Parameters<EdgeCurrencyWallet['exportTransactionsToCSV']>) => {

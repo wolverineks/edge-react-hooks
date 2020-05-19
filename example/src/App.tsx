@@ -1,15 +1,14 @@
+import { EdgeAccount } from 'edge-core-js'
 import * as React from 'react'
 
 import { AccountInfo } from './EdgeAccount/AccountInfo'
-import { ContextInfo } from './EdgeContext/ContextInfo'
-import { LoginForm } from './EdgeContext/LoginForm'
-import { CreateAccountForm } from './EdgeContext/CreateAccountForm'
-import { ContextProvider, useContext } from './EdgeContext/useContext'
 import { AccountProvider, useAccount, useSetAccount } from './EdgeAccount/useAccount'
-import { SelectedWalletProvider } from './EdgeCurrencyWallet/useSelectedWallet'
+import { ContextInfo } from './EdgeContext/ContextInfo'
 import { contextOptions } from './EdgeContext/contextOptions'
-
-import { EdgeAccount } from '../../src/types'
+import { CreateAccountForm } from './EdgeContext/CreateAccountForm'
+import { LoginForm } from './EdgeContext/LoginForm'
+import { ContextProvider, useContext } from './EdgeContext/useContext'
+import { SelectedWalletProvider } from './EdgeCurrencyWallet/useSelectedWallet'
 
 export const Providers: React.FC = ({ children }) => (
   <ContextProvider contextOptions={contextOptions}>

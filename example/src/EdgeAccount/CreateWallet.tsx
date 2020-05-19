@@ -1,7 +1,6 @@
-import * as React from 'react'
+import { EdgeAccount } from 'edge-core-js'
 import { useCreateCurrencyWallet } from 'edge-react-hooks'
-
-import { EdgeAccount } from '../../../src/types'
+import * as React from 'react'
 
 const onChange = (cb: Function) => (event: React.SyntheticEvent<any>) => cb(event.currentTarget.value)
 

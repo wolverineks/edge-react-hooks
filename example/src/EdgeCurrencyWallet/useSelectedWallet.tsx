@@ -1,6 +1,5 @@
+import { EdgeAccount, EdgeCurrencyWallet } from 'edge-core-js'
 import React, { useContext, useState } from 'react'
-
-import { EdgeCurrencyWallet, EdgeAccount } from '../../../src/types'
 
 const SelectedWalletContext = React.createContext<EdgeCurrencyWallet | undefined>(undefined)
 const SelectWalletContext = React.createContext<(wallet: EdgeCurrencyWallet) => undefined>(() => undefined)

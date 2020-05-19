@@ -1,25 +1,20 @@
+import { EdgeCurrencyWallet } from 'edge-core-js'
 import * as React from 'react'
 import { useAsync } from 'react-use-async'
-import { EdgeCurrencyWallet } from '../../types'
 
-export const useDenominationToNative = (wallet: EdgeCurrencyWallet) => {
-  const { onStart, onSuccess, onError, reset, pending, error } = useAsync()
+export const useDenominationToNative = (
+  wallet: EdgeCurrencyWallet,
+  { denomimatedAmount, currencyCode }: { denomimatedAmount: string; currencyCode: string },
+) => {
+  const { onSuccess, onError, pending, error, data } = useAsync<string>({ pending: true })
 
-  const denominationToNative = React.useCallback(
-    (...args: Parameters<EdgeCurrencyWallet['denominationToNative']>) => {
-      onStart()
-      wallet
-        .denominationToNative(...args)
-        .then(onSuccess)
-        .catch(onError)
-    },
-    [onError, onStart, onSuccess, wallet],
-  )
+  React.useEffect(() => {
+    wallet.denominationToNative(denomimatedAmount, currencyCode).then(onSuccess).catch(onError)
+  }, [currencyCode, denomimatedAmount, onError, onSuccess, wallet])
 
   return {
-    denominationToNative,
+    nativeAmount: data,
     error,
     pending,
-    reset,
   }
 }

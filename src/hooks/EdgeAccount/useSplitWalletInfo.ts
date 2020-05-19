@@ -1,27 +1,20 @@
+import { EdgeAccount } from 'edge-core-js'
 import * as React from 'react'
 import { useAsync } from 'react-use-async'
 
-import { EdgeAccount } from '../../types'
+export const useSplitWalletInfo = (
+  account: EdgeAccount,
+  { walletId, newWalletType }: { walletId: string; newWalletType: string },
+) => {
+  const { onSuccess, onError, pending, error, data } = useAsync<string>({ pending: true })
 
-export const useSplitWalletInfo = (account: EdgeAccount) => {
-  const { onStart, onSuccess, onError, reset, pending, error, data } = useAsync()
-
-  const splitWalletInfo = React.useCallback(
-    (...args: Parameters<EdgeAccount['splitWalletInfo']>) => {
-      onStart()
-      account
-        .splitWalletInfo(...args)
-        .then(onSuccess)
-        .catch(onError)
-    },
-    [account, onError, onStart, onSuccess],
-  )
+  React.useEffect(() => {
+    account.splitWalletInfo(walletId, newWalletType).then(onSuccess).catch(onError)
+  }, [account, newWalletType, onError, onSuccess, walletId])
 
   return {
     data: data,
     error,
     pending,
-    reset,
-    splitWalletInfo,
   }
 }

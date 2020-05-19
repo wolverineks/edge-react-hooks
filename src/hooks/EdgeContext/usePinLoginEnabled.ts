@@ -1,26 +1,20 @@
+import { EdgeContext } from 'edge-core-js'
 import * as React from 'react'
 import { useAsync } from 'react-use-async'
-import { EdgeContext } from '../../types'
 
-export const usePinLoginEnabled = (context: EdgeContext) => {
-  const { onStart, onSuccess, onError, reset, pending, error, data } = useAsync()
+export const usePinLoginEnabled = (context: EdgeContext, username: string) => {
+  const { onSuccess, onError, pending, error, data } = useAsync<boolean>({ pending: true })
 
-  const pinLoginEnabled = React.useCallback(
-    (...args: Parameters<EdgeContext['pinLoginEnabled']>) => {
-      onStart()
-      context
-        .pinLoginEnabled(...args)
-        .then(onSuccess)
-        .catch(onError)
-    },
-    [context, onError, onStart, onSuccess],
-  )
+  React.useEffect(() => {
+    context
+      .pinLoginEnabled(username)
+      .then((messages: any) => onSuccess(messages))
+      .catch(onError)
+  }, [context, onError, onSuccess, username])
 
   return {
-    account: data,
-    pinLoginEnabled,
+    pinLoginEnabled: data,
     error,
     pending,
-    reset,
   }
 }

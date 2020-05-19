@@ -1,11 +1,8 @@
+import { EdgeAccount } from 'edge-core-js'
 import * as React from 'react'
 
-import { EdgeAccount } from '../../../src/types'
-
 export const AccountContext = React.createContext<EdgeAccount | undefined>(undefined)
-export const SetAccountContext = React.createContext<(account: EdgeAccount | undefined) => undefined>(
-  (account: EdgeAccount | undefined) => undefined,
-)
+export const SetAccountContext = React.createContext<(account: EdgeAccount | undefined) => undefined>(() => undefined)
 
 export const AccountProvider: React.FC = ({ children }) => {
   const [account, setAccount] = React.useState<EdgeAccount>()

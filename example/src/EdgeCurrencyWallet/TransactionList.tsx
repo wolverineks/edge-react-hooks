@@ -1,7 +1,6 @@
-import { useGetTransactions } from 'edge-react-hooks'
+import { EdgeCurrencyWallet } from 'edge-core-js'
+import { useTransactions } from 'edge-react-hooks'
 import * as React from 'react'
-
-import { EdgeCurrencyWallet } from '../../../src/types'
 
 const INITIAL_TRANSACTION_COUNT = 10
 const TRANSACTION_COUNTS = [1, 5, 10, 15, 20, 25]
@@ -11,12 +10,7 @@ const onChange = (cb: Function) => (event: React.SyntheticEvent<any>) => cb(even
 export const TransactionList: React.FC<{ wallet: EdgeCurrencyWallet }> = ({ wallet }) => {
   const [currencyCode, setCurrencyCode] = React.useState<string>(wallet.currencyInfo.currencyCode)
   const [startEntries, setStartEntries] = React.useState<number>(INITIAL_TRANSACTION_COUNT)
-  const { transactions, getTransactions, pending } = useGetTransactions(wallet)
-
-  React.useEffect(() => {
-    wallet.on('transactionsChanged', () => getTransactions({ currencyCode }))
-    wallet.on('newTransactions', () => getTransactions({ currencyCode }))
-  }, [currencyCode, getTransactions, wallet])
+  const { transactions, pending } = useTransactions(wallet, { currencyCode })
 
   return (
     <div>
@@ -51,7 +45,7 @@ export const TransactionList: React.FC<{ wallet: EdgeCurrencyWallet }> = ({ wall
       {pending && <div>Loading transactions...</div>}
       {transactions &&
         transactions.map((transaction) => (
-          <div id={transaction.txid}>
+          <div key={transaction.txid} id={transaction.txid}>
             {transaction.nativeAmount} {transaction.currencyCode}
           </div>
         ))}

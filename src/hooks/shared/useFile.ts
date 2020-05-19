@@ -1,6 +1,6 @@
+import { Disklet } from 'disklet'
 import * as React from 'react'
 import { useAsync } from 'react-use-async'
-import { Disklet } from 'disklet'
 
 export const useFile = (disklet: Disklet, path: string) => {
   const { onSuccess, onError, pending, error, data } = useAsync<string>({ pending: true })

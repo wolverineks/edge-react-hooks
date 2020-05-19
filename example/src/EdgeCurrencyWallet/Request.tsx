@@ -1,14 +1,13 @@
+import { EdgeCurrencyWallet } from 'edge-core-js'
+import { useReceiveAddressAndEncodeUri } from 'edge-react-hooks'
 import QRCode from 'qrcode.react'
 import * as React from 'react'
-import { useReceiveAddressAndEncodeUri } from 'edge-react-hooks'
-
-import { EdgeCurrencyWallet } from '../../../src/types'
 
 const onChange = (cb: Function) => (event: React.SyntheticEvent<HTMLInputElement>) => cb(event.currentTarget.value)
 
 export const Request: React.FC<{ wallet: EdgeCurrencyWallet }> = ({ wallet }) => {
   const [nativeAmount, setNativeAmount] = React.useState<string>('')
-  const { uri, receiveAddress, error } = useReceiveAddressAndEncodeUri(wallet, nativeAmount)
+  const { uri, receiveAddress, error } = useReceiveAddressAndEncodeUri(wallet, { nativeAmount })
 
   return (
     <div>

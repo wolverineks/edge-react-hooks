@@ -1,9 +1,9 @@
+import { EdgeCurrencyWallet } from 'edge-react-hooks/dist/types'
 // import { useBroadcastTx, useSaveTx, useSignTx } from 'edge-react-hooks'
 import * as React from 'react'
 
-import { EdgeCurrencyWallet } from '../../../src/types'
-
-export const Send = ({ wallet }: { wallet: EdgeCurrencyWallet }) => {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const Send: React.FC<{ wallet: EdgeCurrencyWallet }> = ({ wallet }) => {
   //   const { signTx } = useSignTx()
   //   const { broadcastTx } = useBroadcastTx()
   //   const { saveTx } = useSaveTx()
@@ -14,16 +14,16 @@ export const Send = ({ wallet }: { wallet: EdgeCurrencyWallet }) => {
 
       <div>
         <label>
-          To: <input onChange={(event) => null} />
+          To: <input onChange={() => null} />
         </label>
       </div>
 
       <div>
         <label>
-          Amount: <input onChange={(event) => null} />
+          Amount: <input onChange={() => null} />
         </label>
       </div>
-      <button onClick={() => {}}>Send</button>
+      <button onClick={() => null}>Send</button>
     </div>
   )
 }
