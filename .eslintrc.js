@@ -9,6 +9,8 @@ module.exports = {
     'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:react/recommended',
+    'plugin:import/errors',
+    'plugin:import/typescript',
     'prettier',
   ],
   globals: {
@@ -25,10 +27,25 @@ module.exports = {
   },
   plugins: ['react', '@typescript-eslint', 'eslint-plugin-prettier', 'react-hooks'],
   rules: {
-    '@typescript-eslint/explicit-function-return-type': 0,
-    '@typescript-eslint/member-delimiter-style': 0,
-    '@typescript-eslint/no-explicit-any': 0,
     'prettier/prettier': 'error',
+    'import/no-unresolved': [2, { caseSensitive: true, ignore: ['react'] }],
+    '@typescript-eslint/explicit-function-return-type': 0,
+    '@typescript-eslint/no-explicit-any': 0,
+    '@typescript-eslint/member-delimiter-style': [
+      0,
+      {
+        multiline: {
+          delimiter: 'comma',
+          requireLast: true,
+        },
+        singleline: {
+          delimiter: 'comma',
+          requireLast: false,
+        },
+      },
+    ],
+    '@typescript-eslint/no-unused-vars': [0, { argsIgnorePattern: '^_' }],
+    'newline-before-return': 'error',
     'react-hooks/exhaustive-deps': 'error',
     'react-hooks/rules-of-hooks': 'error',
   },

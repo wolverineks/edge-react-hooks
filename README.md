@@ -18,7 +18,7 @@ These hooks enable you to use a mutable **Edge Object** (`EdgeContext | EdgeAcco
 
 ### Async Properties (e.g. 'useLocalUsers')
 
-An async property is data that is available through an async function, but which is eagerly loaded.
+An async property is data that is available through an async function, but which is automatically loaded.
 
 ```typescript
 const { loginMessages, pending, error } = useLoginMessages(context)
@@ -26,21 +26,20 @@ const { loginMessages, pending, error } = useLoginMessages(context)
 
 ### Async Methods
 
-You can think of `edge-react-hooks` like `useRenameWallet()` as mini redux stores with redux-thunk built in.
+You can think of async method hooks like `useRenameWallet()` as mini redux stores with redux-thunk built in.
 
 To use them, you can destructure the return value:
 
 ```typescript
-const { renameWallet, pending, error, reset } = useRenameWallet(account)
+const { renameWallet, pending, error } = useRenameWallet(account, walletName)
 ```
 
-|       name       | type                |
-| :--------------: | :------------------ |
-| `{named method}` | `(...args) => void` |
-|      reset       | `() => void`        |
-|     pending      | `boolean`           |
-|      error       | `Error | undefined` |
-|  `{named data}`  | `any | undefined`   |
+|       name       | type                      |
+| :--------------: | :------------------------ |
+| `{named method}` | `() => void`              |
+|     pending      | `boolean`                 |
+|      error       | `Error | undefined`       |
+|  `{named data}`  | `typeof data | undefined` |
 
 Calling the `{named method}` is like dispatching a thunk to the redux store, and results in multiple changes of the state with accompanying re-renders of the consuming component.
 
