@@ -1,7 +1,6 @@
 import { EdgeCurrencyCodeOptions, EdgeCurrencyWallet, EdgeGetTransactionsOptions, EdgeSpendInfo } from 'edge-core-js'
 import * as React from 'react'
 import { useMutation } from 'react-query'
-import useDeepCompareEffect from 'use-deep-compare-effect'
 
 import { useOnNewTransactions, useOnTransactionsChanged } from './events'
 
@@ -142,10 +141,6 @@ export const useMaxSpendable = (wallet: EdgeCurrencyWallet, { spendInfo }: { spe
   React.useEffect(() => {
     execute()
   }, [execute, wallet, spendInfo])
-
-  useDeepCompareEffect(() => {
-    execute()
-  }, [execute, spendInfo])
 
   return { maxSpendable: data, pending: rest.status === 'loading', ...rest }
 }

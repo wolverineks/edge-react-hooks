@@ -32,7 +32,7 @@
     "edge-core-js": "^0.17.1",
     "edge-currency-bitcoin": "^4.7.7",
     "edge-currency-monero": "^0.2.4",
-    "edge-react-hooks": "^3.0.0",
+    "edge-react-hooks": "^3.2.0",
     "qrcode.react": "^1.0.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",

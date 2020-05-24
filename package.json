@@ -1,6 +1,6 @@
 {
   "name": "edge-react-hooks",
-  "version": "3.1.0",
+  "version": "3.2.0",
   "keywords": [
     "edge",
     "hooks",
@@ -17,7 +17,7 @@
   ],
   "scripts": {
     "build": "tsc",
-    "fix": "yarn sort-package-json && yarn lint",
+    "fix": "yarn lint",
     "format": "prettier --write --list-different '*.js' 'src/**/*.ts'",
     "lint": "yarn eslint ./src --fix",
     "precommit": "yarn format && yarn build",
@@ -45,9 +45,7 @@
     "prettier": "^2.0.5",
     "prettier-plugin-import-sort": "^0.0.4",
     "prettier-plugin-packagejson": "^2.2.3",
-    "sort-package-json": "^1.42.2",
-    "typescript": "^3.9.2",
-    "use-deep-compare-effect": "^1.3.1"
+    "typescript": "^3.9.2"
   },
   "peerDependencies": {
     "edge-core-js": "^0.17.1",

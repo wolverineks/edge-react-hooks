@@ -1,4 +1,4 @@
-import { EdgeCurrencyWallet } from 'edge-react-hooks/dist/types'
+import { EdgeCurrencyWallet } from 'edge-core-js'
 // import { useBroadcastTx, useSaveTx, useSignTx } from 'edge-react-hooks'
 import * as React from 'react'
 
