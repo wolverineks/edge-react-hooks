@@ -4041,10 +4041,10 @@ edge-currency-monero@^0.2.4:
     mymonero-core-js "git://github.com/EdgeApp/mymonero-core-js.git#william/v0.14.0-hardfork"
     uri-js "^3.0.2"
 
-edge-react-hooks@^3.1.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/edge-react-hooks/-/edge-react-hooks-3.1.0.tgz#6b2b1c9b2450cdfa9c4d1193c214dc68e337988f"
-  integrity sha512-N7IuEtYoRTnOIAKHOi/Ep1wJ8R8C+WIp2kNwbz4qSJ3TbKr+LdSncDH5Ajh7kMsxYvKuxxYZ5zBEiBfu7WSbsA==
+edge-react-hooks@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/edge-react-hooks/-/edge-react-hooks-3.2.0.tgz#46cbf6f07608621cb13a814a464bb17ba8e30b9b"
+  integrity sha512-0dYzrdoaKWRfoldNXwmOE/FNE/ymBkoZTW/hNAZhUYSI0I0GJXtq8K8WJWv/ud5eUcUtv4p7hRDRlOtBVmJp3A==
   dependencies:
     react-native-fs "^2.16.6"
     react-query "^1.5.2"
