@@ -2089,11 +2089,6 @@ react-query@^1.5.2:
     "@scarf/scarf" "^1.0.0"
     ts-toolbelt "^6.4.2"
 
-react-use-async@^0.0.16:
-  version "0.0.16"
-  resolved "https://registry.yarnpkg.com/react-use-async/-/react-use-async-0.0.16.tgz#53bb3f44718dc17959586abad76afcfa8af347a7"
-  integrity sha512-/S8BtfALbGT+dbCT3cDuArkwbhpO6LJJ9ytFDBaXs02Y3uCj25Y58eNjVNSTg9NngMsx+AFrT6uvRCy1IXx8gA==
-
 read-pkg-up@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/read-pkg-up/-/read-pkg-up-2.0.0.tgz#6b72a8048984e0c41e79510fd5e9fa99b3b549be"

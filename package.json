@@ -17,16 +17,14 @@
   ],
   "scripts": {
     "build": "tsc",
-    "fix": "yarn lint",
-    "format": "prettier --write --list-different '*.js' 'src/**/*.ts'",
+    "fix": "yarn eslint . --ext '.ts, .tsx, .json, .js, .jsx' --fix --no-error-on-unmatched-pattern",
     "lint": "yarn eslint ./src --fix",
     "precommit": "yarn format && yarn build",
     "test": "jest"
   },
   "dependencies": {
     "react-native-fs": "^2.16.6",
-    "react-query": "^1.5.2",
-    "react-use-async": "^0.0.16"
+    "react-query": "^1.5.2"
   },
   "devDependencies": {
     "@types/react": "^16.9.35",
