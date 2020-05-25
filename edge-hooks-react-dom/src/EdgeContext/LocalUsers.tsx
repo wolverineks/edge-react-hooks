@@ -1,36 +1,31 @@
 import { EdgeContext } from 'edge-core-js'
 import { useDeleteLocalAccount, useLoginMessages, useWatch } from 'edge-react-hooks'
 import * as React from 'react'
+import { Alert, Button, Card, ListGroup } from 'react-bootstrap'
 
 import { useTimeout } from '../utils'
 
 export const LocalUsers: React.FC<{ context: EdgeContext }> = ({ context }) => {
   useWatch(context, 'localUsers')
 
-  if (!context.localUsers) {
-    return (
-      <div>
-        <div>Previously Logged-In Accounts</div>
-        <div> Loading.... </div>
-      </div>
-    )
-  }
-
-  if (context.localUsers.length <= 0) {
-    return (
-      <div>
-        <div>Previously Logged-In Accounts</div>
-        <div> ------ </div>
-      </div>
-    )
-  }
-
   return (
-    <div>
-      <div>Previously Logged-In Accounts</div>
-      {context.localUsers &&
-        context.localUsers.map(({ username }) => <LocalUserRow context={context} username={username} key={username} />)}
-    </div>
+    <Card>
+      <Card.Header>
+        <Card.Title>Previously Logged-In Accounts</Card.Title>
+      </Card.Header>
+
+      <ListGroup>
+        {!context.localUsers ? (
+          <Card.Text>Loading...</Card.Text>
+        ) : context.localUsers.length <= 0 ? (
+          <Card.Text>------</Card.Text>
+        ) : (
+          context.localUsers.map(({ username }) => (
+            <LocalUserRow context={context} username={username} key={username} />
+          ))
+        )}
+      </ListGroup>
+    </Card>
   )
 }
 
@@ -43,44 +38,38 @@ const LocalUserRow: React.FC<{ context: EdgeContext; username: string }> = ({ co
   }, [error, reset, timeout])
 
   return (
-    <div key={username}>
+    <ListGroup.Item key={username}>
       {username} -{' '}
-      <button disabled={pending} onClick={() => deleteLocalAccount({ username })}>
+      <Button variant="danger" disabled={pending} onClick={() => deleteLocalAccount({ username })}>
         {pending ? '...' : 'X'}
-      </button>
-      {error && <div>{(error as Error).message}</div>}
+      </Button>
       <LoginMessages context={context} username={username} />
-    </div>
+      {error && <Alert variant={'danger'}>{(error as Error).message}</Alert>}
+    </ListGroup.Item>
   )
 }
 
 const LoginMessages: React.FC<{ context: EdgeContext; username: string }> = ({ context, username }) => {
   const { loginMessages, pending, status, error } = useLoginMessages(context)
 
-  console.log({ loginMessages, pending, status })
-
-  if (status === 'error') {
-    return <div>{(error as Error).message}.</div>
-  }
-
-  if (pending) {
-    return <div>Loading...</div>
-  }
-
   if (!loginMessages) return null
-
-  if (Object.keys(loginMessages[username]).length <= 0) {
-    return <div>No messages</div>
-  }
 
   const { otpResetPending, recovery2Corrupt } = loginMessages[username]
 
   return (
-    <div>
-      <div key={username}>
-        <div>otpResetPending: {otpResetPending.toString()}</div>
-        <div>recovery2Corrupt: {recovery2Corrupt.toString()}</div>
-      </div>
-    </div>
+    <ListGroup key={username}>
+      {status === 'error' ? (
+        <ListGroup.Item>{(error as Error).message}.</ListGroup.Item>
+      ) : pending ? (
+        <ListGroup.Item>Loading...</ListGroup.Item>
+      ) : Object.keys(loginMessages[username]).length <= 0 ? (
+        <ListGroup.Item>No messages</ListGroup.Item>
+      ) : (
+        <>
+          <ListGroup.Item>otpResetPending: {otpResetPending.toString()}</ListGroup.Item>
+          <ListGroup.Item>recovery2Corrupt: {recovery2Corrupt.toString()}</ListGroup.Item>
+        </>
+      )}
+    </ListGroup>
   )
 }

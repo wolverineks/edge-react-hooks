@@ -1,17 +1,17 @@
 import { EdgeAccount } from 'edge-core-js'
 import { useChangeWalletState, useWatch } from 'edge-react-hooks'
 import * as React from 'react'
+import { Button, ListGroup } from 'react-bootstrap'
 
 export const ArchivedWalletList: React.FC<{ account: EdgeAccount }> = ({ account }) => {
   useWatch(account, 'archivedWalletIds')
 
   return (
-    <div>
-      Archived Wallets:
+    <ListGroup variant={'flush'}>
       {account.archivedWalletIds.map((id) => (
         <ArchivedWalletRow key={id} id={id} account={account} />
       ))}
-    </div>
+    </ListGroup>
   )
 }
 
@@ -27,15 +27,15 @@ const ArchivedWalletRow: React.FC<{ account: EdgeAccount; id: string }> = ({ acc
   const deleteWallet = () => changeWalletState({ walletId: walletInfo.id, walletState: { deleted: true } })
 
   return (
-    <div>
-      <button disabled={pending} onClick={activateWallet}>
-        Activate
-      </button>
-      <button disabled={pending} onClick={deleteWallet}>
+    <ListGroup.Item>
+      <Button variant={'danger'} disabled={pending} onClick={deleteWallet} className={'float-right'}>
         Delete
-      </button>
+      </Button>
+      <Button variant={'warning'} disabled={pending} onClick={activateWallet} className={'float-right'}>
+        Activate
+      </Button>
       {walletInfo.id} - {walletInfo.type}
       {error && <div>{(error as Error).message}</div>}
-    </div>
+    </ListGroup.Item>
   )
 }

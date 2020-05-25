@@ -1,6 +1,5 @@
 import { EdgeAccount, EdgeCurrencyWallet } from 'edge-core-js'
 import {
-  useChangeWalletState,
   useEnableTokens,
   useEnabledTokens,
   useOnNewTransactions,
@@ -9,6 +8,7 @@ import {
   useWatch,
 } from 'edge-react-hooks'
 import * as React from 'react'
+import { Alert, Button, Card, Form, FormControl, FormGroup, FormLabel, ListGroup, Tab, Tabs } from 'react-bootstrap'
 
 import { Disklet } from '../Disklet/Disklet'
 import { BalanceList } from '../EdgeAccount/BalanceList'
@@ -22,7 +22,7 @@ const FIAT_CURRENCY_CODES = [
   { value: 'iso:CAD', display: 'Canadian Dollars' },
 ]
 
-export const WalletInfo: React.FC<{ account: EdgeAccount; wallet: EdgeCurrencyWallet }> = ({ wallet, account }) => {
+export const WalletInfo: React.FC<{ account: EdgeAccount; wallet: EdgeCurrencyWallet }> = ({ wallet }) => {
   useWatch(wallet, 'name')
   useWatch(wallet, 'fiatCurrencyCode')
   useWatch(wallet, 'currencyInfo')
@@ -32,111 +32,132 @@ export const WalletInfo: React.FC<{ account: EdgeAccount; wallet: EdgeCurrencyWa
     (transactions) => transactions && alert(transactions.length > 1 ? 'New Transactions' : 'New Transaction'),
   )
 
+  if (!wallet) return null
+
   return (
-    <div>
-      <h1>Wallet</h1>
-      {wallet.name} - {wallet.fiatCurrencyCode} - {wallet.currencyInfo.currencyCode}
-      <div style={{ display: 'flex' }}>
-        <div>
-          <WalletOptions wallet={wallet} account={account} />
-          <br />
-          <SetFiatCurrencyCode wallet={wallet} />
-          <BalanceList wallet={wallet} />
-          <div style={{ display: 'flex' }}>
-            <div>
-              <TransactionList key={wallet.id} wallet={wallet} />
-            </div>
-            <Send wallet={wallet} />
-            <Request wallet={wallet} />
-            <br />
-            <Tokens wallet={wallet} />
-          </div>
-          Disklet
-          <Disklet disklet={wallet.disklet} />
-          LocalDisklet
-          <Disklet disklet={wallet.localDisklet} />
-        </div>
-      </div>
-      <DisplayKeys wallet={wallet} />
-    </div>
+    <Tabs id={'walletTabs'} defaultActiveKey={'details'}>
+      <Tab eventKey={'details'} title={'Details'}>
+        <WalletOptions wallet={wallet} />
+        <DisplayKeys wallet={wallet} />
+        <BalanceList wallet={wallet} />
+        <EnabledTokens wallet={wallet} />
+        <EnableTokens wallet={wallet} />
+        <Disklet disklet={wallet.disklet} title={'Disklet'} />
+        <Disklet disklet={wallet.localDisklet} title={'Local Disklet'} />
+      </Tab>
+
+      <Tab eventKey={'transactions'} title={'Transactions'}>
+        <TransactionList key={wallet.id} wallet={wallet} />
+      </Tab>
+
+      <Tab eventKey={'send'} title={'Send'}>
+        <Send wallet={wallet} />
+      </Tab>
+
+      <Tab eventKey={'request'} title={'Request'}>
+        <Request wallet={wallet} />
+      </Tab>
+    </Tabs>
   )
 }
 
-const Tokens: React.FC<{ wallet: EdgeCurrencyWallet }> = ({ wallet }) => {
+const EnabledTokens: React.FC<{ wallet: EdgeCurrencyWallet }> = ({ wallet }) => {
   const { enabledTokens } = useEnabledTokens(wallet)
+
+  return (
+    <Card>
+      <Card.Header>
+        <Card.Title>Enabled Tokens</Card.Title>
+      </Card.Header>
+
+      <Card.Body>
+        {!enabledTokens ? (
+          <Card.Text>Loading...</Card.Text>
+        ) : enabledTokens.length <= 0 ? (
+          <Card.Text>No Tokens Enabled</Card.Text>
+        ) : (
+          <ListGroup>
+            {enabledTokens.map((token) => (
+              <ListGroup.Item key={token}>{token}</ListGroup.Item>
+            ))}
+          </ListGroup>
+        )}
+      </Card.Body>
+    </Card>
+  )
+}
+
+const EnableTokens: React.FC<{ wallet: EdgeCurrencyWallet }> = ({ wallet }) => {
   const { enableTokens } = useEnableTokens(wallet)
   const availableTokens = wallet.currencyInfo.metaTokens
 
   return (
-    <div>
-      Tokens
-      {!enabledTokens ? (
-        <div>Loading...</div>
-      ) : enabledTokens.length <= 0 ? (
-        <div>No Tokens Enabled</div>
-      ) : (
-        enabledTokens.map((token) => <div key={token}>{token}</div>)
-      )}
-      <div>Enable Tokens</div>
-      {availableTokens.length >= 0 ? (
-        <div>No Tokens Available</div>
-      ) : (
-        availableTokens.map((token) => (
-          <div key={token.currencyCode}>
-            <button onClick={() => enableTokens({ tokens: [token.currencyCode] })}>
-              {token.currencyName} - {token.currencyCode}
-            </button>
-          </div>
-        ))
-      )}
-    </div>
+    <Card>
+      <Card.Header>
+        <Card.Title>Enable Tokens</Card.Title>
+      </Card.Header>
+
+      <Card.Body>
+        {availableTokens.length >= 0 ? (
+          <Card.Text>No Tokens Available</Card.Text>
+        ) : (
+          <ListGroup>
+            {availableTokens.map((token) => (
+              <ListGroup.Item key={token.currencyCode}>
+                <Button onClick={() => enableTokens({ tokens: [token.currencyCode] })}>
+                  {token.currencyName} - {token.currencyCode}
+                </Button>
+              </ListGroup.Item>
+            ))}
+          </ListGroup>
+        )}
+      </Card.Body>
+    </Card>
   )
 }
 
-const SetFiatCurrencyCode = ({ wallet }: { wallet: EdgeCurrencyWallet }) => {
-  const { setFiatCurrencyCode, pending } = useSetFiatCurrencyCode(wallet)
-
-  return (
-    <div>
-      <label htmlFor={'fiatCurrencyCodes'}>FiatCurrencyCode</label>
-      <select
-        defaultValue={wallet.fiatCurrencyCode}
-        id={'fiatCurrencyCodes'}
-        disabled={pending}
-        onChange={(event) => setFiatCurrencyCode({ fiatCurrencyCode: event.currentTarget.value })}
-      >
-        {FIAT_CURRENCY_CODES.map(({ display, value }) => (
-          <option value={value} key={value}>
-            {display}
-          </option>
-        ))}
-      </select>
-    </div>
-  )
-}
-
-const WalletOptions = ({ wallet, account }: { wallet: EdgeCurrencyWallet; account: EdgeAccount }) => {
+const WalletOptions = ({ wallet }: { wallet: EdgeCurrencyWallet }) => {
   const [walletName, setWalletName] = React.useState<string>(wallet.name || '')
-
-  const { changeWalletState, pending: changeWalletStatePending } = useChangeWalletState(account)
+  const [fiatCurrencyCode, setFiatCurrencyCode] = React.useState(wallet.fiatCurrencyCode)
   const { renameWallet, pending: renameWalletPending } = useRenameWallet(wallet)
-  const archiveWallet = () =>
-    changeWalletState({ walletId: wallet.id, walletState: { deleted: false, archived: true } })
-  const deleteWallet = () => changeWalletState({ walletId: wallet.id, walletState: { deleted: true, archived: false } })
+  const {
+    setFiatCurrencyCode: _setFiatCurrencyCode,
+    pending: setFiatCurrencyCodePending,
+    error: setFiatCurrencyCodeError,
+  } = useSetFiatCurrencyCode(wallet)
 
   return (
-    <div>
-      <button onClick={() => archiveWallet()} disabled={changeWalletStatePending}>
-        Archive
-      </button>
-      <button onClick={() => deleteWallet()} disabled={changeWalletStatePending}>
-        Delete
-      </button>
-      <input value={walletName} onChange={(event) => setWalletName(event.currentTarget.value)} />
-      <button onClick={() => renameWallet({ name: walletName })} disabled={renameWalletPending}>
-        Rename
-      </button>
-    </div>
+    <Form>
+      <FormGroup>
+        <Form.Label>Wallet Name</Form.Label>
+        <FormControl value={walletName} onChange={(event) => setWalletName(event.currentTarget.value)} />
+        <Button onClick={() => renameWallet({ name: walletName })} disabled={renameWalletPending}>
+          Rename
+        </Button>
+      </FormGroup>
+
+      <FormGroup>
+        <FormLabel htmlFor={'fiatCurrencyCodes'}>FiatCurrencyCode</FormLabel>
+        <FormControl
+          as={'select'}
+          defaultValue={wallet.fiatCurrencyCode}
+          id={'fiatCurrencyCodes'}
+          disabled={setFiatCurrencyCodePending}
+          onChange={(event) => setFiatCurrencyCode(event.currentTarget.value)}
+        >
+          {FIAT_CURRENCY_CODES.map(({ display, value }) => (
+            <option value={value} key={value}>
+              {display}
+            </option>
+          ))}
+        </FormControl>
+        <Button onClick={() => _setFiatCurrencyCode({ fiatCurrencyCode })} disabled={setFiatCurrencyCodePending}>
+          Set Fiat
+        </Button>
+
+        {setFiatCurrencyCodeError && <Alert variant={'danger'}>{(setFiatCurrencyCodeError as Error).message}</Alert>}
+      </FormGroup>
+    </Form>
   )
 }
 
@@ -147,11 +168,11 @@ const DisplayKeys = ({ wallet }: { wallet: EdgeCurrencyWallet }) => {
   return (
     <div>
       <div>
-        <button onClick={() => setShowPrivateKey((x) => !x)}>Show Private Key</button>
+        <Button onClick={() => setShowPrivateKey((x) => !x)}>Show Private Key</Button>
         Private Key: {showPrivateKey ? wallet.getDisplayPrivateSeed() : '***************'}
       </div>
       <div>
-        <button onClick={() => setShowPublicKey((x) => !x)}>Show Private Key</button>
+        <Button onClick={() => setShowPublicKey((x) => !x)}>Show Private Key</Button>
         Public Key: {showPublicKey ? wallet.getDisplayPublicSeed() : '***************'}
       </div>
     </div>

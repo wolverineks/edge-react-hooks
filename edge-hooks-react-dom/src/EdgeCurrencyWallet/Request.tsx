@@ -2,32 +2,29 @@ import { EdgeCurrencyWallet } from 'edge-core-js'
 import { useReceiveAddressAndEncodeUri } from 'edge-react-hooks'
 import QRCode from 'qrcode.react'
 import * as React from 'react'
-
-const onChange = (cb: Function) => (event: React.SyntheticEvent<HTMLInputElement>) => cb(event.currentTarget.value)
+import { Alert, Form, FormControl, FormGroup, FormLabel } from 'react-bootstrap'
 
 export const Request: React.FC<{ wallet: EdgeCurrencyWallet }> = ({ wallet }) => {
   const [nativeAmount, setNativeAmount] = React.useState<string>('')
   const { uri, receiveAddress, error } = useReceiveAddressAndEncodeUri(wallet, { nativeAmount })
 
   return (
-    <div>
-      <h1>Request</h1>
+    <Form>
+      <FormGroup>
+        <FormLabel>To:</FormLabel>
+        <FormControl value={receiveAddress && receiveAddress.publicAddress} />
+      </FormGroup>
 
-      <div>
-        <label>To: {receiveAddress && receiveAddress.publicAddress}</label>
-      </div>
+      <FormGroup>
+        <FormLabel>Amount:</FormLabel>
+        <FormControl value-={nativeAmount} onChange={(event) => setNativeAmount(event.currentTarget.value)} />
 
-      <div>
-        <label>
-          Amount: <input onChange={onChange(setNativeAmount)} value={nativeAmount} placeholder={'0'} />
-        </label>
+        {error && <Alert variant={'danger'}>{(error as Error).message}</Alert>}
+      </FormGroup>
 
-        {error && <div>{(error as Error).message}</div>}
-      </div>
-
-      <div>
+      <FormGroup>
         <QRCode value={uri || ''} />
-      </div>
-    </div>
+      </FormGroup>
+    </Form>
   )
 }

@@ -1,8 +1,9 @@
 import { EdgeContext } from 'edge-core-js'
 import { useLoginWithPassword } from 'edge-react-hooks'
 import * as React from 'react'
+import { Alert, Button, Card, Form, FormGroup } from 'react-bootstrap'
 
-const onChange = (cb: Function) => (event: React.SyntheticEvent<HTMLInputElement>) => cb(event.currentTarget.value)
+const onChange = (cb: Function) => (event: any) => cb(event.currentTarget.value)
 
 export const LoginForm: React.FC<{ context: EdgeContext; onLogin: Function }> = ({ context, onLogin }) => {
   const [username, setUsername] = React.useState('')
@@ -13,40 +14,38 @@ export const LoginForm: React.FC<{ context: EdgeContext; onLogin: Function }> = 
   React.useEffect(() => account && onLogin(account), [account, onLogin])
 
   return (
-    <div>
-      <h1>Login</h1>
-
-      <div>
-        <label>Username</label>
-        <input
-          disabled={pending}
+    <Form>
+      <FormGroup>
+        <Form.Label>Username</Form.Label>
+        <Form.Control
           type={'username'}
+          disabled={pending}
           onChange={(event) => {
             reset()
             onChange(setUsername)(event)
           }}
         />
-      </div>
+      </FormGroup>
 
-      <div>
-        <label>Password</label>
-        <input
-          disabled={pending}
+      <FormGroup>
+        <Form.Label>Password</Form.Label>
+        <Form.Control
           type={'password'}
+          disabled={pending}
           onChange={(event) => {
             reset()
             onChange(setPassword)(event)
           }}
         />
-      </div>
+      </FormGroup>
 
-      {error && <div>{(error as Error).message}</div>}
+      {error && <Alert variant={'danger'}>{(error as Error).message}</Alert>}
 
-      <div>
-        <button disabled={pending} onClick={handleLogin}>
-          Login
-        </button>
-      </div>
-    </div>
+      <FormGroup>
+        <Button variant="primary" disabled={pending} onClick={handleLogin}>
+          {pending ? '...' : 'Login'}
+        </Button>
+      </FormGroup>
+    </Form>
   )
 }

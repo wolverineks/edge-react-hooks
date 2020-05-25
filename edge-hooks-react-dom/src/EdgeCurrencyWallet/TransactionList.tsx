@@ -1,6 +1,7 @@
 import { EdgeCurrencyWallet } from 'edge-core-js'
 import { useTransactions } from 'edge-react-hooks'
 import * as React from 'react'
+import { Form, FormControl, FormLabel, ListGroup } from 'react-bootstrap'
 
 const INITIAL_TRANSACTION_COUNT = 10
 const TRANSACTION_COUNTS = [1, 5, 10, 15, 20, 25]
@@ -14,11 +15,11 @@ export const TransactionList: React.FC<{ wallet: EdgeCurrencyWallet }> = ({ wall
   const { transactions, pending } = useTransactions(wallet, { options })
 
   return (
-    <div>
+    <ListGroup>
       <h1>Transactions</h1>
-      <form>
-        <label>
-          <select onChange={onChange(setCurrencyCode)} value={wallet.currencyInfo.currencyCode}>
+      <Form>
+        <FormLabel>
+          <FormControl as={'select'} onChange={onChange(setCurrencyCode)} value={wallet.currencyInfo.currencyCode}>
             <option value={wallet.currencyInfo.currencyCode}>
               {wallet.currencyInfo.currencyCode} - {wallet.currencyInfo.displayName}
             </option>
@@ -28,20 +29,24 @@ export const TransactionList: React.FC<{ wallet: EdgeCurrencyWallet }> = ({ wall
                 {token.currencyCode} - {token.currencyName}
               </option>
             ))}
-          </select>
-        </label>
+          </FormControl>
+        </FormLabel>
 
-        <label>
+        <FormLabel>
           # of transactions
-          <select onChange={onChange((count: string) => setStartEntries(+count))} value={startEntries}>
+          <FormControl
+            as={'select'}
+            onChange={onChange((count: string) => setStartEntries(+count))}
+            value={startEntries}
+          >
             {TRANSACTION_COUNTS.map((num: number) => (
               <option key={num} value={num}>
                 {num}
               </option>
             ))}
-          </select>
-        </label>
-      </form>
+          </FormControl>
+        </FormLabel>
+      </Form>
       Transactions:
       {pending && <div>Loading transactions...</div>}
       {transactions &&
@@ -50,6 +55,6 @@ export const TransactionList: React.FC<{ wallet: EdgeCurrencyWallet }> = ({ wall
             {transaction.nativeAmount} {transaction.currencyCode}
           </div>
         ))}
-    </div>
+    </ListGroup>
   )
 }

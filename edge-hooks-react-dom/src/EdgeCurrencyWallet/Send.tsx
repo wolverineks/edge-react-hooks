@@ -1,29 +1,63 @@
-import { EdgeCurrencyWallet } from 'edge-core-js'
+import { EdgeCurrencyWallet, EdgeSpendInfo } from 'edge-core-js'
+import { useMaxSpendable, useNewTransaction, useParsedUri } from 'edge-react-hooks'
 // import { useBroadcastTx, useSaveTx, useSignTx } from 'edge-react-hooks'
 import * as React from 'react'
+import { Button, Form, FormControl, FormGroup, FormLabel } from 'react-bootstrap'
+import QrReader from 'react-qr-reader'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const Send: React.FC<{ wallet: EdgeCurrencyWallet }> = ({ wallet }) => {
   //   const { signTx } = useSignTx()
   //   const { broadcastTx } = useBroadcastTx()
   //   const { saveTx } = useSaveTx()
+  const [uri, setUri] = React.useState('')
+  const { parsedUri } = useParsedUri(wallet, { uri })
+  const [error, setError] = React.useState()
+  const [showScanner, setShowScanner] = React.useState(false)
+  const [spendInfo] = React.useState<EdgeSpendInfo>({
+    currencyCode: wallet.currencyInfo.currencyCode,
+    spendTargets: [
+      {
+        nativeAmount: parsedUri?.nativeAmount,
+        publicAddress: parsedUri?.publicAddress,
+      },
+    ],
+  })
+  const { transaction } = useNewTransaction(wallet, { spendInfo })
+  const { maxSpendable } = useMaxSpendable(wallet, { spendInfo })
+
+  React.useEffect(() => {
+    console.log({ transaction, maxSpendable })
+  }, [transaction, maxSpendable])
+
+  React.useEffect(() => {
+    parsedUri && setShowScanner(false)
+  }, [parsedUri])
 
   return (
-    <div>
-      <h1>Send</h1>
+    <Form>
+      <FormGroup>
+        <FormLabel>To:</FormLabel>
+        <FormControl value={parsedUri?.publicAddress} />
+      </FormGroup>
 
-      <div>
-        <label>
-          To: <input onChange={() => null} />
-        </label>
-      </div>
+      <FormGroup>
+        <FormLabel>Amount:</FormLabel>
+        <FormControl value-={parsedUri?.nativeAmount} />
 
-      <div>
-        <label>
-          Amount: <input onChange={() => null} />
-        </label>
-      </div>
-      <button onClick={() => null}>Send</button>
-    </div>
+        {/* {error && <Alert variant={'danger'}>{(error as Error).message}</Alert>} */}
+      </FormGroup>
+
+      <FormGroup>
+        <Button onClick={() => setShowScanner(true)}>Scan</Button>
+        {showScanner && (
+          <QrReader delay={300} onError={setError} onScan={(data) => setUri(data || '')} style={{ width: '50%' }} />
+        )}
+      </FormGroup>
+
+      <FormGroup>
+        <Button onClick={() => {}}>Send</Button>
+      </FormGroup>
+    </Form>
   )
 }

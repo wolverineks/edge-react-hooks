@@ -1,8 +1,9 @@
 import { EdgeAccount } from 'edge-core-js'
 import { useCreateCurrencyWallet } from 'edge-react-hooks'
 import * as React from 'react'
+import { Alert, Button, Form, FormControl, FormGroup, FormLabel } from 'react-bootstrap'
 
-const onChange = (cb: Function) => (event: React.SyntheticEvent<any>) => cb(event.currentTarget.value)
+const onChange = (cb: Function) => (event: any) => cb(event.currentTarget.value)
 
 const WALLET_TYPES = [
   { value: 'wallet:bitcoin', display: 'Bitcoin' },
@@ -26,42 +27,38 @@ export const CreateWallet: React.FC<{ account: EdgeAccount }> = ({ account }) =>
   const onSubmit = () => createCurrencyWallet({ type, options: { name, fiatCurrencyCode } })
 
   return (
-    <div>
-      <h1>Create Wallet</h1>
-      <div>
-        <label htmlFor={'name'}>Name</label>
-        <input id={'name'} disabled={pending} value={name} onChange={onChange(setName)} />
+    <Form>
+      <FormGroup controlId={'name'}>
+        <FormLabel>Name</FormLabel>
+        <FormControl id={'name'} disabled={pending} value={name} onChange={onChange(setName)} />
+      </FormGroup>
 
-        <br />
-
-        <label htmlFor={'type'}>Type</label>
-        <select id={'type'} disabled={pending} onChange={onChange(setType)}>
+      <FormGroup controlId={'type'}>
+        <FormLabel>Type</FormLabel>
+        <FormControl as="select" id={'type'} disabled={pending} onChange={onChange(setType)}>
           {WALLET_TYPES.map(({ display, value }) => (
             <option value={value} key={value}>
               {display} - {value}
             </option>
           ))}
-        </select>
+        </FormControl>
+      </FormGroup>
 
-        <br />
-
-        <label htmlFor={'fiatCurrencyCodes'}>FiatCurrencyCode</label>
-        <select id={'fiatCurrencyCodes'} disabled={pending} onChange={onChange(setFiatCurrencyCode)}>
+      <FormGroup controlId={'fiatCurrencyCodes'}>
+        <FormLabel>FiatCurrencyCode</FormLabel>
+        <FormControl as="select" id={'fiatCurrencyCodes'} disabled={pending} onChange={onChange(setFiatCurrencyCode)}>
           {FIAT_CURRENCY_CODES.map(({ display, value }) => (
             <option value={value} key={value}>
               {display}
             </option>
           ))}
-        </select>
+        </FormControl>
+      </FormGroup>
 
-        <br />
-
-        <button disabled={pending} onClick={onSubmit}>
-          {pending ? '...' : 'Create'}
-        </button>
-
-        {error && <div>{(error as Error).message}</div>}
-      </div>
-    </div>
+      <Button variant={'primary'} disabled={pending} onClick={onSubmit}>
+        {pending ? '...' : 'Create'}
+      </Button>
+      {error && <Alert variant={'danger'}>{(error as Error).message}</Alert>}
+    </Form>
   )
 }

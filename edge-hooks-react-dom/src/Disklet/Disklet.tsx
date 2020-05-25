@@ -1,6 +1,7 @@
 import { Disklet as DiskletType } from 'disklet'
 import { useFile, useFolder } from 'edge-react-hooks'
 import * as React from 'react'
+import { Button, Card, ListGroup } from 'react-bootstrap'
 import Json from 'react-json-pretty'
 
 import { fileName } from './utils'
@@ -10,25 +11,33 @@ const ToggleRow: React.FC<{ title: string }> = ({ children, title }) => {
 
   return (
     <div>
-      <button
-        style={{ height: '30px', width: '30px', margin: '4px' }}
-        onClick={(event) => {
+      <Button
+        onClick={(event: any) => {
           event.stopPropagation()
           setShowContents((x) => !x)
         }}
       >
         {showContents ? '-' : '+'}
-      </button>
+      </Button>
       {title}
       {showContents && children}
     </div>
   )
 }
 
-export const Disklet: React.FC<{ disklet: DiskletType; path?: string }> = ({ disklet, path = '/' }) => (
-  <div>
-    <Folder disklet={disklet} path={path} />
-  </div>
+export const Disklet: React.FC<{ disklet: DiskletType; path?: string; title: string }> = ({
+  disklet,
+  path = '/',
+  title,
+}) => (
+  <Card>
+    <Card.Header>
+      <Card.Title>{title}</Card.Title>
+    </Card.Header>
+    <Card.Body>
+      <Folder disklet={disklet} path={path} />
+    </Card.Body>
+  </Card>
 )
 
 export const Folder: React.FC<{ disklet: DiskletType; path: string }> = ({ disklet, path = '/' }) => (
@@ -45,16 +54,28 @@ const FolderContents: React.FC<{ disklet: DiskletType; path: string }> = ({ disk
   if (error) return <div>Error: {(error as Error).message}</div>
   if (pending || !folder) return <div>Loading...</div>
 
+  if (Object.entries(folder).length <= 0) {
+    return (
+      <ListGroup>
+        <ListGroup.Item>Empty</ListGroup.Item>
+      </ListGroup>
+    )
+  }
+
   return (
-    <>
+    <ListGroup>
       {Object.entries(folder).map(([key, value]) =>
         value === 'folder' ? (
-          <Folder disklet={disklet} path={`${path}${key}`} key={key} />
+          <ListGroup.Item>
+            <Folder disklet={disklet} path={`${path}${key}`} key={key} />
+          </ListGroup.Item>
         ) : value === 'file' ? (
-          <File disklet={disklet} path={key} key={key} />
+          <ListGroup.Item>
+            <File disklet={disklet} path={key} key={key} />
+          </ListGroup.Item>
         ) : null,
       )}
-    </>
+    </ListGroup>
   )
 }
 

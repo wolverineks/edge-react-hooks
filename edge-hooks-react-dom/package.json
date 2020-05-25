@@ -6,9 +6,7 @@
     "build": "react-scripts build",
     "copy": "cd .. && yarn build && cd ./edge-hooks-react-dom && cp -r ../dist ./node_modules/edge-react-hooks && cp -r ../src ./node_modules/edge-react-hooks",
     "eject": "react-scripts eject",
-    "fix": "yarn sort-package-json && yarn lint",
-    "format": "sort-package-json && prettier --write --list-different 'src/**/*.tsx'",
-    "lint": "yarn eslint ./src/**/*.tsx --fix",
+    "fix": "yarn eslint ./*.json ./src/*.tsx ./src/**/*.tsx --fix",
     "start": "react-scripts start",
     "test": "react-scripts test"
   },
@@ -28,6 +26,8 @@
     "extends": "react-app"
   },
   "dependencies": {
+    "@material-ui/core": "^4.10.0",
+    "bootstrap": "^4.5.0",
     "disklet": "^0.4.4",
     "edge-core-js": "^0.17.1",
     "edge-currency-bitcoin": "^4.7.7",
@@ -35,8 +35,10 @@
     "edge-react-hooks": "^3.2.0",
     "qrcode.react": "^1.0.0",
     "react": "^16.13.1",
+    "react-bootstrap": "^1.0.1",
     "react-dom": "^16.13.1",
-    "react-json-pretty": "^2.2.0"
+    "react-json-pretty": "^2.2.0",
+    "react-qr-reader": "^2.2.1"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.8.0",
@@ -47,10 +49,16 @@
     "@types/qrcode.react": "^1.0.1",
     "@types/react": "^16.9.0",
     "@types/react-dom": "^16.9.0",
+    "@types/react-qr-reader": "^2.1.3",
+    "eslint-config-prettier": "^6.11.0",
     "eslint-import-resolver-webpack": "^0.12.1",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-prettier": "^3.1.3",
+    "import-sort-style-module": "^6.0.0",
     "prettier": "^2.0.5",
+    "prettier-plugin-import-sort": "^0.0.4",
+    "prettier-plugin-packagejson": "^2.2.3",
     "react-scripts": "3.4.1",
-    "sort-package-json": "^1.42.2",
     "stop-runaway-react-effects": "^2.0.0",
     "typescript": "~3.7.2"
   }
