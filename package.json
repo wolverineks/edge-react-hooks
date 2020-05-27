@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "react-native-fs": "^2.16.6",
-    "react-query": "^1.5.2"
+    "react-query": "^1.5.3"
   },
   "devDependencies": {
     "@types/react": "^16.9.35",
