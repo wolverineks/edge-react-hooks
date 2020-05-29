@@ -12,7 +12,8 @@ export * from './hooks/EdgeCurrencyWallet/events'
 export * from './hooks/EdgeCurrencyWallet/properties'
 
 export * from './hooks/Disklet/methods'
+export * from './hooks/Disklet/properties'
 
-export * from './hooks/shared/useWatch'
+export * from './hooks/shared/watch'
 export * from './hooks/shared/methods'
 export * from './hooks/shared/events'

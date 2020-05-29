@@ -1,18 +1,20 @@
 import { EdgeAccount, EdgeWalletInfoFull } from 'edge-core-js'
-import { useChangeWalletState, useWatch } from 'edge-react-hooks'
+import { useChangeWalletState, useEdgeAccount } from 'edge-react-hooks'
 import * as React from 'react'
-import { Button, ListGroup } from 'react-bootstrap'
+import { Button, Image, ListGroup } from 'react-bootstrap'
+
+import { getDeletedWalletInfos, getLogo } from './utils'
 
 export const DeletedWalletList: React.FC<{ account: EdgeAccount }> = ({ account }) => {
-  useWatch(account, 'allKeys')
+  useEdgeAccount(account)
+
+  const deletedWalletInfos = getDeletedWalletInfos(account)
 
   return (
     <ListGroup variant={'flush'}>
-      {account.allKeys
-        .filter((walletInfo) => walletInfo.deleted)
-        .map((walletInfo: EdgeWalletInfoFull) => (
-          <DeletedWalletRow account={account} key={walletInfo.id} walletInfo={walletInfo} />
-        ))}
+      {deletedWalletInfos.map((walletInfo) => (
+        <DeletedWalletRow account={account} key={walletInfo.id} walletInfo={walletInfo} />
+      ))}
     </ListGroup>
   )
 }
@@ -21,17 +23,24 @@ const DeletedWalletRow: React.FC<{ account: EdgeAccount; walletInfo: EdgeWalletI
   account,
   walletInfo,
 }) => {
-  const { changeWalletState, error, status } = useChangeWalletState(account)
+  useEdgeAccount(account)
+
+  const logo = getLogo(account, { walletType: walletInfo.type })
+  const shortId = `${walletInfo.id.slice(0, 4)}...${walletInfo.id.slice(-4)}`
+
+  const { execute: changeWalletState, error, status } = useChangeWalletState(account)
+  const pending = status === 'loading'
   const restoreWallet = () =>
     changeWalletState({ walletId: walletInfo.id, walletState: { deleted: false, archived: false } })
 
   return (
     <ListGroup.Item>
-      <Button disabled={status === 'loading'} onClick={restoreWallet} className={'float-right'}>
+      <Image src={logo} />
+      <Button disabled={pending} onClick={restoreWallet} className={'float-right'}>
         Restore
       </Button>
-      {walletInfo.id} - {walletInfo.type}
-      {error && <div>{(error as Error).message}</div>}
+      {shortId}
+      {error && <div>{error.message}</div>}
     </ListGroup.Item>
   )
 }

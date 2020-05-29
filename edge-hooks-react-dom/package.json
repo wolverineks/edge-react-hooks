@@ -28,11 +28,12 @@
   "dependencies": {
     "@material-ui/core": "^4.10.0",
     "bootstrap": "^4.5.0",
-    "disklet": "^0.4.4",
-    "edge-core-js": "^0.17.1",
-    "edge-currency-bitcoin": "^4.7.7",
+    "disklet": "^0.4.5",
+    "edge-core-js": "^0.17.3",
+    "edge-currency-accountbased": "^0.7.6",
+    "edge-currency-bitcoin": "^4.8.0",
     "edge-currency-monero": "^0.2.4",
-    "edge-react-hooks": "^3.2.0",
+    "edge-react-hooks": "^4.0.0",
     "qrcode.react": "^1.0.0",
     "react": "^16.13.1",
     "react-bootstrap": "^1.0.1",
@@ -41,14 +42,14 @@
     "react-qr-reader": "^2.2.1"
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "^5.8.0",
-    "@testing-library/react": "^9.3.2",
-    "@testing-library/user-event": "^7.1.2",
-    "@types/jest": "^24.0.0",
-    "@types/node": "^12.0.0",
+    "@testing-library/jest-dom": "^5.9.0",
+    "@testing-library/react": "^10.0.4",
+    "@testing-library/user-event": "^10.4.0",
+    "@types/jest": "^25.2.3",
+    "@types/node": "^14.0.5",
     "@types/qrcode.react": "^1.0.1",
-    "@types/react": "^16.9.0",
-    "@types/react-dom": "^16.9.0",
+    "@types/react": "^16.9.35",
+    "@types/react-dom": "^16.9.8",
     "@types/react-qr-reader": "^2.1.3",
     "eslint-config-prettier": "^6.11.0",
     "eslint-import-resolver-webpack": "^0.12.1",
@@ -57,9 +58,12 @@
     "import-sort-style-module": "^6.0.0",
     "prettier": "^2.0.5",
     "prettier-plugin-import-sort": "^0.0.4",
-    "prettier-plugin-packagejson": "^2.2.3",
-    "react-scripts": "3.4.1",
+    "prettier-plugin-packagejson": "^2.2.4",
+    "react-scripts": "^3.4.1",
     "stop-runaway-react-effects": "^2.0.0",
-    "typescript": "~3.7.2"
+    "typescript": "^3.9.3"
+  },
+  "peerDependencies": {
+    "disklet": "^0.4.5"
   }
 }

@@ -1,63 +1,153 @@
-import { EdgeCurrencyWallet, EdgeSpendInfo } from 'edge-core-js'
-import { useMaxSpendable, useNewTransaction, useParsedUri } from 'edge-react-hooks'
-// import { useBroadcastTx, useSaveTx, useSignTx } from 'edge-react-hooks'
+import { EdgeCurrencyWallet, EdgeParsedUri, EdgeSpendInfo } from 'edge-core-js'
+import { useEdgeCurrencyWallet, useMaxSpendable, useNewTransaction } from 'edge-react-hooks'
 import * as React from 'react'
-import { Button, Form, FormControl, FormGroup, FormLabel } from 'react-bootstrap'
+import { Alert, Button, Form, FormControl, FormGroup, FormLabel, InputGroup } from 'react-bootstrap'
+import JSONPretty from 'react-json-pretty'
 import QrReader from 'react-qr-reader'
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { getCurrencyCodes } from './utils'
+
+const CATEGORIES = ['expenses', 'income', 'groceries']
+
 export const Send: React.FC<{ wallet: EdgeCurrencyWallet }> = ({ wallet }) => {
-  //   const { signTx } = useSignTx()
-  //   const { broadcastTx } = useBroadcastTx()
-  //   const { saveTx } = useSaveTx()
-  const [uri, setUri] = React.useState('')
-  const { parsedUri } = useParsedUri(wallet, { uri })
-  const [error, setError] = React.useState()
-  const [showScanner, setShowScanner] = React.useState(false)
-  const [spendInfo] = React.useState<EdgeSpendInfo>({
-    currencyCode: wallet.currencyInfo.currencyCode,
-    spendTargets: [
-      {
-        nativeAmount: parsedUri?.nativeAmount,
-        publicAddress: parsedUri?.publicAddress,
-      },
-    ],
-  })
-  const { transaction } = useNewTransaction(wallet, { spendInfo })
-  const { maxSpendable } = useMaxSpendable(wallet, { spendInfo })
+  useEdgeCurrencyWallet(wallet)
 
-  React.useEffect(() => {
-    console.log({ transaction, maxSpendable })
-  }, [transaction, maxSpendable])
+  const currencyCodes = getCurrencyCodes(wallet)
+  const [parsedUri, setParsedUri] = React.useState<EdgeParsedUri>()
+  const [currencyCode, setCurrencyCode] = React.useState(wallet.currencyInfo.currencyCode)
+  const [publicAddress, setPublicAddress] = React.useState('')
+  const [nativeAmount, setNativeAmount] = React.useState('0')
+  const [name, setName] = React.useState('')
+  const [notes, setNotes] = React.useState('')
+  const [category, setCategory] = React.useState('')
 
-  React.useEffect(() => {
-    parsedUri && setShowScanner(false)
-  }, [parsedUri])
+  const spendInfo: EdgeSpendInfo = React.useMemo(
+    () => ({
+      metadata: { name, notes, category },
+      currencyCode,
+      spendTargets: [{ publicAddress, nativeAmount }],
+    }),
+    [publicAddress, nativeAmount, currencyCode, name, notes, category],
+  )
+
+  const { data: maxSpendable } = useMaxSpendable(wallet, { spendInfo })
+
+  const [scan, setScan] = React.useState(false)
+  const onScan = (uri: string) =>
+    wallet
+      .parseUri(uri, currencyCode)
+      .then((parsedUri: EdgeParsedUri) => {
+        setParsedUri(parsedUri)
+        setPublicAddress(parsedUri.publicAddress || '')
+        setNativeAmount(parsedUri.nativeAmount || '')
+        setCurrencyCode(parsedUri.currencyCode || '')
+        setName(parsedUri.metadata?.name || '')
+        setNotes(parsedUri.metadata?.notes || '')
+        setCategory(parsedUri.metadata?.category || '')
+      })
+      .catch((error) => console.log(error))
+
+  const { data: transaction, error } = useNewTransaction(wallet, { spendInfo })
 
   return (
-    <Form>
-      <FormGroup>
-        <FormLabel>To:</FormLabel>
-        <FormControl value={parsedUri?.publicAddress} />
-      </FormGroup>
+    <div>
+      <Form>
+        <FormGroup>
+          <FormLabel>To:</FormLabel>
+          <InputGroup>
+            <FormControl value={publicAddress} onChange={(event) => setPublicAddress(event.currentTarget.value)} />
+            <InputGroup.Append>
+              <Button variant="outline-secondary" onClick={() => setPublicAddress(parsedUri?.publicAddress || '')}>
+                Reset
+              </Button>
+            </InputGroup.Append>
+          </InputGroup>
+        </FormGroup>
 
-      <FormGroup>
-        <FormLabel>Amount:</FormLabel>
-        <FormControl value-={parsedUri?.nativeAmount} />
+        <FormGroup>
+          <FormLabel>Amount:</FormLabel>
+          <InputGroup>
+            <FormControl value={nativeAmount} onChange={(event) => setNativeAmount(event.currentTarget.value)} />
+            <InputGroup.Append>
+              <Button variant="outline-secondary" onClick={() => setNativeAmount(parsedUri?.nativeAmount || '')}>
+                Reset
+              </Button>
+            </InputGroup.Append>
+          </InputGroup>
+        </FormGroup>
 
-        {/* {error && <Alert variant={'danger'}>{(error as Error).message}</Alert>} */}
-      </FormGroup>
+        <FormGroup>
+          <FormLabel>CurrencyCode:</FormLabel>
+          <FormControl
+            as={'select'}
+            value={currencyCode}
+            onChange={(event) => setCurrencyCode(event.currentTarget.value)}
+          >
+            <option key={'none'} value={''}>
+              -
+            </option>
+            {currencyCodes.map((currencyCode: string) => (
+              <option key={currencyCode} value={currencyCode}>
+                {currencyCode}
+              </option>
+            ))}
+          </FormControl>
+        </FormGroup>
 
-      <FormGroup>
-        <Button onClick={() => setShowScanner(true)}>Scan</Button>
-        {showScanner && (
-          <QrReader delay={300} onError={setError} onScan={(data) => setUri(data || '')} style={{ width: '50%' }} />
-        )}
-      </FormGroup>
+        <FormGroup>
+          <FormLabel>Name</FormLabel>
+          <FormControl value={name} onChange={(event) => setName(event.currentTarget.value)} />
+        </FormGroup>
 
-      <FormGroup>
-        <Button onClick={() => {}}>Send</Button>
-      </FormGroup>
-    </Form>
+        <FormGroup>
+          <FormLabel>Note</FormLabel>
+          <FormControl as={'textarea'} value={notes} onChange={(event) => setNotes(event.currentTarget.value)} />
+        </FormGroup>
+
+        <FormGroup>
+          <FormLabel>Category</FormLabel>
+          <FormControl as={'select'} value={category} onChange={(event) => setCategory(event.currentTarget.value)}>
+            <option key={'none'} value={''}>
+              -
+            </option>
+            {CATEGORIES.map((category) => (
+              <option value={category} key={category}>
+                {category}
+              </option>
+            ))}
+          </FormControl>
+        </FormGroup>
+
+        {error && <Alert>{error.message}</Alert>}
+      </Form>
+
+      <Button onClick={() => setScan((scan) => !scan)}>Scan</Button>
+
+      {scan && <Scanner onScan={!parsedUri ? onScan : () => undefined} show={!parsedUri} />}
+
+      <JSONPretty
+        data={{
+          parsedUri: parsedUri || 'undefined',
+          nativeAmount: String(nativeAmount),
+          currencyCode: String(currencyCode),
+          publicAddress: String(publicAddress),
+          spendInfo: spendInfo || 'undefined',
+          maxSpendable: String(maxSpendable),
+          transaction: transaction || 'undefined',
+        }}
+      />
+    </div>
   )
+}
+
+const Scanner: React.FC<{ onScan: Function; show: boolean }> = ({ onScan, show }) => {
+  const [error, setError] = React.useState<Error>()
+
+  return show ? (
+    <div>
+      {error && <Alert variant={'danger'}>{error.message}</Alert>}
+
+      <QrReader delay={300} onError={setError} onScan={(data) => onScan(data || '')} style={{ width: '50%' }} />
+    </div>
+  ) : null
 }

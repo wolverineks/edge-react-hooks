@@ -1,16 +1,11 @@
 import { EdgeAccount } from 'edge-core-js'
-import { useCreateCurrencyWallet } from 'edge-react-hooks'
+import { useCreateCurrencyWallet, useEdgeAccount } from 'edge-react-hooks'
 import * as React from 'react'
 import { Alert, Button, Form, FormControl, FormGroup, FormLabel } from 'react-bootstrap'
 
-const onChange = (cb: Function) => (event: any) => cb(event.currentTarget.value)
+import { getWalletTypes } from './utils'
 
-const WALLET_TYPES = [
-  { value: 'wallet:bitcoin', display: 'Bitcoin' },
-  { value: 'wallet:ethereum', display: 'Ethereum' },
-  { value: 'wallet:dash', display: 'Dash' },
-  { value: 'wallet:monero', display: 'Monero' },
-]
+const onChange = (cb: Function) => (event: any) => cb(event.currentTarget.value)
 
 const FIAT_CURRENCY_CODES = [
   { value: 'iso:USD', display: 'US Dollars' },
@@ -19,11 +14,16 @@ const FIAT_CURRENCY_CODES = [
 ]
 
 export const CreateWallet: React.FC<{ account: EdgeAccount }> = ({ account }) => {
-  const [type, setType] = React.useState<string>(WALLET_TYPES[0].value)
+  useEdgeAccount(account)
+
+  const walletTypes = getWalletTypes(account)
+
+  const [type, setType] = React.useState<string>(walletTypes[0].type)
   const [name, setName] = React.useState<string>('')
   const [fiatCurrencyCode, setFiatCurrencyCode] = React.useState(FIAT_CURRENCY_CODES[0].value)
 
-  const { createCurrencyWallet, pending, error } = useCreateCurrencyWallet(account)
+  const { execute: createCurrencyWallet, error, status } = useCreateCurrencyWallet(account)
+  const pending = status === 'loading'
   const onSubmit = () => createCurrencyWallet({ type, options: { name, fiatCurrencyCode } })
 
   return (
@@ -36,9 +36,9 @@ export const CreateWallet: React.FC<{ account: EdgeAccount }> = ({ account }) =>
       <FormGroup controlId={'type'}>
         <FormLabel>Type</FormLabel>
         <FormControl as="select" id={'type'} disabled={pending} onChange={onChange(setType)}>
-          {WALLET_TYPES.map(({ display, value }) => (
-            <option value={value} key={value}>
-              {display} - {value}
+          {walletTypes.map(({ display, type, currencyCode }) => (
+            <option value={type} key={type}>
+              {currencyCode} - {display}
             </option>
           ))}
         </FormControl>
@@ -58,7 +58,7 @@ export const CreateWallet: React.FC<{ account: EdgeAccount }> = ({ account }) =>
       <Button variant={'primary'} disabled={pending} onClick={onSubmit}>
         {pending ? '...' : 'Create'}
       </Button>
-      {error && <Alert variant={'danger'}>{(error as Error).message}</Alert>}
+      {error && <Alert variant={'danger'}>{error.message}</Alert>}
     </Form>
   )
 }

@@ -4,7 +4,7 @@ module.exports = {
     es6: true,
     node: true,
   },
-  ignorePatterns: ['!.*', 'node_modules', 'dist'],
+  ignorePatterns: ['!.*', 'node_modules', 'dist', 'edge-hooks-react-dom'],
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/eslint-recommended',

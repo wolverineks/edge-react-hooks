@@ -1,12 +1,13 @@
 import { EdgeContext } from 'edge-core-js'
-import { useDeleteLocalAccount, useLoginMessages, useLoginWithPin, useWatch } from 'edge-react-hooks'
+import { useDeleteLocalAccount, useEdgeContext, useLoginMessages, useLoginWithPin } from 'edge-react-hooks'
 import * as React from 'react'
-import { Alert, Button, Card, Col, Form, FormControl, FormGroup, FormLabel, ListGroup, Row } from 'react-bootstrap'
+import { Alert, Button, Card, Col, Form, FormControl, FormLabel, ListGroup } from 'react-bootstrap'
 
+import { useSetAccount } from '../EdgeAccount/useAccount'
 import { useTimeout } from '../utils'
 
-export const PinLogin: React.FC<{ context: EdgeContext; onLogin: Function }> = ({ context, onLogin }) => {
-  useWatch(context, 'localUsers')
+export const PinLogin: React.FC<{ context: EdgeContext }> = ({ context }) => {
+  useEdgeContext(context)
 
   return (
     <ListGroup>
@@ -15,41 +16,32 @@ export const PinLogin: React.FC<{ context: EdgeContext; onLogin: Function }> = (
       ) : context.localUsers.length <= 0 ? (
         <Card.Text>------</Card.Text>
       ) : (
-        context.localUsers.map(({ username }) => (
-          <LocalUserRow context={context} username={username} key={username} onLogin={onLogin} />
-        ))
+        context.localUsers.map(({ username }) => <LocalUserRow context={context} username={username} key={username} />)
       )}
     </ListGroup>
   )
 }
 
-const LocalUserRow: React.FC<{ context: EdgeContext; username: string; onLogin: Function }> = ({
-  context,
-  username,
-  onLogin,
-}) => {
-  const {
-    pending: deleteAccountPending,
-    deleteLocalAccount,
-    error: deleteAccountError,
-    reset: deleteAccountReset,
-  } = useDeleteLocalAccount(context)
-  const {
-    loginWithPIN,
-    pending: loginWithPinPending,
-    error: loginWithPinError,
-    account,
-    reset: loginWithPinReset,
-  } = useLoginWithPin(context)
+const LocalUserRow: React.FC<{ context: EdgeContext; username: string }> = ({ context, username }) => {
+  useEdgeContext(context)
+
   const [pin, setPin] = React.useState('')
-  const pending = loginWithPinPending || deleteAccountPending
 
-  React.useEffect(() => account && onLogin(account), [account, onLogin])
+  const deleteLocalAccount = useDeleteLocalAccount(context)
+  const loginWithPin = useLoginWithPin(context)
+  const pending = loginWithPin.status === 'loading' || deleteLocalAccount.status === 'loading'
+  const setAccount = useSetAccount()
+
   const timeout = useTimeout()
-
   React.useEffect(() => {
-    deleteAccountError && timeout(deleteAccountReset, 2500)
-  }, [deleteAccountError, deleteAccountReset, timeout])
+    deleteLocalAccount.error && timeout(deleteLocalAccount.reset, 2500)
+  }, [deleteLocalAccount.error, deleteLocalAccount.reset, timeout])
+
+  const handleLogin = (event: { preventDefault: () => void }) => {
+    event.preventDefault()
+    loginWithPin.execute({ username, pin }).then(setAccount)
+  }
+  const handleDeleteLocalAccount = () => deleteLocalAccount.execute({ username })
 
   return (
     <ListGroup.Item>
@@ -58,25 +50,24 @@ const LocalUserRow: React.FC<{ context: EdgeContext; username: string; onLogin: 
           <FormLabel>{username} - PIN</FormLabel>
           <Col>
             <FormControl
-              type={'password'}
               onChange={(event) => {
-                loginWithPinReset()
+                loginWithPin.reset()
                 setPin(event.currentTarget.value)
               }}
             />
           </Col>
 
           <Col>
-            <Button variant="primary" disabled={pending} onClick={() => loginWithPIN({ username, pin })}>
-              {loginWithPinPending ? '...' : 'Login'}
+            <Button variant="primary" disabled={pending} onClick={handleLogin}>
+              {loginWithPin.status === 'loading' ? '...' : 'Login'}
             </Button>
-            <Button variant="danger" disabled={pending} onClick={() => deleteLocalAccount({ username })}>
-              {deleteAccountPending ? '...' : 'Remove Account'}
+            <Button variant="danger" disabled={pending} onClick={handleDeleteLocalAccount}>
+              {deleteLocalAccount.status === 'loading' ? '...' : 'Remove Account'}
             </Button>
           </Col>
 
-          {loginWithPinError && <Alert variant={'danger'}>{(loginWithPinError as Error).message}</Alert>}
-          {deleteAccountError && <Alert variant={'danger'}>{(deleteAccountError as Error).message}</Alert>}
+          {loginWithPin.error && <Alert variant={'danger'}>{loginWithPin.error.message}</Alert>}
+          {deleteLocalAccount.error && <Alert variant={'danger'}>{deleteLocalAccount.error.message}</Alert>}
         </Form.Row>
       </Form>
       <LoginMessages context={context} username={username} />
@@ -85,24 +76,26 @@ const LocalUserRow: React.FC<{ context: EdgeContext; username: string; onLogin: 
 }
 
 const LoginMessages: React.FC<{ context: EdgeContext; username: string }> = ({ context, username }) => {
-  const { loginMessages, pending, status, error } = useLoginMessages(context)
+  const loginMessages = useLoginMessages(context, { username })
 
-  if (!loginMessages || pending) return null
-
-  const { otpResetPending, recovery2Corrupt } = loginMessages[username]
-
-  return (
+  return loginMessages.status === 'success' ? (
     <ListGroup key={username}>
-      {status === 'error' ? (
-        <ListGroup.Item>{(error as Error).message}.</ListGroup.Item>
-      ) : Object.keys(loginMessages[username]).length <= 0 ? (
+      {Object.keys(loginMessages).length <= 0 ? (
         <ListGroup.Item>No messages</ListGroup.Item>
       ) : (
         <>
-          <ListGroup.Item>otpResetPending: {otpResetPending.toString()}</ListGroup.Item>
-          <ListGroup.Item>recovery2Corrupt: {recovery2Corrupt.toString()}</ListGroup.Item>
+          <ListGroup.Item>otpResetPending: {loginMessages.data.otpResetPending.toString()}</ListGroup.Item>
+          <ListGroup.Item>recovery2Corrupt: {loginMessages.data.recovery2Corrupt.toString()}</ListGroup.Item>
         </>
       )}
+    </ListGroup>
+  ) : loginMessages.status === 'error' ? (
+    <ListGroup key={username}>
+      <ListGroup.Item>{loginMessages.error.message}</ListGroup.Item>
+    </ListGroup>
+  ) : (
+    <ListGroup key={username}>
+      <ListGroup.Item>Loading...</ListGroup.Item>
     </ListGroup>
   )
 }

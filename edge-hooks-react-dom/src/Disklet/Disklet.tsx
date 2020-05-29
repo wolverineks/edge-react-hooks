@@ -4,7 +4,7 @@ import * as React from 'react'
 import { Button, Card, ListGroup } from 'react-bootstrap'
 import Json from 'react-json-pretty'
 
-import { fileName } from './utils'
+export const fileName = (path: string) => (path.match(/\w*\.\w*/) || [])[0] || ''
 
 const ToggleRow: React.FC<{ title: string }> = ({ children, title }) => {
   const [showContents, setShowContents] = React.useState(false)
@@ -49,12 +49,12 @@ export const Folder: React.FC<{ disklet: DiskletType; path: string }> = ({ diskl
 )
 
 const FolderContents: React.FC<{ disklet: DiskletType; path: string }> = ({ disklet, path }) => {
-  const { folder, error, pending } = useFolder(disklet, { path })
+  const folder = useFolder(disklet, { path })
 
-  if (error) return <div>Error: {(error as Error).message}</div>
-  if (pending || !folder) return <div>Loading...</div>
+  if (folder.status === 'loading' || folder.status === 'idle') return <div>Loading...</div>
+  if (folder.status === 'error') return <div>Error: {folder.error.message}</div>
 
-  if (Object.entries(folder).length <= 0) {
+  if (Object.entries(folder.data).length <= 0) {
     return (
       <ListGroup>
         <ListGroup.Item>Empty</ListGroup.Item>
@@ -64,7 +64,7 @@ const FolderContents: React.FC<{ disklet: DiskletType; path: string }> = ({ disk
 
   return (
     <ListGroup>
-      {Object.entries(folder).map(([key, value]) =>
+      {Object.entries(folder.data).map(([key, value]) =>
         value === 'folder' ? (
           <ListGroup.Item>
             <Folder disklet={disklet} path={`${path}${key}`} key={key} />
@@ -88,10 +88,10 @@ export const File: React.FC<{ disklet: DiskletType; path: string }> = ({ disklet
 )
 
 const FileContents: React.FC<{ disklet: DiskletType; path: string }> = ({ disklet, path }) => {
-  const { file, error, pending } = useFile(disklet, { path })
+  const { data: file, error, status } = useFile<string>(disklet, { path })
 
-  if (error) return <div>Error: {(error as Error).message}</div>
-  if (pending || !file) return <div>Loading...</div>
+  if (status === 'loading' || status === 'idle' || !file) return <div>Loading...</div>
+  if (status === 'error' && error) return <div>Error: {error.message}</div>
 
   return <Json data={file} />
 }

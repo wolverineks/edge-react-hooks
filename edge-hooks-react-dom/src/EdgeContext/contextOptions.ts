@@ -3,14 +3,14 @@ export const contextOptions = {
   appId: '',
   plugins: {
     // edge-currency-accountbased:
-    // eos: true,
-    // ethereum: {},
-    // fio: true,
-    // stellar: true,
-    // ripple: true,
-    // tezos: true,
-    // binance: true,
-    // rsk: true,
+    eos: true,
+    ethereum: {},
+    fio: true,
+    stellar: true,
+    ripple: true,
+    tezos: true,
+    binance: true,
+    rsk: true,
     // edge-currency-bitcoin:
     bitcoin: true,
     bitcoincash: true,

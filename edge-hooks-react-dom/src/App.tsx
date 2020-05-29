@@ -1,6 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
 
-import { EdgeAccount } from 'edge-core-js'
+import { EdgeContext } from 'edge-core-js'
 import * as React from 'react'
 import { Button, Container, Navbar, Tab, Tabs } from 'react-bootstrap'
 
@@ -23,12 +23,6 @@ export const Inner = () => {
   const context = useContext()
   const account = useAccount()
   const setAccount = useSetAccount()
-
-  React.useEffect(() => {
-    if (!context) return
-    context.on('loginStart', (accountName: any) => console.log({ accountName }))
-    context.on('login', ((account: EdgeAccount) => setAccount(account)) as any)
-  }, [context, setAccount])
 
   if (!context) return <div>Loading...</div>
 
@@ -54,29 +48,31 @@ export const Inner = () => {
       </Navbar>
 
       {!account || !account.loggedIn ? (
-        <Tabs id={'loginCreateAccountTabs'} defaultActiveKey={'login'} transition={false}>
-          <Tab eventKey={'login'} title={'Login'}>
-            <LoginForm context={context} onLogin={setAccount} />
-          </Tab>
-
-          <Tab eventKey={'createAccount'} title={'Create Account'}>
-            <CreateAccountForm context={context} onCreate={setAccount} />
-          </Tab>
-
-          <Tab eventKey={'pinLogin'} title={'Pin Login'}>
-            <PinLogin context={context} onLogin={setAccount} />
-          </Tab>
-        </Tabs>
+        <Login context={context} />
       ) : (
-        <div>
-          <SelectedWalletProvider account={account}>
-            <AccountInfo account={account} />
-          </SelectedWalletProvider>
-        </div>
+        <SelectedWalletProvider account={account}>
+          <AccountInfo account={account} />
+        </SelectedWalletProvider>
       )}
     </Container>
   )
 }
+
+const Login: React.FC<{ context: EdgeContext }> = ({ context }) => (
+  <Tabs id={'loginCreateAccountTabs'} defaultActiveKey={'login'} transition={false}>
+    <Tab eventKey={'login'} title={'Login'}>
+      <LoginForm context={context} />
+    </Tab>
+
+    <Tab eventKey={'createAccount'} title={'Create Account'}>
+      <CreateAccountForm context={context} />
+    </Tab>
+
+    <Tab eventKey={'pinLogin'} title={'Pin Login'}>
+      <PinLogin context={context} />
+    </Tab>
+  </Tabs>
+)
 
 export const App = () => (
   <div>

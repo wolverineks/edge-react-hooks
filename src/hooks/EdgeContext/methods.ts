@@ -2,15 +2,15 @@ import { EdgeAccountOptions, EdgeContext, EdgeEdgeLoginOptions } from 'edge-core
 import { useMutation } from 'react-query'
 
 export const useClose = (context: EdgeContext) => {
-  const [close, { ...rest }] = useMutation(() => context.close())
+  const [execute, rest] = useMutation(() => context.close())
 
-  return { close, pending: rest.status === 'loading', ...rest }
+  return { execute, ...rest }
 }
 
 export const useCreateAccount = (context: EdgeContext) => {
   const [
-    createAccount,
-    { data: account, ...rest },
+    execute,
+    rest,
   ] = useMutation(
     ({
       username,
@@ -20,53 +20,53 @@ export const useCreateAccount = (context: EdgeContext) => {
     }: {
       username: string
       password: string
-      pin?: string
+      pin: string
       options?: EdgeAccountOptions
     }) => context.createAccount(username, password, pin, options),
   )
 
-  return { account, createAccount, pending: rest.status === 'loading', ...rest }
+  return { execute, ...rest }
 }
 
 export const useLoginWithKey = (context: EdgeContext) => {
   const [
-    loginWithKey,
-    { data, ...rest },
+    execute,
+    rest,
   ] = useMutation(
     ({ username, loginKey, options }: { username: string; loginKey: string; options?: EdgeAccountOptions }) =>
       context.loginWithKey(username, loginKey, options),
   )
 
-  return { loginWithKey, account: data, pending: rest.status === 'loading', ...rest }
+  return { execute, ...rest }
 }
 
 export const useLoginWithPassword = (context: EdgeContext) => {
   const [
-    loginWithPassword,
-    { data, ...rest },
+    execute,
+    rest,
   ] = useMutation(
     ({ username, password, options }: { username: string; password: string; options?: EdgeAccountOptions }) =>
       context.loginWithPassword(username, password, options),
   )
 
-  return { loginWithPassword, account: data, pending: rest.status === 'loading', ...rest }
+  return { execute, ...rest }
 }
 
 export const useLoginWithPin = (context: EdgeContext) => {
   const [
-    loginWithPIN,
-    { data, ...rest },
+    execute,
+    rest,
   ] = useMutation(({ username, pin, options }: { username: string; pin: string; options?: EdgeAccountOptions }) =>
     context.loginWithPIN(username, pin, options),
   )
 
-  return { loginWithPIN, account: data, pending: rest.status === 'loading', ...rest }
+  return { execute, ...rest }
 }
 
 export const useLoginWithRecovery = (context: EdgeContext) => {
   const [
-    loginWithRecovery,
-    { data, ...rest },
+    execute,
+    rest,
   ] = useMutation(
     ({
       username,
@@ -81,32 +81,27 @@ export const useLoginWithRecovery = (context: EdgeContext) => {
     }) => context.loginWithRecovery2(recoveryKey, username, answers, options),
   )
 
-  return { loginWithRecovery, account: data, pending: rest.status === 'loading', ...rest }
+  return { execute, ...rest }
 }
 
 export const useDeleteLocalAccount = (context: EdgeContext) => {
-  const [deleteLocalAccount, { ...rest }] = useMutation(({ username }: { username: string }) =>
-    context.deleteLocalAccount(username),
-  )
+  const [execute, rest] = useMutation(({ username }: { username: string }) => context.deleteLocalAccount(username))
 
-  return { deleteLocalAccount, pending: rest.status === 'loading', ...rest }
+  return { execute, ...rest }
 }
 
 export const useRequestEdgeLogin = (context: EdgeContext) => {
-  const [requestEdgeLogin, { data, ...rest }] = useMutation(({ options }: { options: EdgeEdgeLoginOptions }) =>
+  const [execute, rest] = useMutation(({ options }: { options: EdgeEdgeLoginOptions }) =>
     context.requestEdgeLogin(options),
   )
 
-  return { requestEdgeLogin, pendingEdgeLogin: data, pending: rest.status === 'loading', ...rest }
+  return { execute, ...rest }
 }
 
 export const useRequestOtpReset = (context: EdgeContext) => {
-  const [
-    requestOtpReset,
-    { data, ...rest },
-  ] = useMutation(({ username, otpResetToken }: { username: string; otpResetToken: string }) =>
+  const [execute, rest] = useMutation(({ username, otpResetToken }: { username: string; otpResetToken: string }) =>
     context.requestOtpReset(username, otpResetToken),
   )
 
-  return { requestOtpReset, resetDate: data, pending: rest.status === 'loading', ...rest }
+  return { execute, ...rest }
 }

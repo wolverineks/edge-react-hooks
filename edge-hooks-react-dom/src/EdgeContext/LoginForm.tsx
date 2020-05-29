@@ -1,45 +1,46 @@
 import { EdgeContext } from 'edge-core-js'
-import { useLoginWithPassword } from 'edge-react-hooks'
+import { useEdgeContext, useLoginWithPassword } from 'edge-react-hooks'
 import * as React from 'react'
-import { Alert, Button, Card, Form, FormGroup } from 'react-bootstrap'
+import { Alert, Button, Form, FormGroup } from 'react-bootstrap'
 
-const onChange = (cb: Function) => (event: any) => cb(event.currentTarget.value)
+import { useSetAccount } from '../EdgeAccount/useAccount'
 
-export const LoginForm: React.FC<{ context: EdgeContext; onLogin: Function }> = ({ context, onLogin }) => {
+export const LoginForm: React.FC<{ context: EdgeContext }> = ({ context }) => {
+  useEdgeContext(context)
+  const setAccount = useSetAccount()
   const [username, setUsername] = React.useState('')
   const [password, setPassword] = React.useState('')
-  const { loginWithPassword, error, pending, account, reset } = useLoginWithPassword(context)
+  const { execute: loginWithPassword, error, status, reset } = useLoginWithPassword(context)
+  const pending = status === 'loading'
 
-  const handleLogin = () => loginWithPassword({ username, password })
-  React.useEffect(() => account && onLogin(account), [account, onLogin])
+  const handleChangeUsername = (event: { currentTarget: { value: React.SetStateAction<string> } }) => {
+    reset()
+    setUsername(event.currentTarget.value)
+  }
+
+  const handleChangePassword = (event: { currentTarget: { value: React.SetStateAction<string> } }) => {
+    reset()
+    setPassword(event.currentTarget.value)
+  }
+
+  const handleLogin = (event: { preventDefault: () => void }) => {
+    event.preventDefault()
+    loginWithPassword({ username, password }).then(setAccount)
+  }
 
   return (
     <Form>
       <FormGroup>
         <Form.Label>Username</Form.Label>
-        <Form.Control
-          type={'username'}
-          disabled={pending}
-          onChange={(event) => {
-            reset()
-            onChange(setUsername)(event)
-          }}
-        />
+        <Form.Control type={'username'} disabled={pending} onChange={handleChangeUsername} />
       </FormGroup>
 
       <FormGroup>
         <Form.Label>Password</Form.Label>
-        <Form.Control
-          type={'password'}
-          disabled={pending}
-          onChange={(event) => {
-            reset()
-            onChange(setPassword)(event)
-          }}
-        />
+        <Form.Control type={'password'} disabled={pending} onChange={handleChangePassword} />
       </FormGroup>
 
-      {error && <Alert variant={'danger'}>{(error as Error).message}</Alert>}
+      {error && <Alert variant={'danger'}>{error.message}</Alert>}
 
       <FormGroup>
         <Button variant="primary" disabled={pending} onClick={handleLogin}>

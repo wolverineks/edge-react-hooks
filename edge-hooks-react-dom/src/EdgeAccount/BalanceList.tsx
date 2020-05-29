@@ -1,11 +1,12 @@
 import { EdgeCurrencyWallet } from 'edge-core-js'
-import { useWatch } from 'edge-react-hooks'
+import { useEdgeCurrencyWallet } from 'edge-react-hooks'
 import * as React from 'react'
 import { Card, ListGroup } from 'react-bootstrap'
 
 export const BalanceList: React.FC<{ wallet: EdgeCurrencyWallet }> = ({ wallet }) => {
-  useWatch(wallet, 'fiatCurrencyCode')
-  useWatch(wallet, 'balances')
+  useEdgeCurrencyWallet(wallet)
+
+  const balances = Object.entries(wallet.balances)
 
   return (
     <Card>
@@ -14,7 +15,7 @@ export const BalanceList: React.FC<{ wallet: EdgeCurrencyWallet }> = ({ wallet }
       </Card.Header>
 
       <ListGroup>
-        {Object.entries(wallet.balances).map(([currencyCode, balance]: [string, any]) => (
+        {balances.map(([currencyCode, balance]: [string, any]) => (
           <ListGroup.Item key={wallet.id}>
             <Balance
               wallet={wallet}
@@ -35,7 +36,7 @@ const Balance: React.FC<{
   toCurrencyCode: string
   nativeAmount: string
 }> = ({ fromCurrencyCode, toCurrencyCode, nativeAmount }) => (
-  <div key={fromCurrencyCode}>
+  <div>
     {fromCurrencyCode} {nativeAmount} ({toCurrencyCode})
   </div>
 )

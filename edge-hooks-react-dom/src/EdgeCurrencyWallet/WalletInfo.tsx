@@ -1,11 +1,11 @@
-import { EdgeAccount, EdgeCurrencyWallet } from 'edge-core-js'
+import { EdgeCurrencyWallet } from 'edge-core-js'
 import {
+  useEdgeCurrencyWallet,
   useEnableTokens,
   useEnabledTokens,
   useOnNewTransactions,
   useRenameWallet,
   useSetFiatCurrencyCode,
-  useWatch,
 } from 'edge-react-hooks'
 import * as React from 'react'
 import { Alert, Button, Card, Form, FormControl, FormGroup, FormLabel, ListGroup, Tab, Tabs } from 'react-bootstrap'
@@ -16,23 +16,18 @@ import { Request } from './Request'
 import { Send } from './Send'
 import { TransactionList } from './TransactionList'
 
-const FIAT_CURRENCY_CODES = [
+const fiatCurrencyCodes = [
   { value: 'iso:USD', display: 'US Dollars' },
   { value: 'iso:EUR', display: 'Euros' },
   { value: 'iso:CAD', display: 'Canadian Dollars' },
 ]
 
-export const WalletInfo: React.FC<{ account: EdgeAccount; wallet: EdgeCurrencyWallet }> = ({ wallet }) => {
-  useWatch(wallet, 'name')
-  useWatch(wallet, 'fiatCurrencyCode')
-  useWatch(wallet, 'currencyInfo')
-
+export const WalletInfo: React.FC<{ wallet: EdgeCurrencyWallet }> = ({ wallet }) => {
+  useEdgeCurrencyWallet(wallet)
   useOnNewTransactions(
     wallet,
     (transactions) => transactions && alert(transactions.length > 1 ? 'New Transactions' : 'New Transaction'),
   )
-
-  if (!wallet) return null
 
   return (
     <Tabs id={'walletTabs'} defaultActiveKey={'details'}>
@@ -46,7 +41,7 @@ export const WalletInfo: React.FC<{ account: EdgeAccount; wallet: EdgeCurrencyWa
         <Disklet disklet={wallet.localDisklet} title={'Local Disklet'} />
       </Tab>
 
-      <Tab eventKey={'transactions'} title={'Transactions'}>
+      <Tab eventKey={'transactions'} title={'History'}>
         <TransactionList key={wallet.id} wallet={wallet} />
       </Tab>
 
@@ -62,7 +57,9 @@ export const WalletInfo: React.FC<{ account: EdgeAccount; wallet: EdgeCurrencyWa
 }
 
 const EnabledTokens: React.FC<{ wallet: EdgeCurrencyWallet }> = ({ wallet }) => {
-  const { enabledTokens } = useEnabledTokens(wallet)
+  useEdgeCurrencyWallet(wallet)
+
+  const { data: enabledTokens } = useEnabledTokens(wallet)
 
   return (
     <Card>
@@ -88,8 +85,11 @@ const EnabledTokens: React.FC<{ wallet: EdgeCurrencyWallet }> = ({ wallet }) => 
 }
 
 const EnableTokens: React.FC<{ wallet: EdgeCurrencyWallet }> = ({ wallet }) => {
-  const { enableTokens } = useEnableTokens(wallet)
+  useEdgeCurrencyWallet(wallet)
+
   const availableTokens = wallet.currencyInfo.metaTokens
+
+  const { execute: enableTokens } = useEnableTokens(wallet)
 
   return (
     <Card>
@@ -117,21 +117,18 @@ const EnableTokens: React.FC<{ wallet: EdgeCurrencyWallet }> = ({ wallet }) => {
 }
 
 const WalletOptions = ({ wallet }: { wallet: EdgeCurrencyWallet }) => {
-  const [walletName, setWalletName] = React.useState<string>(wallet.name || '')
-  const [fiatCurrencyCode, setFiatCurrencyCode] = React.useState(wallet.fiatCurrencyCode)
-  const { renameWallet, pending: renameWalletPending } = useRenameWallet(wallet)
-  const {
-    setFiatCurrencyCode: _setFiatCurrencyCode,
-    pending: setFiatCurrencyCodePending,
-    error: setFiatCurrencyCodeError,
-  } = useSetFiatCurrencyCode(wallet)
+  const [walletName, _setWalletName] = React.useState<string>(wallet.name || '')
+  const [fiatCurrencyCode, _setFiatCurrencyCode] = React.useState(wallet.fiatCurrencyCode)
+
+  const renameWallet = useRenameWallet(wallet)
+  const setFiatCurrencyCode = useSetFiatCurrencyCode(wallet)
 
   return (
     <Form>
       <FormGroup>
         <Form.Label>Wallet Name</Form.Label>
-        <FormControl value={walletName} onChange={(event) => setWalletName(event.currentTarget.value)} />
-        <Button onClick={() => renameWallet({ name: walletName })} disabled={renameWalletPending}>
+        <FormControl value={walletName} onChange={(event) => _setWalletName(event.currentTarget.value)} />
+        <Button onClick={() => renameWallet.execute({ name: walletName })} disabled={renameWallet.status === 'loading'}>
           Rename
         </Button>
       </FormGroup>
@@ -142,39 +139,47 @@ const WalletOptions = ({ wallet }: { wallet: EdgeCurrencyWallet }) => {
           as={'select'}
           defaultValue={wallet.fiatCurrencyCode}
           id={'fiatCurrencyCodes'}
-          disabled={setFiatCurrencyCodePending}
-          onChange={(event) => setFiatCurrencyCode(event.currentTarget.value)}
+          disabled={setFiatCurrencyCode.status === 'loading'}
+          onChange={(event) => _setFiatCurrencyCode(event.currentTarget.value)}
         >
-          {FIAT_CURRENCY_CODES.map(({ display, value }) => (
+          {fiatCurrencyCodes.map(({ display, value }) => (
             <option value={value} key={value}>
               {display}
             </option>
           ))}
         </FormControl>
-        <Button onClick={() => _setFiatCurrencyCode({ fiatCurrencyCode })} disabled={setFiatCurrencyCodePending}>
+        <Button
+          onClick={() => setFiatCurrencyCode.execute({ fiatCurrencyCode })}
+          disabled={setFiatCurrencyCode.status === 'loading'}
+        >
           Set Fiat
         </Button>
 
-        {setFiatCurrencyCodeError && <Alert variant={'danger'}>{(setFiatCurrencyCodeError as Error).message}</Alert>}
+        {setFiatCurrencyCode.error && <Alert variant={'danger'}>{setFiatCurrencyCode.error.message}</Alert>}
       </FormGroup>
     </Form>
   )
 }
 
 const DisplayKeys = ({ wallet }: { wallet: EdgeCurrencyWallet }) => {
-  const [showPrivateKey, setShowPrivateKey] = React.useState(false)
-  const [showPublicKey, setShowPublicKey] = React.useState(false)
+  useEdgeCurrencyWallet(wallet)
+
+  const [showPrivateSeed, setShowPrivateSeed] = React.useState(false)
+  const [showPublicSeed, setShowPublicSeed] = React.useState(false)
 
   return (
-    <div>
-      <div>
-        <Button onClick={() => setShowPrivateKey((x) => !x)}>Show Private Key</Button>
-        Private Key: {showPrivateKey ? wallet.getDisplayPrivateSeed() : '***************'}
-      </div>
-      <div>
-        <Button onClick={() => setShowPublicKey((x) => !x)}>Show Private Key</Button>
-        Public Key: {showPublicKey ? wallet.getDisplayPublicSeed() : '***************'}
-      </div>
-    </div>
+    <Form>
+      <FormGroup>
+        <FormLabel>Private Seed</FormLabel>
+        <FormControl readOnly value={showPrivateSeed ? wallet.getDisplayPrivateSeed() || '' : ''} />
+        <Button onClick={() => setShowPrivateSeed((x) => !x)}>Show Private Seed</Button>
+      </FormGroup>
+
+      <FormGroup>
+        <FormLabel>Public Seed</FormLabel>
+        <FormControl readOnly value={showPublicSeed ? wallet.getDisplayPublicSeed() || '' : ''} />
+        <Button onClick={() => setShowPublicSeed((x) => !x)}>Show Public Seed</Button>
+      </FormGroup>
+    </Form>
   )
 }
