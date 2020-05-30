@@ -5,7 +5,7 @@ import * as React from 'react'
 import { Alert, Form, FormControl, FormGroup, FormLabel } from 'react-bootstrap'
 import JSONPretty from 'react-json-pretty'
 
-import { getCurrencyCodes } from './utils'
+import { getCurrencyCodes } from '../utils'
 
 export const Request: React.FC<{ wallet: EdgeCurrencyWallet }> = ({ wallet }) => {
   useEdgeCurrencyWallet(wallet)
@@ -23,7 +23,7 @@ export const Request: React.FC<{ wallet: EdgeCurrencyWallet }> = ({ wallet }) =>
     <Form>
       <FormGroup>
         <FormLabel>To:</FormLabel>
-        <FormControl value={data?.receiveAddress.publicAddress} />
+        <FormControl value={data?.receiveAddress.publicAddress || ''} readOnly />
       </FormGroup>
 
       <FormGroup>

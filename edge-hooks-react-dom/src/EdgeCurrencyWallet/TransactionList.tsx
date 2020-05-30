@@ -3,7 +3,7 @@ import { useEdgeCurrencyWallet, useTransactions } from 'edge-react-hooks'
 import * as React from 'react'
 import { Form, FormControl, FormGroup, FormLabel, ListGroup } from 'react-bootstrap'
 
-import { getCurrencyCodes } from './utils'
+import { getCurrencyCodes } from '../utils'
 
 const INITIAL_TRANSACTION_COUNT = 10
 const TRANSACTION_COUNTS = [1, 5, 10, 15, 20, 25]

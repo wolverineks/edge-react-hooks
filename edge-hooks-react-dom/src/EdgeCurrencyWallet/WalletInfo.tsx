@@ -1,5 +1,6 @@
-import { EdgeCurrencyWallet } from 'edge-core-js'
+import { EdgeAccount, EdgeCurrencyWallet } from 'edge-core-js'
 import {
+  useEdgeAccount,
   useEdgeCurrencyWallet,
   useEnableTokens,
   useEnabledTokens,
@@ -22,8 +23,9 @@ const fiatCurrencyCodes = [
   { value: 'iso:CAD', display: 'Canadian Dollars' },
 ]
 
-export const WalletInfo: React.FC<{ wallet: EdgeCurrencyWallet }> = ({ wallet }) => {
+export const WalletInfo: React.FC<{ wallet: EdgeCurrencyWallet; account: EdgeAccount }> = ({ wallet, account }) => {
   useEdgeCurrencyWallet(wallet)
+  useEdgeAccount(account)
   useOnNewTransactions(
     wallet,
     (transactions) => transactions && alert(transactions.length > 1 ? 'New Transactions' : 'New Transaction'),
@@ -34,7 +36,7 @@ export const WalletInfo: React.FC<{ wallet: EdgeCurrencyWallet }> = ({ wallet })
       <Tab eventKey={'details'} title={'Details'}>
         <WalletOptions wallet={wallet} />
         <DisplayKeys wallet={wallet} />
-        <BalanceList wallet={wallet} />
+        <BalanceList wallet={wallet} account={account} />
         <EnabledTokens wallet={wallet} />
         <EnableTokens wallet={wallet} />
         <Disklet disklet={wallet.disklet} title={'Disklet'} />

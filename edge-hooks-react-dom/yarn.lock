@@ -3188,9 +3188,9 @@ bs58check@^1.0.8:
     bs58 "^3.1.0"
     create-hash "^1.1.0"
 
-"bs58grscheck@git+https://github.com/Groestlcoin/bs58grscheck.git":
+"bs58grscheck@https://github.com/Groestlcoin/bs58grscheck":
   version "2.1.2"
-  resolved "git+https://github.com/Groestlcoin/bs58grscheck.git#8ff31333a7626161c1484b461c20710bb9f97b93"
+  resolved "https://github.com/Groestlcoin/bs58grscheck#8ff31333a7626161c1484b461c20710bb9f97b93"
   dependencies:
     bs58 "^4.0.0"
     create-hash "^1.1.0"
@@ -4797,14 +4797,25 @@ edge-currency-monero@^0.2.4:
     mymonero-core-js "git://github.com/EdgeApp/mymonero-core-js.git#william/v0.14.0-hardfork"
     uri-js "^3.0.2"
 
-edge-react-hooks@^3.2.0:
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/edge-react-hooks/-/edge-react-hooks-3.2.0.tgz#46cbf6f07608621cb13a814a464bb17ba8e30b9b"
-  integrity sha512-0dYzrdoaKWRfoldNXwmOE/FNE/ymBkoZTW/hNAZhUYSI0I0GJXtq8K8WJWv/ud5eUcUtv4p7hRDRlOtBVmJp3A==
+edge-exchange-plugins@^0.10.4:
+  version "0.10.4"
+  resolved "https://registry.yarnpkg.com/edge-exchange-plugins/-/edge-exchange-plugins-0.10.4.tgz#f62fa3ef6982b3811d01eff733dd75ce8ee01071"
+  integrity sha512-Xv7bzdnOxbtMOLbl5H5gw4V8LRJRE0lltwZKsfFiU8ze9S/CrOAE2Dt4ny7Y8rm70MbKSNX92BHxbqvfT57i8A==
+  dependencies:
+    biggystring "^3.0.2"
+    cleaners "^0.2.0"
+    esm "^3.2.4"
+    hashjs "^1.2.0"
+    iso4217 "^0.2.0"
+    utf8 "^3.0.0"
+
+edge-react-hooks@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/edge-react-hooks/-/edge-react-hooks-4.0.0.tgz#4cfb2edbe9cfedfc6735b223c6e53dde8e41d0d5"
+  integrity sha512-cQsNW7qZcYOKmtj8Qo5NetEH4rzFYGFarZLnhyV89AbwiymPwOfqAMJG8hBEHFmV0UgDni9MqY5PzxgPNJ/iFQ==
   dependencies:
     react-native-fs "^2.16.6"
-    react-query "^1.5.2"
-    react-use-async "^0.0.16"
+    react-query "^1.5.3"
 
 ee-first@1.1.1:
   version "1.1.1"
@@ -6326,6 +6337,11 @@ hash.js@^1.0.0, hash.js@^1.0.3:
     inherits "^2.0.3"
     minimalistic-assert "^1.0.1"
 
+hashjs@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/hashjs/-/hashjs-1.2.0.tgz#a40e2d69de57826774643029c7b1bb4f2390baaa"
+  integrity sha1-pA4tad5Xgmd0ZDApx7G7TyOQuqo=
+
 hdkey@^0.7.0:
   version "0.7.1"
   resolved "https://registry.yarnpkg.com/hdkey/-/hdkey-0.7.1.tgz#caee4be81aa77921e909b8d228dd0f29acaee632"
@@ -7168,6 +7184,11 @@ isexe@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/isexe/-/isexe-2.0.0.tgz#e8fbf374dc556ff8947a10dcb0572d633f2cfa10"
   integrity sha1-6PvzdNxVb/iUehDcsFctYz8s+hA=
+
+iso4217@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/iso4217/-/iso4217-0.2.0.tgz#139ce00ac0cf0d360e48b22215c797f016b2840d"
+  integrity sha1-E5zgCsDPDTYOSLIiFceX8BayhA0=
 
 isobject@^2.0.0:
   version "2.1.0"
@@ -10595,7 +10616,7 @@ react-qr-reader@^2.2.1:
     prop-types "^15.7.2"
     webrtc-adapter "^7.2.1"
 
-react-query@^1.5.2:
+react-query@^1.5.3:
   version "1.5.3"
   resolved "https://registry.yarnpkg.com/react-query/-/react-query-1.5.3.tgz#672dbda734113e8b0e0b90b06e003c4daeef8a58"
   integrity sha512-KiOdVnKdimn8QCNirs1lJdrCE5o8nFgn8BMmlk2ujfUopnHPSGZs4EaVSuwRynNaTNI0N9U0Fws1Pcn6DtvE2g==
@@ -10672,11 +10693,6 @@ react-transition-group@^4.0.0, react-transition-group@^4.4.0:
     dom-helpers "^5.0.1"
     loose-envify "^1.4.0"
     prop-types "^15.6.2"
-
-react-use-async@^0.0.16:
-  version "0.0.16"
-  resolved "https://registry.yarnpkg.com/react-use-async/-/react-use-async-0.0.16.tgz#53bb3f44718dc17959586abad76afcfa8af347a7"
-  integrity sha512-/S8BtfALbGT+dbCT3cDuArkwbhpO6LJJ9ytFDBaXs02Y3uCj25Y58eNjVNSTg9NngMsx+AFrT6uvRCy1IXx8gA==
 
 react@^16.13.1:
   version "16.13.1"

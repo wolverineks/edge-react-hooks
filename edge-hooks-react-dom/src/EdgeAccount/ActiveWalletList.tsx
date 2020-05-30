@@ -1,10 +1,17 @@
 import { EdgeAccount, EdgeCurrencyWallet } from 'edge-core-js'
-import { useChangeWalletState, useEdgeAccount, useEdgeCurrencyWallet, useOnNewTransactions } from 'edge-react-hooks'
+import {
+  useChangeWalletState,
+  useConvertCurrency,
+  useEdgeAccount,
+  useEdgeCurrencyWallet,
+  useOnNewTransactions,
+} from 'edge-react-hooks'
 import * as React from 'react'
-import { Button, Image, ListGroup } from 'react-bootstrap'
+import { Button, ListGroup } from 'react-bootstrap'
 
+import { Logo } from '../Components/Logo'
 import { useSelectedWallet } from '../EdgeCurrencyWallet/useSelectedWallet'
-import { getLogo, getSortedCurrencyWallets } from './utils'
+import { getCurrencySymbol, getFiatInfo, getSortedCurrencyWallets } from '../utils'
 
 export const ActiveWalletList: React.FC<{ account: EdgeAccount; onSelect: (wallet: EdgeCurrencyWallet) => any }> = ({
   account,
@@ -41,23 +48,37 @@ const ActiveWalletRow: React.FC<{ wallet: EdgeCurrencyWallet; account: EdgeAccou
   const archiveWallet = () => changeWalletState({ walletId: wallet.id, walletState: { archived: true } })
   const deleteWallet = () => changeWalletState({ walletId: wallet.id, walletState: { deleted: true } })
 
-  const logo = getLogo(account, { walletType: wallet.type })
+  const currencyCode = wallet.currencyInfo.currencyCode
+  const balance = wallet.balances[currencyCode]
+  const { data: fiatAmount } = useConvertCurrency(account.rateCache, {
+    fromCurrency: currencyCode,
+    toCurrency: wallet.fiatCurrencyCode,
+    amount: 1, //Number(balance),
+  })
+  const fiatInfo = getFiatInfo({ currencyCode: wallet.fiatCurrencyCode })
 
   useOnNewTransactions(wallet, (transactions) =>
     alert(`${wallet.name} - ${transactions.length > 1 ? 'New Transactions' : 'New Transaction'}`),
   )
 
+  const symbol = getCurrencySymbol(account, { walletType: wallet.type })
+
   return (
     <ListGroup.Item variant={selectedWallet && wallet.id === selectedWallet.id ? 'primary' : undefined}>
-      <span onClick={() => onSelect(wallet)}>
-        <Image src={logo} /> {wallet.name} - {wallet.syncRatio.toString()}
+      <span onClick={() => onSelect(wallet)} className={'float-left'}>
+        <Logo account={account} walletType={wallet.type} />
+        {wallet.name}: {symbol} {balance} {currencyCode} - {fiatInfo?.symbol} {(fiatAmount || 0).toFixed(2)}{' '}
+        {fiatInfo?.currencyCode}
       </span>
-      <Button variant={'danger'} disabled={pending} onClick={deleteWallet} className={'float-right'}>
-        Delete
-      </Button>
-      <Button variant={'warning'} disabled={pending} onClick={archiveWallet} className={'float-right'}>
-        Archive
-      </Button>
+
+      <span className={'float-right'}>
+        <Button variant={'danger'} disabled={pending} onClick={deleteWallet}>
+          Delete
+        </Button>
+        <Button variant={'warning'} disabled={pending} onClick={archiveWallet}>
+          Archive
+        </Button>
+      </span>
     </ListGroup.Item>
   )
 }

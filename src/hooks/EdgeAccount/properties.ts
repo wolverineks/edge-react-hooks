@@ -74,7 +74,7 @@ export const useConvertCurrency = (
   }: {
     fromCurrency: string
     toCurrency: string
-    amount: number
+    amount?: number
     options?: EdgeConvertCurrencyOpts
   },
 ) => {
@@ -83,6 +83,7 @@ export const useConvertCurrency = (
   )
 
   React.useEffect(() => {
+    rateCache.on('update', () => execute())
     execute()
   }, [execute, rateCache, fromCurrency, toCurrency, amount, options])
 

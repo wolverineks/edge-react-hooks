@@ -3,7 +3,7 @@ import { useCreateCurrencyWallet, useEdgeAccount } from 'edge-react-hooks'
 import * as React from 'react'
 import { Alert, Button, Form, FormControl, FormGroup, FormLabel } from 'react-bootstrap'
 
-import { getWalletTypes } from './utils'
+import { getWalletTypes } from '../utils'
 
 const onChange = (cb: Function) => (event: any) => cb(event.currentTarget.value)
 
@@ -28,12 +28,12 @@ export const CreateWallet: React.FC<{ account: EdgeAccount }> = ({ account }) =>
 
   return (
     <Form>
-      <FormGroup controlId={'name'}>
+      <FormGroup>
         <FormLabel>Name</FormLabel>
         <FormControl id={'name'} disabled={pending} value={name} onChange={onChange(setName)} />
       </FormGroup>
 
-      <FormGroup controlId={'type'}>
+      <FormGroup>
         <FormLabel>Type</FormLabel>
         <FormControl as="select" id={'type'} disabled={pending} onChange={onChange(setType)}>
           {walletTypes.map(({ display, type, currencyCode }) => (
@@ -44,7 +44,7 @@ export const CreateWallet: React.FC<{ account: EdgeAccount }> = ({ account }) =>
         </FormControl>
       </FormGroup>
 
-      <FormGroup controlId={'fiatCurrencyCodes'}>
+      <FormGroup>
         <FormLabel>FiatCurrencyCode</FormLabel>
         <FormControl as="select" id={'fiatCurrencyCodes'} disabled={pending} onChange={onChange(setFiatCurrencyCode)}>
           {FIAT_CURRENCY_CODES.map(({ display, value }) => (

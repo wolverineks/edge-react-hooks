@@ -47,7 +47,9 @@ export const useDeleteRecovery = (account: EdgeAccount) => {
 }
 
 export const useChangePin = (account: EdgeAccount) => {
-  const [execute, rest] = useMutation(({ options }: { options: { pin?: string } }) => account.changePin(options))
+  const [execute, rest] = useMutation(({ options }: { options: { enableLogin?: boolean; pin?: string } }) =>
+    account.changePin(options),
+  )
 
   return { execute, ...rest }
 }

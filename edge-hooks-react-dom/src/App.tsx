@@ -51,7 +51,7 @@ export const Inner = () => {
         <Login context={context} />
       ) : (
         <SelectedWalletProvider account={account}>
-          <AccountInfo account={account} />
+          <AccountInfo account={account} context={context} />
         </SelectedWalletProvider>
       )}
     </Container>

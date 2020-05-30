@@ -1,9 +1,10 @@
 import { EdgeAccount, EdgeWalletInfoFull } from 'edge-core-js'
 import { useChangeWalletState, useEdgeAccount } from 'edge-react-hooks'
 import * as React from 'react'
-import { Button, Image, ListGroup } from 'react-bootstrap'
+import { Button, ListGroup } from 'react-bootstrap'
 
-import { getArchivedWalletInfos, getLogo } from './utils'
+import { Logo } from '../Components/Logo'
+import { getArchivedWalletInfos, getShortId } from '../utils'
 
 export const ArchivedWalletList: React.FC<{ account: EdgeAccount }> = ({ account }) => {
   useEdgeAccount(account)
@@ -25,8 +26,7 @@ const ArchivedWalletRow: React.FC<{ account: EdgeAccount; walletInfo: EdgeWallet
 }) => {
   useEdgeAccount(account)
 
-  const logo = getLogo(account, { walletType: walletInfo.type })
-  const shortId = `${walletInfo.id.slice(0, 4)}...${walletInfo.id.slice(-4)}`
+  const shortId = getShortId({ walletInfo })
 
   const { execute: changeWalletState, error, status } = useChangeWalletState(account)
   const pending = status === 'loading'
@@ -35,7 +35,7 @@ const ArchivedWalletRow: React.FC<{ account: EdgeAccount; walletInfo: EdgeWallet
 
   return (
     <ListGroup.Item>
-      <Image src={logo} />
+      <Logo account={account} walletType={walletInfo.type} />
       <Button variant={'danger'} disabled={pending} onClick={deleteWallet} className={'float-right'}>
         Delete
       </Button>

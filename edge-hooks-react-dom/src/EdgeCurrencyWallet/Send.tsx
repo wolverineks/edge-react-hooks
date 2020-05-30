@@ -5,7 +5,7 @@ import { Alert, Button, Form, FormControl, FormGroup, FormLabel, InputGroup } fr
 import JSONPretty from 'react-json-pretty'
 import QrReader from 'react-qr-reader'
 
-import { getCurrencyCodes } from './utils'
+import { getCurrencyCodes } from '../utils'
 
 const CATEGORIES = ['expenses', 'income', 'groceries']
 
