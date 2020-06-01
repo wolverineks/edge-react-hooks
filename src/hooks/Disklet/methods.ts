@@ -1,11 +1,11 @@
 import { Disklet } from 'disklet'
 import { useMutation } from 'react-query'
 
-export const useWrite = (
+export const useWrite = <T>(
   storage: Disklet,
-  { path, data, stringify = JSON.stringify }: { path: string; data: any; stringify?: (data: any) => string },
+  { path, stringify = JSON.stringify }: { path: string; stringify?: (data: T) => string },
 ) => {
-  const [execute, rest] = useMutation(() => storage.setText(path, stringify(data)))
+  const [execute, rest] = useMutation(({ data }: { data: T }) => storage.setText(path, stringify(data)))
 
   return { execute, ...rest }
 }
