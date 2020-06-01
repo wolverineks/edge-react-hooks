@@ -34,7 +34,7 @@
     "edge-currency-bitcoin": "^4.8.0",
     "edge-currency-monero": "^0.2.4",
     "edge-exchange-plugins": "^0.10.4",
-    "edge-react-hooks": "^4.1.0",
+    "edge-react-hooks": "^4.2.0",
     "qrcode.react": "^1.0.0",
     "react": "^16.13.1",
     "react-bootstrap": "^1.0.1",

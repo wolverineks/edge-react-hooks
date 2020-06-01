@@ -1,5 +1,14 @@
-import { EdgeAccount, EdgeCurrencyWallet, EdgeWalletInfo, EdgeWalletInfoFull } from 'edge-core-js'
+import {
+  EdgeAccount,
+  EdgeContext,
+  EdgeCurrencyInfo,
+  EdgeCurrencyWallet,
+  EdgeWalletInfo,
+  EdgeWalletInfoFull,
+} from 'edge-core-js'
+import { useFile, useWrite } from 'edge-react-hooks'
 import * as React from 'react'
+import { useMutation } from 'react-query'
 
 export const getSortedCurrencyWallets = (account: EdgeAccount) => {
   const { activeWalletIds, currencyWallets } = account
@@ -50,7 +59,156 @@ export const getCurrencyCode = (account: EdgeAccount, { walletType }: { walletTy
 export const getShortId = ({ walletInfo }: { walletInfo: EdgeWalletInfo }) =>
   `${walletInfo.id.slice(0, 4)}...${walletInfo.id.slice(-4)}`
 
-const fiatCurrencyInfos = [
+export const getFiatInfo = ({ currencyCode }: { currencyCode: string }) =>
+  fiatCurrencyInfos.find((fiatInfo) => fiatInfo.isoCurrencyCode.includes(currencyCode))
+
+export const getCurrencyCodes = (wallet: EdgeCurrencyWallet) => {
+  const {
+    currencyInfo: { currencyCode, metaTokens },
+  } = wallet
+
+  return [currencyCode, ...metaTokens.map(({ currencyCode }) => currencyCode)]
+}
+
+// export const useDisplayDenomination = (account: EdgeAccount, { currencyInfo }: { currencyInfo: EdgeCurrencyInfo }) => {
+//   const read = useCurrencySetting(account, { currencyCode: currencyInfo.currencyCode as any })
+
+//   return currencyInfo?.denominations.find(
+//     ({ multiplier }) => multiplier === (currencySetting as EdgeCurrencySetting).displayDenominationMultiplier,
+//   )
+// }
+
+export const useTimeout = () => {
+  const [{ callback, delay }, set] = React.useState({ callback: () => null, delay: 0 })
+
+  React.useEffect(() => {
+    const id = setTimeout(callback, delay)
+
+    return () => clearTimeout(id)
+  }, [callback, delay])
+
+  const timeout = React.useCallback((callback: () => any, delay: number) => {
+    set({ callback, delay })
+  }, [])
+
+  return timeout
+}
+
+export const useReadSyncedSettings = (account: EdgeAccount) =>
+  useFile<EdgeSyncedSettings>(account.disklet, {
+    path: 'Settings.json',
+    parse: JSON.parse,
+  })
+
+export const useWriteSyncedSettings = (account: EdgeAccount) =>
+  useWrite<EdgeSyncedSettings>(account.disklet, {
+    path: 'Settings.json',
+    stringify: JSON.stringify,
+  })
+
+export const useReadLocalSettings = (account: EdgeAccount) =>
+  useFile(account.localDisklet, {
+    path: 'Settings.json',
+    parse: JSON.parse,
+  })
+
+export const useWriteLocalSettings = (account: EdgeAccount) =>
+  useWrite(account.localDisklet, {
+    path: 'Settings.json',
+    stringify: JSON.stringify,
+  })
+
+export const useWriteDefaultFiatCurrencyCode = (account: EdgeAccount) =>
+  useWrite<string>(account.disklet, {
+    path: 'Settings/DefaultFiatCurrencyCode.json',
+    stringify: JSON.stringify,
+  })
+
+export const useReadDefaultFiatCurrencyCode = (account: EdgeAccount) => {
+  const write = useWriteDefaultFiatCurrencyCode(account)
+  const read = useFile<string>(account.disklet, {
+    path: 'Settings/DefaultFiatCurrencyCode.json',
+    parse: JSON.parse,
+  })
+
+  React.useEffect(() => {
+    if (read.error) {
+      write.execute({ data: defaultSyncedSettings.defaultFiatCurrencyCode }).then(() => read.execute())
+    }
+  }, [read.error, read.data])
+
+  return read
+}
+
+export const useDefaultFiatCurrencyCode = (account: EdgeAccount) => ({
+  read: useReadDefaultFiatCurrencyCode(account),
+  write: useWriteDefaultFiatCurrencyCode(account),
+})
+
+export const useWriteCurrencySetting = (
+  account: EdgeAccount,
+  { currencyCode }: { currencyCode: keyof EdgeCurrencySettings },
+) =>
+  useWrite<EdgeCurrencySetting>(account.disklet, {
+    path: `Settings/Currencies/${currencyCode}.json`,
+    stringify: JSON.stringify,
+  })
+
+export const useReadCurrencySetting = (
+  account: EdgeAccount,
+  { currencyCode }: { currencyCode: keyof EdgeCurrencySettings },
+) => {
+  const write = useWriteCurrencySetting(account, { currencyCode })
+  const read = useFile<EdgeCurrencySetting>(account.disklet, {
+    path: `Settings/Currencies/${currencyCode}.json`,
+    parse: JSON.parse,
+  })
+
+  React.useEffect(() => {
+    if (read.error) {
+      write.execute({ data: defaultCurrencySetting }).then(() => read.execute())
+    }
+  }, [read.error])
+
+  return read
+}
+
+export const useCurrencySetting = (
+  account: EdgeAccount,
+  { currencyCode }: { currencyCode: keyof EdgeCurrencySettings },
+) => ({
+  read: useReadCurrencySetting(account, { currencyCode }),
+  write: useWriteCurrencySetting(account, { currencyCode }),
+})
+
+export const useWriteAutoLogoutDelay = (account: EdgeAccount) =>
+  useWrite<number>(account.disklet, {
+    path: `Settings/AutoLogoutDelay.json`,
+    stringify: JSON.stringify,
+  })
+
+export const useReadAutoLogoutDelay = (account: EdgeAccount) => {
+  const write = useWriteAutoLogoutDelay(account)
+  const read = useFile<number>(account.disklet, {
+    path: `Settings/AutoLogoutDelay.json`,
+    parse: JSON.parse,
+  })
+
+  React.useEffect(() => {
+    if (read.error) {
+      write.execute({ data: defaultSyncedSettings.autoLogoutDelay }).then(() => read.execute())
+    }
+  }, [read.error])
+
+  return read
+}
+
+export const useAutologoutDelay = (account: EdgeAccount) => ({
+  read: useReadAutoLogoutDelay(account),
+  write: useWriteAutoLogoutDelay(account),
+})
+
+export const fiatCurrencyInfos = [
   { currencyCode: 'AED', isoCurrencyCode: 'iso:AED', symbol: 'د.إ' },
   { currencyCode: 'AFN', isoCurrencyCode: 'iso:AFN', symbol: '؋' },
   { currencyCode: 'ALL', isoCurrencyCode: 'iso:ALL', symbol: 'L' },
@@ -212,29 +370,198 @@ const fiatCurrencyInfos = [
   { currencyCode: 'ZMW', isoCurrencyCode: 'iso:ZMW', symbol: 'ZK' },
 ]
 
-export const getFiatInfo = ({ currencyCode }: { currencyCode: string }) =>
-  fiatCurrencyInfos.find((fiatInfo) => fiatInfo.isoCurrencyCode === currencyCode)
-
-export const getCurrencyCodes = (wallet: EdgeCurrencyWallet) => {
-  const {
-    currencyInfo: { currencyCode, metaTokens },
-  } = wallet
-
-  return [currencyCode, ...metaTokens.map(({ currencyCode }) => currencyCode)]
+export type EdgeCurrencySetting = {
+  displayDenominationMultiplier: string
 }
 
-export const useTimeout = () => {
-  const [{ callback, delay }, set] = React.useState({ callback: () => null, delay: 0 })
+export interface PasswordRecoveryReminderSettings {
+  '20': boolean
+  '200': boolean
+  '2000': boolean
+  '20000': boolean
+  '200000': boolean
+}
 
-  React.useEffect(() => {
-    const id = setTimeout(callback, delay)
+export interface EdgeSyncedSettings extends EdgeCurrencySettings {
+  autoLogoutDelay: number
+  defaultFiatCurrencyCode: string
+  merchantMode: boolean
+  preferredSwapPluginId: string
+  countryCode: string
+  customTokens: []
+  mostRecentWallets: []
+  passwordRecoveryRemindersShown: PasswordRecoveryReminderSettings
+}
 
-    return () => clearTimeout(id)
-  }, [callback, delay])
+export interface EdgeCurrencySettings {
+  // Chains
+  BCH: EdgeCurrencySetting
+  BNB: EdgeCurrencySetting
+  BTC: EdgeCurrencySetting
+  DASH: EdgeCurrencySetting
+  DGB: EdgeCurrencySetting
+  DOGE: EdgeCurrencySetting
+  EOS: EdgeCurrencySetting
+  ETH: EdgeCurrencySetting
+  FTC: EdgeCurrencySetting
+  LTC: EdgeCurrencySetting
+  QTUM: EdgeCurrencySetting
+  RBTC: EdgeCurrencySetting
+  RVN: EdgeCurrencySetting
+  SMART: EdgeCurrencySetting
+  UFO: EdgeCurrencySetting
+  VTC: EdgeCurrencySetting
+  XLM: EdgeCurrencySetting
+  XMR: EdgeCurrencySetting
+  XRP: EdgeCurrencySetting
+  XTZ: EdgeCurrencySetting
+  XZC: EdgeCurrencySetting
 
-  const timeout = React.useCallback((callback: () => any, delay: number) => {
-    set({ callback, delay })
-  }, [])
+  // Tokens?
+  AGLD: EdgeCurrencySetting
+  ANT: EdgeCurrencySetting
+  BAT: EdgeCurrencySetting
+  BNT: EdgeCurrencySetting
+  BRZ: EdgeCurrencySetting
+  CBAT: EdgeCurrencySetting
+  CDAI: EdgeCurrencySetting
+  CETH: EdgeCurrencySetting
+  CREP: EdgeCurrencySetting
+  CSAI: EdgeCurrencySetting
+  CUSDC: EdgeCurrencySetting
+  CWBTC: EdgeCurrencySetting
+  CZRX: EdgeCurrencySetting
+  DAI: EdgeCurrencySetting
+  ETHBNT: EdgeCurrencySetting
+  FUN: EdgeCurrencySetting
+  GNO: EdgeCurrencySetting
+  GNT: EdgeCurrencySetting
+  GUSD: EdgeCurrencySetting
+  HERC: EdgeCurrencySetting
+  HUR: EdgeCurrencySetting
+  IND: EdgeCurrencySetting
+  KIN: EdgeCurrencySetting
+  KNC: EdgeCurrencySetting
+  LINK: EdgeCurrencySetting
+  MANA: EdgeCurrencySetting
+  MET: EdgeCurrencySetting
+  MKR: EdgeCurrencySetting
+  NEXO: EdgeCurrencySetting
+  NMR: EdgeCurrencySetting
+  OMG: EdgeCurrencySetting
+  OXT: EdgeCurrencySetting
+  PAX: EdgeCurrencySetting
+  POLY: EdgeCurrencySetting
+  REP: EdgeCurrencySetting
+  RIF: EdgeCurrencySetting
+  SAI: EdgeCurrencySetting
+  SALT: EdgeCurrencySetting
+  STORJ: EdgeCurrencySetting
+  TUSD: EdgeCurrencySetting
+  USDC: EdgeCurrencySetting
+  USDS: EdgeCurrencySetting
+  USDT: EdgeCurrencySetting
+  WINGS: EdgeCurrencySetting
+  ZRX: EdgeCurrencySetting
+}
 
-  return timeout
+export const passwordRecoveryRemindersShown = {
+  '20': false,
+  '200': false,
+  '2000': false,
+  '20000': false,
+  '200000': false,
+}
+
+export const defaultCurrencySetting = { displayDenominationMultiplier: '' }
+
+export const defaultCurrencySettings = {
+  // Chains
+  BCH: { displayDenominationMultiplier: '' },
+  BNB: { displayDenominationMultiplier: '' },
+  BSV: { displayDenominationMultiplier: '' },
+  BTC: { displayDenominationMultiplier: '' },
+  BTG: { displayDenominationMultiplier: '' },
+  DASH: { displayDenominationMultiplier: '' },
+  DGB: { displayDenominationMultiplier: '' },
+  DOGE: { displayDenominationMultiplier: '' },
+  EOS: { displayDenominationMultiplier: '' },
+  EBST: { displayDenominationMultiplier: '' },
+  ETC: { displayDenominationMultiplier: '' },
+  ETH: { displayDenominationMultiplier: '' },
+  FIO: { displayDenominationMultiplier: '' },
+  FTC: { displayDenominationMultiplier: '' },
+  GRS: { displayDenominationMultiplier: '' },
+  LTC: { displayDenominationMultiplier: '' },
+  QTUM: { displayDenominationMultiplier: '' },
+  RBTC: { displayDenominationMultiplier: '' },
+  RVN: { displayDenominationMultiplier: '' },
+  SMART: { displayDenominationMultiplier: '' },
+  UFO: { displayDenominationMultiplier: '' },
+  VTC: { displayDenominationMultiplier: '' },
+  XLM: { displayDenominationMultiplier: '' },
+  XMR: { displayDenominationMultiplier: '' },
+  XRP: { displayDenominationMultiplier: '' },
+  XTZ: { displayDenominationMultiplier: '' },
+  XZC: { displayDenominationMultiplier: '' },
+
+  // Tokens?
+  AGLD: { displayDenominationMultiplier: '' },
+  ANT: { displayDenominationMultiplier: '' },
+  BAT: { displayDenominationMultiplier: '' },
+  BNT: { displayDenominationMultiplier: '' },
+  BRZ: { displayDenominationMultiplier: '' },
+  CBAT: { displayDenominationMultiplier: '' },
+  CDAI: { displayDenominationMultiplier: '' },
+  CETH: { displayDenominationMultiplier: '' },
+  CREP: { displayDenominationMultiplier: '' },
+  CSAI: { displayDenominationMultiplier: '' },
+  CUSDC: { displayDenominationMultiplier: '' },
+  CWBTC: { displayDenominationMultiplier: '' },
+  CZRX: { displayDenominationMultiplier: '' },
+  DAI: { displayDenominationMultiplier: '' },
+  ETHBNT: { displayDenominationMultiplier: '' },
+  FUN: { displayDenominationMultiplier: '' },
+  GNO: { displayDenominationMultiplier: '' },
+  GNT: { displayDenominationMultiplier: '' },
+  GUSD: { displayDenominationMultiplier: '' },
+  HERC: { displayDenominationMultiplier: '' },
+  HUR: { displayDenominationMultiplier: '' },
+  IND: { displayDenominationMultiplier: '' },
+  KIN: { displayDenominationMultiplier: '' },
+  KNC: { displayDenominationMultiplier: '' },
+  LINK: { displayDenominationMultiplier: '' },
+  MANA: { displayDenominationMultiplier: '' },
+  MET: { displayDenominationMultiplier: '' },
+  MKR: { displayDenominationMultiplier: '' },
+  NEXO: { displayDenominationMultiplier: '' },
+  NMR: { displayDenominationMultiplier: '' },
+  OMG: { displayDenominationMultiplier: '' },
+  OXT: { displayDenominationMultiplier: '' },
+  PAX: { displayDenominationMultiplier: '' },
+  POLY: { displayDenominationMultiplier: '' },
+  REP: { displayDenominationMultiplier: '' },
+  RIF: { displayDenominationMultiplier: '' },
+  SAI: { displayDenominationMultiplier: '' },
+  SALT: { displayDenominationMultiplier: '' },
+  STORJ: { displayDenominationMultiplier: '' },
+  TBTC: { displayDenominationMultiplier: '' },
+  TUSD: { displayDenominationMultiplier: '' },
+  USDC: { displayDenominationMultiplier: '' },
+  USDS: { displayDenominationMultiplier: '' },
+  USDT: { displayDenominationMultiplier: '' },
+  WINGS: { displayDenominationMultiplier: '' },
+  ZRX: { displayDenominationMultiplier: '' },
+}
+
+export const defaultSyncedSettings: EdgeSyncedSettings = {
+  autoLogoutDelay: 3600,
+  defaultFiatCurrencyCode: 'iso:USD',
+  merchantMode: false,
+  preferredSwapPluginId: '',
+  countryCode: '',
+  customTokens: [],
+  mostRecentWallets: [],
+  passwordRecoveryRemindersShown,
+  ...defaultCurrencySettings,
 }

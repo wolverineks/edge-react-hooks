@@ -1,12 +1,13 @@
-import { Disklet as DiskletType } from 'disklet'
+import { Disklet as DiskletType, deepList } from 'disklet'
 import { useFile, useFolder } from 'edge-react-hooks'
 import * as React from 'react'
 import { Button, Card, ListGroup } from 'react-bootstrap'
 import Json from 'react-json-pretty'
 
-export const fileName = (path: string) => (path.match(/\w*\.\w*/) || [])[0] || ''
+export const fileName = (path: string) => (path.match(/\w*.\w+$/) || [])[0] || '/'
+export const folderName = (path: string) => (path.match(/\w+$/) || [])[0] || '/'
 
-const ToggleRow: React.FC<{ title: string }> = ({ children, title }) => {
+const ToggleRow: React.FC<{ title: string; right?: React.ReactElement }> = ({ children, title, right }) => {
   const [showContents, setShowContents] = React.useState(false)
 
   return (
@@ -20,6 +21,7 @@ const ToggleRow: React.FC<{ title: string }> = ({ children, title }) => {
         {showContents ? '-' : '+'}
       </Button>
       {title}
+      {right}
       {showContents && children}
     </div>
   )
@@ -29,24 +31,35 @@ export const Disklet: React.FC<{ disklet: DiskletType; path?: string; title: str
   disklet,
   path = '/',
   title,
-}) => (
-  <Card>
-    <Card.Header>
-      <Card.Title>{title}</Card.Title>
-    </Card.Header>
-    <Card.Body>
-      <Folder disklet={disklet} path={path} />
-    </Card.Body>
-  </Card>
-)
+}) => {
+  return (
+    <Card>
+      <Card.Header>
+        <Card.Title>{title}</Card.Title>
+      </Card.Header>
+      <Card.Body>
+        <Folder disklet={disklet} path={path} />
+      </Card.Body>
+    </Card>
+  )
+}
 
-export const Folder: React.FC<{ disklet: DiskletType; path: string }> = ({ disklet, path = '/' }) => (
-  <div style={{ paddingLeft: '20px' }}>
-    <ToggleRow title={path}>
-      <FolderContents disklet={disklet} path={path} />
-    </ToggleRow>
-  </div>
-)
+export const Folder: React.FC<{ disklet: DiskletType; path: string }> = ({ disklet, path = '/' }) => {
+  return (
+    <div style={{ paddingLeft: '20px' }}>
+      <ToggleRow
+        title={folderName(path)}
+        right={
+          <Button className={'float-right'} variant={'danger'} onClick={() => disklet.delete(path)}>
+            Delete
+          </Button>
+        }
+      >
+        <FolderContents disklet={disklet} path={path} />
+      </ToggleRow>
+    </div>
+  )
+}
 
 const FolderContents: React.FC<{ disklet: DiskletType; path: string }> = ({ disklet, path }) => {
   const folder = useFolder(disklet, { path })
@@ -67,7 +80,7 @@ const FolderContents: React.FC<{ disklet: DiskletType; path: string }> = ({ disk
       {Object.entries(folder.data).map(([key, value]) =>
         value === 'folder' ? (
           <ListGroup.Item>
-            <Folder disklet={disklet} path={`${path}${key}`} key={key} />
+            <Folder disklet={disklet} path={key} key={key} />
           </ListGroup.Item>
         ) : value === 'file' ? (
           <ListGroup.Item>
@@ -81,7 +94,14 @@ const FolderContents: React.FC<{ disklet: DiskletType; path: string }> = ({ disk
 
 export const File: React.FC<{ disklet: DiskletType; path: string }> = ({ disklet, path }) => (
   <div style={{ paddingLeft: '20px' }}>
-    <ToggleRow title={fileName(path)}>
+    <ToggleRow
+      title={fileName(path)}
+      right={
+        <Button className={'float-right'} variant={'danger'} onClick={() => disklet.delete(path)}>
+          Delete
+        </Button>
+      }
+    >
       <FileContents disklet={disklet} path={path} />
     </ToggleRow>
   </div>

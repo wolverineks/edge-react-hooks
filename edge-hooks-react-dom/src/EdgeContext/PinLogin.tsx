@@ -8,15 +8,16 @@ import { useTimeout } from '../utils'
 
 export const PinLogin: React.FC<{ context: EdgeContext }> = ({ context }) => {
   useEdgeContext(context)
+  const accountsWithPinLogin = context.localUsers.filter(({ pinLoginEnabled }) => pinLoginEnabled)
 
   return (
     <ListGroup>
-      {!context.localUsers ? (
-        <Card.Text>Loading...</Card.Text>
-      ) : context.localUsers.length <= 0 ? (
+      {accountsWithPinLogin.length <= 0 ? (
         <Card.Text>------</Card.Text>
       ) : (
-        context.localUsers.map(({ username }) => <LocalUserRow context={context} username={username} key={username} />)
+        accountsWithPinLogin.map(({ username }) => (
+          <LocalUserRow context={context} username={username} key={username} />
+        ))
       )}
     </ListGroup>
   )

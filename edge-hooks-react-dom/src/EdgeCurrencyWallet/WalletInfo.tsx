@@ -13,15 +13,10 @@ import { Alert, Button, Card, Form, FormControl, FormGroup, FormLabel, ListGroup
 
 import { Disklet } from '../Disklet/Disklet'
 import { BalanceList } from '../EdgeAccount/BalanceList'
+import { fiatCurrencyInfos } from '../utils'
 import { Request } from './Request'
 import { Send } from './Send'
 import { TransactionList } from './TransactionList'
-
-const fiatCurrencyCodes = [
-  { value: 'iso:USD', display: 'US Dollars' },
-  { value: 'iso:EUR', display: 'Euros' },
-  { value: 'iso:CAD', display: 'Canadian Dollars' },
-]
 
 export const WalletInfo: React.FC<{ wallet: EdgeCurrencyWallet; account: EdgeAccount }> = ({ wallet, account }) => {
   useEdgeCurrencyWallet(wallet)
@@ -118,47 +113,57 @@ const EnableTokens: React.FC<{ wallet: EdgeCurrencyWallet }> = ({ wallet }) => {
   )
 }
 
-const WalletOptions = ({ wallet }: { wallet: EdgeCurrencyWallet }) => {
-  const [walletName, _setWalletName] = React.useState<string>(wallet.name || '')
-  const [fiatCurrencyCode, _setFiatCurrencyCode] = React.useState(wallet.fiatCurrencyCode)
-
-  const renameWallet = useRenameWallet(wallet)
-  const setFiatCurrencyCode = useSetFiatCurrencyCode(wallet)
+const RenameWallet: React.FC<{ wallet: EdgeCurrencyWallet }> = ({ wallet }) => {
+  useEdgeCurrencyWallet(wallet)
+  const [walletName, setWalletName] = React.useState<string>(wallet.name || '')
+  const { execute, status } = useRenameWallet(wallet)
 
   return (
+    <FormGroup>
+      <Form.Label>Wallet Name</Form.Label>
+      <FormControl value={walletName} onChange={(event) => setWalletName(event.currentTarget.value)} />
+      <Button onClick={() => execute({ name: walletName })} disabled={status === 'loading'}>
+        Rename
+      </Button>
+    </FormGroup>
+  )
+}
+
+const SetFiatCurrencyCode: React.FC<{ wallet: EdgeCurrencyWallet }> = ({ wallet }) => {
+  useEdgeCurrencyWallet(wallet)
+  const [fiatCurrencyCode, setFiatCurrencyCode] = React.useState(wallet.fiatCurrencyCode)
+  const { execute, status, error } = useSetFiatCurrencyCode(wallet)
+
+  return (
+    <FormGroup>
+      <FormLabel htmlFor={'fiatCurrencyCodes'}>FiatCurrencyCode</FormLabel>
+      <FormControl
+        as={'select'}
+        defaultValue={wallet.fiatCurrencyCode}
+        id={'fiatCurrencyCodes'}
+        disabled={status === 'loading'}
+        onChange={(event) => setFiatCurrencyCode(event.currentTarget.value)}
+      >
+        {fiatCurrencyInfos.map(({ currencyCode, isoCurrencyCode, symbol }) => (
+          <option value={isoCurrencyCode} key={isoCurrencyCode}>
+            {symbol} - {currencyCode}
+          </option>
+        ))}
+      </FormControl>
+      <Button onClick={() => execute({ fiatCurrencyCode })} disabled={status === 'loading'}>
+        Set Fiat
+      </Button>
+
+      {error && <Alert variant={'danger'}>{error.message}</Alert>}
+    </FormGroup>
+  )
+}
+
+const WalletOptions = ({ wallet }: { wallet: EdgeCurrencyWallet }) => {
+  return (
     <Form>
-      <FormGroup>
-        <Form.Label>Wallet Name</Form.Label>
-        <FormControl value={walletName} onChange={(event) => _setWalletName(event.currentTarget.value)} />
-        <Button onClick={() => renameWallet.execute({ name: walletName })} disabled={renameWallet.status === 'loading'}>
-          Rename
-        </Button>
-      </FormGroup>
-
-      <FormGroup>
-        <FormLabel htmlFor={'fiatCurrencyCodes'}>FiatCurrencyCode</FormLabel>
-        <FormControl
-          as={'select'}
-          defaultValue={wallet.fiatCurrencyCode}
-          id={'fiatCurrencyCodes'}
-          disabled={setFiatCurrencyCode.status === 'loading'}
-          onChange={(event) => _setFiatCurrencyCode(event.currentTarget.value)}
-        >
-          {fiatCurrencyCodes.map(({ display, value }) => (
-            <option value={value} key={value}>
-              {display}
-            </option>
-          ))}
-        </FormControl>
-        <Button
-          onClick={() => setFiatCurrencyCode.execute({ fiatCurrencyCode })}
-          disabled={setFiatCurrencyCode.status === 'loading'}
-        >
-          Set Fiat
-        </Button>
-
-        {setFiatCurrencyCode.error && <Alert variant={'danger'}>{setFiatCurrencyCode.error.message}</Alert>}
-      </FormGroup>
+      <RenameWallet wallet={wallet} />
+      <SetFiatCurrencyCode wallet={wallet} />
     </Form>
   )
 }
