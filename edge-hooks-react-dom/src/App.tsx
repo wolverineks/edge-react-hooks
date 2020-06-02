@@ -5,13 +5,13 @@ import * as React from 'react'
 import { Button, Container, Navbar, Tab, Tabs } from 'react-bootstrap'
 
 import { AccountInfo } from './EdgeAccount/AccountInfo'
-import { EdgeAccountProvider, useAccount, useSetAccount } from './EdgeAccount/useAccount'
 import { contextOptions } from './EdgeContext/contextOptions'
 import { CreateAccountForm } from './EdgeContext/CreateAccountForm'
 import { LoginForm } from './EdgeContext/LoginForm'
 import { PinLogin } from './EdgeContext/PinLogin'
 import { EdgeContextProvider, useContext } from './EdgeContext/useContext'
-import { SelectedWalletProvider } from './EdgeCurrencyWallet/useSelectedWallet'
+import { EdgeAccountProvider, useAccount, useSetAccount } from './Providers/AccountProvider'
+import { SelectedWalletProvider } from './Providers/SelectedWalletProvider'
 
 export const Providers: React.FC = ({ children }) => (
   <EdgeContextProvider contextOptions={contextOptions}>

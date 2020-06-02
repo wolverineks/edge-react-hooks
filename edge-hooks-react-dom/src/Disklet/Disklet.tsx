@@ -1,4 +1,4 @@
-import { Disklet as DiskletType, deepList } from 'disklet'
+import { Disklet as DiskletType } from 'disklet'
 import { useFile, useFolder } from 'edge-react-hooks'
 import * as React from 'react'
 import { Button, Card, ListGroup } from 'react-bootstrap'

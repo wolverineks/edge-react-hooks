@@ -1,9 +1,10 @@
-import { EdgeAccount, EdgeCurrencyWallet } from 'edge-core-js'
-import { useConvertCurrency, useEdgeAccount, useEdgeCurrencyWallet } from 'edge-react-hooks'
+import { EdgeAccount, EdgeCurrencyWallet, EdgeDenomination } from 'edge-core-js'
+import { useEdgeAccount, useEdgeCurrencyWallet } from 'edge-react-hooks'
 import * as React from 'react'
-import { Card, ListGroup } from 'react-bootstrap'
+import { Card, Image, ListGroup } from 'react-bootstrap'
 
-import { getCurrencySymbol, getFiatInfo } from '../utils'
+import { getCurrencyInfoFromCurrencyCode } from '../utils'
+import { DisplayAmount, FiatAmount } from './ActiveWalletList'
 
 export const BalanceList: React.FC<{ wallet: EdgeCurrencyWallet; account: EdgeAccount }> = ({ wallet, account }) => {
   useEdgeCurrencyWallet(wallet)
@@ -19,11 +20,11 @@ export const BalanceList: React.FC<{ wallet: EdgeCurrencyWallet; account: EdgeAc
 
       <ListGroup>
         {balances.map(([currencyCode, balance]: [string, any]) => (
-          <ListGroup.Item key={wallet.id}>
+          <ListGroup.Item key={currencyCode}>
             <Balance
               account={account}
               wallet={wallet}
-              fromCurrencyCode={currencyCode}
+              currencyInfo={getCurrencyInfoFromCurrencyCode(wallet, { currencyCode })}
               toCurrencyCode={wallet.fiatCurrencyCode}
               nativeAmount={balance}
             />
@@ -35,24 +36,22 @@ export const BalanceList: React.FC<{ wallet: EdgeCurrencyWallet; account: EdgeAc
 }
 
 const Balance: React.FC<{
+  account: EdgeAccount
   wallet: EdgeCurrencyWallet
-  fromCurrencyCode: string
+  currencyInfo: { currencyCode: string; denominations: EdgeDenomination[]; symbolImage: string }
   toCurrencyCode: string
   nativeAmount: string
-  account: EdgeAccount
-}> = ({ fromCurrencyCode, toCurrencyCode, nativeAmount, account, wallet }) => {
-  const { data: fiatAmount } = useConvertCurrency(account.rateCache, {
-    fromCurrency: fromCurrencyCode,
-    toCurrency: toCurrencyCode,
-    amount: 1, //Number(balance),
-  })
-  const symbol = getCurrencySymbol(account, { walletType: wallet.type })
-  const fiatInfo = getFiatInfo({ currencyCode: toCurrencyCode })
-
+}> = ({ currencyInfo, nativeAmount, account, wallet }) => {
   return (
     <div>
-      {symbol} {nativeAmount} {fromCurrencyCode} - {fiatInfo?.symbol} {(fiatAmount || 0).toFixed(2)}{' '}
-      {fiatInfo?.currencyCode}
+      <Image src={currencyInfo.symbolImage} />
+      <DisplayAmount account={account} currencyInfo={currencyInfo} nativeAmount={nativeAmount} /> -{' '}
+      <FiatAmount
+        account={account}
+        currencyInfo={currencyInfo}
+        toCurrencyCode={wallet.fiatCurrencyCode}
+        nativeAmount={nativeAmount}
+      />
     </div>
   )
 }

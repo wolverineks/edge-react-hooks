@@ -1,10 +1,9 @@
-import { EdgeAccount, EdgeContext, EdgeCurrencyInfo, EdgeDenomination } from 'edge-core-js'
+import { EdgeAccount, EdgeContext, EdgeCurrencyInfo, EdgeDenomination, EdgeMetaToken } from 'edge-core-js'
 import { useChangePin, useEdgeAccount, usePinLoginEnabled } from 'edge-react-hooks'
 import * as React from 'react'
 import { Form, FormControl, FormGroup, FormLabel, Image, ListGroup, ListGroupItem } from 'react-bootstrap'
 
 import {
-  EdgeCurrencySettings,
   fiatCurrencyInfos,
   getCurrencyInfos,
   getFiatInfo,
@@ -127,12 +126,8 @@ const CurrencySetting: React.FC<{
   account: EdgeAccount
   currencyInfo: EdgeCurrencyInfo
 }> = ({ account, currencyInfo }) => {
-  const currencyCode = currencyInfo.currencyCode as keyof EdgeCurrencySettings
+  const { displayName, denominations, symbolImage, currencyCode, metaTokens } = currencyInfo
   const { read, write } = useCurrencySetting(account, { currencyCode })
-
-  React.useEffect(() => {
-    console.log({ read: read.promise })
-  }, [read.status])
 
   if (read.error) return <div>Error: {read.error.message}</div>
   if (!read.data) return <div>Loading...</div>
@@ -143,34 +138,60 @@ const CurrencySetting: React.FC<{
       .then(() => read.execute())
 
   const { displayDenominationMultiplier } = read.data
-  const { displayName, denominations, symbolImage } = currencyInfo
-  const selectedDenomination = currencyInfo.denominations.find(
+  const selectedDenomination = denominations.find(({ multiplier }) => multiplier === displayDenominationMultiplier)
+  const displayDenomination = selectedDenomination || denominations[0]
+
+  return (
+    <ListGroup>
+      <ListGroupItem>
+        <Image src={symbolImage} />
+        {displayName} - {currencyCode}
+      </ListGroupItem>
+      <Denominations
+        denominations={denominations}
+        onSelect={onSelect}
+        selectedDenominationMultiplier={displayDenomination.multiplier}
+      />
+      {metaTokens.map((metaToken) => (
+        <TokenSetting key={metaToken.currencyCode} account={account} tokenInfo={metaToken} />
+      ))}
+    </ListGroup>
+  )
+}
+
+const TokenSetting: React.FC<{
+  account: EdgeAccount
+  tokenInfo: EdgeMetaToken
+}> = ({ account, tokenInfo }) => {
+  const { currencyName, currencyCode, denominations, symbolImage } = tokenInfo
+  const { read, write } = useCurrencySetting(account, { currencyCode })
+
+  if (read.error) return <div>Error: {read.error.message}</div>
+  if (!read.data) return <div>Loading...</div>
+
+  const onSelect = (denomination: EdgeDenomination) =>
+    write
+      .execute({ data: { ...read.data, displayDenominationMultiplier: denomination.multiplier } })
+      .then(() => read.execute())
+
+  const { displayDenominationMultiplier } = read.data
+  const selectedDenomination = tokenInfo.denominations.find(
     ({ multiplier }) => multiplier === displayDenominationMultiplier,
   )
   const displayDenomination = selectedDenomination || denominations[0]
 
   return (
-    <ListGroupItem>
-      {currencyCode}:
-      <ListGroup>
-        <ListGroupItem>
-          <Image src={symbolImage} />
-        </ListGroupItem>
-        <ListGroupItem>Name: {displayName}</ListGroupItem>
-        <ListGroupItem>
-          Denomination:
-          {'{'}
-          name: {displayDenomination.name}, multiplier: {displayDenomination.multiplier}, symbol:{' '}
-          {displayDenomination.symbol}
-          {'}'}
-        </ListGroupItem>
-        <Denominations
-          denominations={denominations}
-          onSelect={onSelect}
-          selectedDenominationMultiplier={displayDenomination.multiplier}
-        />
-      </ListGroup>
-    </ListGroupItem>
+    <ListGroup>
+      <ListGroupItem>
+        <Image src={symbolImage} />
+        {currencyName} - {currencyCode} (token)
+      </ListGroupItem>
+      <Denominations
+        denominations={denominations}
+        onSelect={onSelect}
+        selectedDenominationMultiplier={displayDenomination.multiplier}
+      />
+    </ListGroup>
   )
 }
 
@@ -184,7 +205,6 @@ const Denominations = ({
   onSelect: (denomination: EdgeDenomination) => any
 }) => (
   <ListGroupItem>
-    Denominations:
     <ListGroup>
       {denominations.map((denomination) => (
         <Denomination

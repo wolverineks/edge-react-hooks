@@ -4,8 +4,8 @@ import * as React from 'react'
 import { Tab, Tabs } from 'react-bootstrap'
 
 import { Disklet } from '../Disklet/Disklet'
-import { useSelectWallet, useSelectedWallet } from '../EdgeCurrencyWallet/useSelectedWallet'
 import { WalletInfo } from '../EdgeCurrencyWallet/WalletInfo'
+import { useSelectWallet, useSelectedWallet } from '../Providers/SelectedWalletProvider'
 import { Settings } from '../Settings/Settings'
 import { ActiveWalletList } from './ActiveWalletList'
 import { ArchivedWalletList } from './ArchivedWalletList'
@@ -18,6 +18,17 @@ export const AccountInfo = ({ account, context }: { account: EdgeAccount; contex
   const [tab, setTab] = React.useState('wallets')
   const selectedWallet = useSelectedWallet() || account.currencyWallets[account.activeWalletIds[0]]
   const selectWallet = useSelectWallet()
+
+  React.useEffect(() => {
+    const unsubs = Object.values(account.currencyConfig).map((currencyConfig) => {
+      const { userSettings } = currencyConfig
+      console.log({ currencyConfig: currencyConfig.currencyInfo.currencyCode, userSettings })
+
+      return currencyConfig.watch('userSettings', (userSettings) => console.log({ userSettings }))
+    })
+
+    return () => unsubs.forEach((unsub) => unsub())
+  }, [account.currencyConfig])
 
   return (
     <Tabs

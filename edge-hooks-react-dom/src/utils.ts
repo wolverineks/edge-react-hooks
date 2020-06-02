@@ -3,6 +3,8 @@ import {
   EdgeContext,
   EdgeCurrencyInfo,
   EdgeCurrencyWallet,
+  EdgeDenomination,
+  EdgeMetaToken,
   EdgeWalletInfo,
   EdgeWalletInfoFull,
 } from 'edge-core-js'
@@ -35,8 +37,18 @@ export const getWalletTypes = (account: EdgeAccount) =>
     }),
   )
 
+export const nativeToDenomination = ({
+  denomination,
+  nativeAmount,
+}: {
+  denomination: EdgeDenomination
+  nativeAmount: string
+}) => (Number(nativeAmount) / Number(denomination.multiplier)).toFixed(4)
+
+export const getTokenSymbol = (tokenInfo: EdgeMetaToken) => tokenInfo.denominations[0].symbol
+
 export const getCurrencySymbol = (account: EdgeAccount, { walletType }: { walletType: string }) =>
-  getCurrencyInfo(account, { walletType })?.denominations[0]?.symbol
+  getCurrencyInfoFromWalletType(account, { walletType })?.denominations[0]?.symbol
 
 export const getCurrencyInfos = (account: EdgeAccount) =>
   Object.values(account.currencyConfig).map(({ currencyInfo }) => currencyInfo)
@@ -44,17 +56,30 @@ export const getCurrencyInfos = (account: EdgeAccount) =>
 export const getCurrencyConfig = (account: EdgeAccount, { walletType }: { walletType: string }) =>
   Object.values(account.currencyConfig).find((currencyConfig) => currencyConfig.currencyInfo.walletType === walletType)
 
-export const getCurrencyInfo = (account: EdgeAccount, { walletType }: { walletType: string }) =>
-  getCurrencyConfig(account, { walletType })?.currencyInfo
+export const getCurrencyInfoFromWalletType = (account: EdgeAccount, { walletType }: { walletType: string }) =>
+  (getCurrencyConfig(account, { walletType })?.currencyInfo as unknown) as {
+    currencyCode: string
+    denominations: EdgeDenomination[]
+    symbolImage: string
+  }
+
+export const getCurrencyInfoFromCurrencyCode = (
+  wallet: EdgeCurrencyWallet,
+  { currencyCode }: { currencyCode: string },
+) =>
+  (wallet.currencyInfo.currencyCode === currencyCode
+    ? wallet.currencyInfo
+    : wallet.currencyInfo.metaTokens.find((tokenInfo) => tokenInfo.currencyCode === currencyCode)) as {
+    currencyCode: string
+    denominations: EdgeDenomination[]
+    symbolImage: string
+  }
 
 export const getLogo = (account: EdgeAccount, { walletType }: { walletType: string }) =>
-  getCurrencyInfo(account, { walletType })?.symbolImage
-
-export const getLogoDark = (account: EdgeAccount, { walletType }: { walletType: string }) =>
-  getCurrencyInfo(account, { walletType })?.symbolImageDarkMono
+  getCurrencyInfoFromWalletType(account, { walletType })?.symbolImage
 
 export const getCurrencyCode = (account: EdgeAccount, { walletType }: { walletType: string }) =>
-  getCurrencyInfo(account, { walletType })?.currencyCode
+  getCurrencyInfoFromWalletType(account, { walletType })?.currencyCode
 
 export const getShortId = ({ walletInfo }: { walletInfo: EdgeWalletInfo }) =>
   `${walletInfo.id.slice(0, 4)}...${walletInfo.id.slice(-4)}`
@@ -145,19 +170,13 @@ export const useDefaultFiatCurrencyCode = (account: EdgeAccount) => ({
   write: useWriteDefaultFiatCurrencyCode(account),
 })
 
-export const useWriteCurrencySetting = (
-  account: EdgeAccount,
-  { currencyCode }: { currencyCode: keyof EdgeCurrencySettings },
-) =>
+export const useWriteCurrencySetting = (account: EdgeAccount, { currencyCode }: { currencyCode: string }) =>
   useWrite<EdgeCurrencySetting>(account.disklet, {
     path: `Settings/Currencies/${currencyCode}.json`,
     stringify: JSON.stringify,
   })
 
-export const useReadCurrencySetting = (
-  account: EdgeAccount,
-  { currencyCode }: { currencyCode: keyof EdgeCurrencySettings },
-) => {
+export const useReadCurrencySetting = (account: EdgeAccount, { currencyCode }: { currencyCode: string }) => {
   const write = useWriteCurrencySetting(account, { currencyCode })
   const read = useFile<EdgeCurrencySetting>(account.disklet, {
     path: `Settings/Currencies/${currencyCode}.json`,
@@ -173,10 +192,7 @@ export const useReadCurrencySetting = (
   return read
 }
 
-export const useCurrencySetting = (
-  account: EdgeAccount,
-  { currencyCode }: { currencyCode: keyof EdgeCurrencySettings },
-) => ({
+export const useCurrencySetting = (account: EdgeAccount, { currencyCode }: { currencyCode: string }) => ({
   read: useReadCurrencySetting(account, { currencyCode }),
   write: useWriteCurrencySetting(account, { currencyCode }),
 })

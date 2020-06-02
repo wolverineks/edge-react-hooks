@@ -5,12 +5,8 @@ import { Alert, Button, Form, FormControl, FormGroup, FormLabel } from 'react-bo
 
 import { fiatCurrencyInfos, getFiatInfo, getWalletTypes, useDefaultFiatCurrencyCode } from '../utils'
 
-const onChange = (cb: Function) => (event: any) => cb(event.currentTarget.value)
-
 export const CreateWallet: React.FC<{ account: EdgeAccount }> = ({ account }) => {
   useEdgeAccount(account)
-  const { read } = useDefaultFiatCurrencyCode(account)
-
   const walletTypes = getWalletTypes(account)
 
   const [type, setType] = React.useState<string>(walletTypes[0].type)
@@ -19,22 +15,34 @@ export const CreateWallet: React.FC<{ account: EdgeAccount }> = ({ account }) =>
 
   const { execute: createCurrencyWallet, error, status } = useCreateCurrencyWallet(account)
   const pending = status === 'loading'
-  const onSubmit = () => createCurrencyWallet({ type, options: { name, fiatCurrencyCode } })
 
+  const { read } = useDefaultFiatCurrencyCode(account)
   if (read.error) return <div>Error: {read.error.message}</div>
   if (!read.data) return <div>Default Fiat: Loading...</div>
+
+  const onSubmit = () => createCurrencyWallet({ type, options: { name, fiatCurrencyCode } })
   const defaultFiatInfo = getFiatInfo({ currencyCode: read.data })
 
   return (
     <Form>
       <FormGroup>
         <FormLabel>Name</FormLabel>
-        <FormControl id={'name'} disabled={pending} value={name} onChange={onChange(setName)} />
+        <FormControl
+          id={'name'}
+          disabled={pending}
+          value={name}
+          onChange={(event) => setName(event.currentTarget.value)}
+        />
       </FormGroup>
 
       <FormGroup>
         <FormLabel>Type</FormLabel>
-        <FormControl as="select" id={'type'} disabled={pending} onChange={onChange(setType)}>
+        <FormControl
+          as="select"
+          id={'type'}
+          disabled={pending}
+          onChange={(event) => setType(event.currentTarget.value)}
+        >
           {walletTypes.map(({ display, type, currencyCode }) => (
             <option value={type} key={type}>
               {currencyCode} - {display}
@@ -49,7 +57,7 @@ export const CreateWallet: React.FC<{ account: EdgeAccount }> = ({ account }) =>
           as="select"
           id={'fiatCurrencyCodes'}
           disabled={pending}
-          onChange={onChange(setFiatCurrencyCode)}
+          onChange={(event) => setFiatCurrencyCode(event.currentTarget.value)}
           defaultValue={defaultFiatInfo?.isoCurrencyCode}
         >
           {defaultFiatInfo && (

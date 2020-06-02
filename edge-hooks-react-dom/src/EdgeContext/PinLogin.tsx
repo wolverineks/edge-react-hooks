@@ -3,7 +3,7 @@ import { useDeleteLocalAccount, useEdgeContext, useLoginMessages, useLoginWithPi
 import * as React from 'react'
 import { Alert, Button, Card, Col, Form, FormControl, FormLabel, ListGroup } from 'react-bootstrap'
 
-import { useSetAccount } from '../EdgeAccount/useAccount'
+import { useSetAccount } from '../Providers/AccountProvider'
 import { useTimeout } from '../utils'
 
 export const PinLogin: React.FC<{ context: EdgeContext }> = ({ context }) => {

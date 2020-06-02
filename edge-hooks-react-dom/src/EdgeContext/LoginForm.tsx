@@ -3,7 +3,7 @@ import { useEdgeContext, useLoginWithPassword } from 'edge-react-hooks'
 import * as React from 'react'
 import { Alert, Button, Form, FormGroup } from 'react-bootstrap'
 
-import { useSetAccount } from '../EdgeAccount/useAccount'
+import { useSetAccount } from '../Providers/AccountProvider'
 
 export const LoginForm: React.FC<{ context: EdgeContext }> = ({ context }) => {
   useEdgeContext(context)

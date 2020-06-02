@@ -1,5 +1,6 @@
-import { EdgeAccount, EdgeCurrencyWallet } from 'edge-core-js'
+import { EdgeAccount, EdgeCurrencyWallet, EdgeMetaToken } from 'edge-core-js'
 import {
+  useDisableTokens,
   useEdgeAccount,
   useEdgeCurrencyWallet,
   useEnableTokens,
@@ -9,7 +10,19 @@ import {
   useSetFiatCurrencyCode,
 } from 'edge-react-hooks'
 import * as React from 'react'
-import { Alert, Button, Card, Form, FormControl, FormGroup, FormLabel, ListGroup, Tab, Tabs } from 'react-bootstrap'
+import {
+  Alert,
+  Button,
+  Card,
+  Form,
+  FormControl,
+  FormGroup,
+  FormLabel,
+  Image,
+  ListGroup,
+  Tab,
+  Tabs,
+} from 'react-bootstrap'
 
 import { Disklet } from '../Disklet/Disklet'
 import { BalanceList } from '../EdgeAccount/BalanceList'
@@ -32,8 +45,7 @@ export const WalletInfo: React.FC<{ wallet: EdgeCurrencyWallet; account: EdgeAcc
         <WalletOptions wallet={wallet} />
         <DisplayKeys wallet={wallet} />
         <BalanceList wallet={wallet} account={account} />
-        <EnabledTokens wallet={wallet} />
-        <EnableTokens wallet={wallet} />
+        <Tokens wallet={wallet} />
         <Disklet disklet={wallet.disklet} title={'Disklet'} />
         <Disklet disklet={wallet.localDisklet} title={'Local Disklet'} />
       </Tab>
@@ -53,57 +65,44 @@ export const WalletInfo: React.FC<{ wallet: EdgeCurrencyWallet; account: EdgeAcc
   )
 }
 
-const EnabledTokens: React.FC<{ wallet: EdgeCurrencyWallet }> = ({ wallet }) => {
-  useEdgeCurrencyWallet(wallet)
-
-  const { data: enabledTokens } = useEnabledTokens(wallet)
-
-  return (
-    <Card>
-      <Card.Header>
-        <Card.Title>Enabled Tokens</Card.Title>
-      </Card.Header>
-
-      <Card.Body>
-        {!enabledTokens ? (
-          <Card.Text>Loading...</Card.Text>
-        ) : enabledTokens.length <= 0 ? (
-          <Card.Text>No Tokens Enabled</Card.Text>
-        ) : (
-          <ListGroup>
-            {enabledTokens.map((token) => (
-              <ListGroup.Item key={token}>{token}</ListGroup.Item>
-            ))}
-          </ListGroup>
-        )}
-      </Card.Body>
-    </Card>
-  )
-}
-
-const EnableTokens: React.FC<{ wallet: EdgeCurrencyWallet }> = ({ wallet }) => {
+const Tokens: React.FC<{ wallet: EdgeCurrencyWallet }> = ({ wallet }) => {
   useEdgeCurrencyWallet(wallet)
 
   const availableTokens = wallet.currencyInfo.metaTokens
+  const enabledTokens = useEnabledTokens(wallet)
 
-  const { execute: enableTokens } = useEnableTokens(wallet)
+  const enableTokens = useEnableTokens(wallet)
+  const disableTokens = useDisableTokens(wallet)
+  const pending = enableTokens.status === 'loading' || disableTokens.status === 'loading'
+
+  if (enabledTokens.status === 'loading' || !enabledTokens.data) return <div>Loading...</div>
+
+  const toggleToken = (token: EdgeMetaToken) => () => {
+    enabledTokens.data.includes(token.currencyCode)
+      ? disableTokens.execute({ tokens: [token.currencyCode] })
+      : enableTokens.execute({ tokens: [token.currencyCode] })
+  }
 
   return (
     <Card>
       <Card.Header>
-        <Card.Title>Enable Tokens</Card.Title>
+        <Card.Title>Tokens</Card.Title>
       </Card.Header>
 
       <Card.Body>
-        {availableTokens.length >= 0 ? (
+        {availableTokens.length <= 0 ? (
           <Card.Text>No Tokens Available</Card.Text>
         ) : (
           <ListGroup>
             {availableTokens.map((token) => (
-              <ListGroup.Item key={token.currencyCode}>
-                <Button onClick={() => enableTokens({ tokens: [token.currencyCode] })}>
-                  {token.currencyName} - {token.currencyCode}
-                </Button>
+              <ListGroup.Item
+                key={token.currencyCode}
+                variant={enabledTokens.data.includes(token.currencyCode) ? 'primary' : undefined}
+                disabled={pending}
+                onClick={toggleToken(token)}
+              >
+                <Image src={token.symbolImage} /> {token.currencyName}
+                {token.currencyCode}
               </ListGroup.Item>
             ))}
           </ListGroup>

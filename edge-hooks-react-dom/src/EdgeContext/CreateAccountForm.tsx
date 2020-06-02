@@ -3,7 +3,7 @@ import { useCreateAccount, useEdgeContext } from 'edge-react-hooks'
 import * as React from 'react'
 import { Alert, Button, Form, FormGroup } from 'react-bootstrap'
 
-import { useSetAccount } from '../EdgeAccount/useAccount'
+import { useSetAccount } from '../Providers/AccountProvider'
 
 const onChange = (cb: Function) => (event: any) => cb(event.currentTarget.value)
 
