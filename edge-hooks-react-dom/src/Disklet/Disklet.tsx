@@ -79,12 +79,12 @@ const FolderContents: React.FC<{ disklet: DiskletType; path: string }> = ({ disk
     <ListGroup>
       {Object.entries(folder.data).map(([key, value]) =>
         value === 'folder' ? (
-          <ListGroup.Item>
-            <Folder disklet={disklet} path={key} key={key} />
+          <ListGroup.Item key={key}>
+            <Folder disklet={disklet} path={key} />
           </ListGroup.Item>
         ) : value === 'file' ? (
-          <ListGroup.Item>
-            <File disklet={disklet} path={key} key={key} />
+          <ListGroup.Item key={key}>
+            <File disklet={disklet} path={key} />
           </ListGroup.Item>
         ) : null,
       )}

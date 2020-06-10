@@ -4,7 +4,7 @@ module.exports = {
     es6: true,
     node: true,
   },
-  ignorePatterns: ['!.*', 'node_modules', 'dist', 'edge-hooks-react-dom'],
+  // ignorePatterns: ['!.*', 'node_modules', 'dist', 'edge-hooks-react-dom'],
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/eslint-recommended',
@@ -28,6 +28,7 @@ module.exports = {
   },
   plugins: ['react', '@typescript-eslint', 'eslint-plugin-prettier', 'react-hooks'],
   rules: {
+    'padding-line-between-statements': ['error', { blankLine: 'always', prev: '*', next: 'return' }],
     'prettier/prettier': 'error',
     'import/no-unresolved': [2, { caseSensitive: true, ignore: ['react'] }],
     '@typescript-eslint/explicit-function-return-type': 0,
@@ -46,7 +47,6 @@ module.exports = {
       },
     ],
     '@typescript-eslint/no-unused-vars': [0, { argsIgnorePattern: '^_' }],
-    'newline-before-return': 'error',
     'react-hooks/exhaustive-deps': 'error',
     'react-hooks/rules-of-hooks': 'error',
   },

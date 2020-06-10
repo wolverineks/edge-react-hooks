@@ -7,6 +7,7 @@ import { Disklet } from '../Disklet/Disklet'
 import { WalletInfo } from '../EdgeCurrencyWallet/WalletInfo'
 import { useSelectWallet, useSelectedWallet } from '../Providers/SelectedWalletProvider'
 import { Settings } from '../Settings/Settings'
+import { useAccountBalance } from '../utils/hooks'
 import { ActiveWalletList } from './ActiveWalletList'
 import { ArchivedWalletList } from './ArchivedWalletList'
 import { CreateWallet } from './CreateWallet'
@@ -18,17 +19,7 @@ export const AccountInfo = ({ account, context }: { account: EdgeAccount; contex
   const [tab, setTab] = React.useState('wallets')
   const selectedWallet = useSelectedWallet() || account.currencyWallets[account.activeWalletIds[0]]
   const selectWallet = useSelectWallet()
-
-  React.useEffect(() => {
-    const unsubs = Object.values(account.currencyConfig).map((currencyConfig) => {
-      const { userSettings } = currencyConfig
-      console.log({ currencyConfig: currencyConfig.currencyInfo.currencyCode, userSettings })
-
-      return currencyConfig.watch('userSettings', (userSettings) => console.log({ userSettings }))
-    })
-
-    return () => unsubs.forEach((unsub) => unsub())
-  }, [account.currencyConfig])
+  const balance = useAccountBalance(account)
 
   return (
     <Tabs
@@ -41,6 +32,7 @@ export const AccountInfo = ({ account, context }: { account: EdgeAccount; contex
       <Tab eventKey={'wallets'} title={'Wallets'}>
         <Tabs variant={'pills'} id={'walletLists'} defaultActiveKey={'active'} transition={false}>
           <Tab eventKey={'active'} title={'Active'}>
+            <div>ACCOUNT BALANCE: {balance}</div>
             <ActiveWalletList
               account={account}
               onSelect={(wallet) => {
@@ -55,11 +47,10 @@ export const AccountInfo = ({ account, context }: { account: EdgeAccount; contex
           <Tab eventKey={'deleted'} title={'Deleted'}>
             <DeletedWalletList account={account} />
           </Tab>
+          <Tab eventKey={'create'} title={'Create'}>
+            <CreateWallet account={account} key={account.activeWalletIds.length} />
+          </Tab>
         </Tabs>
-      </Tab>
-
-      <Tab eventKey={'newWallet'} title={'New Wallet'}>
-        <CreateWallet account={account} key={account.activeWalletIds.length} />
       </Tab>
 
       <Tab eventKey={'wallet'} title={'Wallet'}>

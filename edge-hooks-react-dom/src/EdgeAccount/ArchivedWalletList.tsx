@@ -4,7 +4,7 @@ import * as React from 'react'
 import { Button, ListGroup } from 'react-bootstrap'
 
 import { Logo } from '../Components/Logo'
-import { getArchivedWalletInfos, getShortId } from '../utils'
+import { getArchivedWalletInfos, getShortId } from '../utils/utils'
 
 export const ArchivedWalletList: React.FC<{ account: EdgeAccount }> = ({ account }) => {
   useEdgeAccount(account)
@@ -34,16 +34,18 @@ const ArchivedWalletRow: React.FC<{ account: EdgeAccount; walletInfo: EdgeWallet
   const deleteWallet = () => changeWalletState({ walletId: walletInfo.id, walletState: { deleted: true } })
 
   return (
-    <ListGroup.Item>
-      <Logo account={account} walletType={walletInfo.type} />
-      <Button variant={'danger'} disabled={pending} onClick={deleteWallet} className={'float-right'}>
-        Delete
-      </Button>
-      <Button variant={'warning'} disabled={pending} onClick={activateWallet} className={'float-right'}>
-        Activate
-      </Button>
-      {shortId}
-      {error && <div>{error.message}</div>}
-    </ListGroup.Item>
+    <ListGroup style={{ paddingTop: 4, paddingBottom: 4 }}>
+      <ListGroup.Item>
+        <Logo account={account} walletType={walletInfo.type} />
+        <Button variant={'danger'} disabled={pending} onClick={deleteWallet} className={'float-right'}>
+          Delete
+        </Button>
+        <Button variant={'warning'} disabled={pending} onClick={activateWallet} className={'float-right'}>
+          Activate
+        </Button>
+        {shortId}
+        {error && <div>{error.message}</div>}
+      </ListGroup.Item>
+    </ListGroup>
   )
 }

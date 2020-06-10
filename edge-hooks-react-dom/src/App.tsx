@@ -12,10 +12,13 @@ import { PinLogin } from './EdgeContext/PinLogin'
 import { EdgeContextProvider, useContext } from './EdgeContext/useContext'
 import { EdgeAccountProvider, useAccount, useSetAccount } from './Providers/AccountProvider'
 import { SelectedWalletProvider } from './Providers/SelectedWalletProvider'
+import { SettingsProvider } from './Providers/SettingsProvider'
 
 export const Providers: React.FC = ({ children }) => (
   <EdgeContextProvider contextOptions={contextOptions}>
-    <EdgeAccountProvider>{children}</EdgeAccountProvider>
+    <EdgeAccountProvider>
+      <SettingsProvider>{children}</SettingsProvider>
+    </EdgeAccountProvider>
   </EdgeContextProvider>
 )
 

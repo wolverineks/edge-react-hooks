@@ -5,9 +5,14 @@ import { Alert, Button, Form, FormControl, FormGroup, FormLabel, InputGroup } fr
 import JSONPretty from 'react-json-pretty'
 import QrReader from 'react-qr-reader'
 
-import { getCurrencyCodes } from '../utils'
+import { Select } from '../Components/Select'
+import { getCurrencyCodes } from '../utils/utils'
 
-const CATEGORIES = ['expenses', 'income', 'groceries']
+const CATEGORIES = [
+  { value: 'expenses', display: 'expenses' },
+  { value: 'income', display: 'income' },
+  { value: 'groceries', display: 'groceries' },
+]
 
 export const Send: React.FC<{ wallet: EdgeCurrencyWallet }> = ({ wallet }) => {
   useEdgeCurrencyWallet(wallet)
@@ -65,7 +70,7 @@ export const Send: React.FC<{ wallet: EdgeCurrencyWallet }> = ({ wallet }) => {
         </FormGroup>
 
         <FormGroup>
-          <FormLabel>Amount:</FormLabel>
+          <FormLabel>Native Amount:</FormLabel>
           <InputGroup>
             <FormControl value={nativeAmount} onChange={(event) => setNativeAmount(event.currentTarget.value)} />
             <InputGroup.Append>
@@ -76,23 +81,16 @@ export const Send: React.FC<{ wallet: EdgeCurrencyWallet }> = ({ wallet }) => {
           </InputGroup>
         </FormGroup>
 
-        <FormGroup>
-          <FormLabel>CurrencyCode:</FormLabel>
-          <FormControl
-            as={'select'}
-            value={currencyCode}
-            onChange={(event) => setCurrencyCode(event.currentTarget.value)}
-          >
-            <option key={'none'} value={''}>
-              -
+        <Select
+          title={'CurrencyCode'}
+          onSelect={(event) => setCurrencyCode(event.currentTarget.value)}
+          options={currencyCodes}
+          renderOption={(currencyCode: string) => (
+            <option key={currencyCode} value={currencyCode}>
+              {currencyCode}
             </option>
-            {currencyCodes.map((currencyCode: string) => (
-              <option key={currencyCode} value={currencyCode}>
-                {currencyCode}
-              </option>
-            ))}
-          </FormControl>
-        </FormGroup>
+          )}
+        />
 
         <FormGroup>
           <FormLabel>Name</FormLabel>
@@ -104,19 +102,16 @@ export const Send: React.FC<{ wallet: EdgeCurrencyWallet }> = ({ wallet }) => {
           <FormControl as={'textarea'} value={notes} onChange={(event) => setNotes(event.currentTarget.value)} />
         </FormGroup>
 
-        <FormGroup>
-          <FormLabel>Category</FormLabel>
-          <FormControl as={'select'} value={category} onChange={(event) => setCategory(event.currentTarget.value)}>
-            <option key={'none'} value={''}>
-              -
+        <Select
+          title={'Category'}
+          onSelect={(event) => setCategory(event.currentTarget.value)}
+          options={[{ value: 'none', display: '-' }, ...CATEGORIES]}
+          renderOption={(category) => (
+            <option value={category.value} key={category.value}>
+              {category.display}
             </option>
-            {CATEGORIES.map((category) => (
-              <option value={category} key={category}>
-                {category}
-              </option>
-            ))}
-          </FormControl>
-        </FormGroup>
+          )}
+        />
 
         {error && <Alert>{error.message}</Alert>}
       </Form>

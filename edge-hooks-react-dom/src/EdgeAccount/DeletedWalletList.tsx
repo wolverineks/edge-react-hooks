@@ -4,7 +4,7 @@ import * as React from 'react'
 import { Button, ListGroup } from 'react-bootstrap'
 
 import { Logo } from '../Components/Logo'
-import { getDeletedWalletInfos, getShortId } from '../utils'
+import { getDeletedWalletInfos, getShortId } from '../utils/utils'
 
 export const DeletedWalletList: React.FC<{ account: EdgeAccount }> = ({ account }) => {
   useEdgeAccount(account)
@@ -34,13 +34,15 @@ const DeletedWalletRow: React.FC<{ account: EdgeAccount; walletInfo: EdgeWalletI
     changeWalletState({ walletId: walletInfo.id, walletState: { deleted: false, archived: false } })
 
   return (
-    <ListGroup.Item>
-      <Logo account={account} walletType={walletInfo.type} />
-      <Button disabled={pending} onClick={restoreWallet} className={'float-right'}>
-        Restore
-      </Button>
-      {shortId}
-      {error && <div>{error.message}</div>}
-    </ListGroup.Item>
+    <ListGroup style={{ paddingTop: 4, paddingBottom: 4 }}>
+      <ListGroup.Item>
+        <Logo account={account} walletType={walletInfo.type} />
+        <Button disabled={pending} onClick={restoreWallet} className={'float-right'}>
+          Restore
+        </Button>
+        {shortId}
+        {error && <div>{error.message}</div>}
+      </ListGroup.Item>
+    </ListGroup>
   )
 }

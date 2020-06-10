@@ -4,7 +4,7 @@ import * as React from 'react'
 import { Alert, Button, Card, Col, Form, FormControl, FormLabel, ListGroup } from 'react-bootstrap'
 
 import { useSetAccount } from '../Providers/AccountProvider'
-import { useTimeout } from '../utils'
+import { useTimeout } from '../utils/utils'
 
 export const PinLogin: React.FC<{ context: EdgeContext }> = ({ context }) => {
   useEdgeContext(context)

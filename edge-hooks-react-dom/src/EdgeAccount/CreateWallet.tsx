@@ -3,7 +3,10 @@ import { useCreateCurrencyWallet, useEdgeAccount } from 'edge-react-hooks'
 import * as React from 'react'
 import { Alert, Button, Form, FormControl, FormGroup, FormLabel } from 'react-bootstrap'
 
-import { fiatCurrencyInfos, getFiatInfo, getWalletTypes, useDefaultFiatCurrencyCode } from '../utils'
+import { Select } from '../Components/Select'
+import { fiatCurrencyInfos } from '../utils/fiatInfos'
+import { useDefaultFiatCurrencyCode } from '../utils/hooks'
+import { getFiatInfo, getWalletTypes } from '../utils/utils'
 
 export const CreateWallet: React.FC<{ account: EdgeAccount }> = ({ account }) => {
   useEdgeAccount(account)
@@ -35,43 +38,37 @@ export const CreateWallet: React.FC<{ account: EdgeAccount }> = ({ account }) =>
         />
       </FormGroup>
 
-      <FormGroup>
-        <FormLabel>Type</FormLabel>
-        <FormControl
-          as="select"
-          id={'type'}
-          disabled={pending}
-          onChange={(event) => setType(event.currentTarget.value)}
-        >
-          {walletTypes.map(({ display, type, currencyCode }) => (
-            <option value={type} key={type}>
-              {currencyCode} - {display}
-            </option>
-          ))}
-        </FormControl>
-      </FormGroup>
+      <Select
+        title={'Type'}
+        disabled={pending}
+        onSelect={(event) => setType(event.currentTarget.value)}
+        options={walletTypes}
+        renderOption={({ display, type, currencyCode }) => (
+          <option value={type} key={type}>
+            {currencyCode} - {display}
+          </option>
+        )}
+      />
 
-      <FormGroup>
-        <FormLabel>FiatCurrencyCode</FormLabel>
-        <FormControl
-          as="select"
-          id={'fiatCurrencyCodes'}
-          disabled={pending}
-          onChange={(event) => setFiatCurrencyCode(event.currentTarget.value)}
-          defaultValue={defaultFiatInfo?.isoCurrencyCode}
-        >
-          {defaultFiatInfo && (
-            <option key={defaultFiatInfo.isoCurrencyCode} value={defaultFiatInfo.isoCurrencyCode}>
-              {defaultFiatInfo.symbol} - {defaultFiatInfo.currencyCode}
-            </option>
-          )}
-          {fiatCurrencyInfos.map(({ isoCurrencyCode, currencyCode, symbol }) => (
-            <option value={isoCurrencyCode} key={isoCurrencyCode}>
-              {symbol} - {currencyCode}
-            </option>
-          ))}
-        </FormControl>
-      </FormGroup>
+      <Select
+        title={'FiatCurrencyCode'}
+        disabled={pending}
+        defaultValue={defaultFiatInfo?.isoCurrencyCode}
+        onSelect={(event) => setFiatCurrencyCode(event.currentTarget.value)}
+        options={
+          defaultFiatInfo
+            ? [
+                defaultFiatInfo,
+                ...fiatCurrencyInfos.filter(({ currencyCode }) => currencyCode !== defaultFiatInfo.currencyCode),
+              ]
+            : fiatCurrencyInfos
+        }
+        renderOption={({ isoCurrencyCode, currencyCode, symbol }) => (
+          <option value={isoCurrencyCode} key={isoCurrencyCode}>
+            {symbol} - {currencyCode}
+          </option>
+        )}
+      />
 
       <Button variant={'primary'} disabled={pending} onClick={onSubmit}>
         {pending ? '...' : 'Create'}

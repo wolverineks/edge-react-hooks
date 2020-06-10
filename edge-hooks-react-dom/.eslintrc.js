@@ -25,6 +25,7 @@ module.exports = {
   },
   plugins: ['react', '@typescript-eslint', 'eslint-plugin-prettier', 'react-hooks'],
   rules: {
+    'padding-line-between-statements': ['error', { blankLine: 'always', prev: '*', next: 'return' }],
     'react/prop-types': 0,
     'prettier/prettier': 'error',
     'react-hooks/rules-of-hooks': 'error',

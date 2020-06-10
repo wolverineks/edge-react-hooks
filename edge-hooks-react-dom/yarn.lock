@@ -4809,11 +4809,12 @@ edge-exchange-plugins@^0.10.4:
     iso4217 "^0.2.0"
     utf8 "^3.0.0"
 
-edge-react-hooks@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/edge-react-hooks/-/edge-react-hooks-4.0.0.tgz#4cfb2edbe9cfedfc6735b223c6e53dde8e41d0d5"
-  integrity sha512-cQsNW7qZcYOKmtj8Qo5NetEH4rzFYGFarZLnhyV89AbwiymPwOfqAMJG8hBEHFmV0UgDni9MqY5PzxgPNJ/iFQ==
+edge-react-hooks@^4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/edge-react-hooks/-/edge-react-hooks-4.2.0.tgz#6108fd3e7533b9183c2dc5e436738ccb38c91b44"
+  integrity sha512-wja0A6K3p9CyGZMAjaJGI+l5YHvTrIYLT3mQ1ur4hiXYNUKkNXCaeqMiBdSV9/oWY+gzKq6rXm2hkuamV7vMEw==
   dependencies:
+    edge-core-js "^0.17.3"
     react-native-fs "^2.16.6"
     react-query "^1.5.3"
 

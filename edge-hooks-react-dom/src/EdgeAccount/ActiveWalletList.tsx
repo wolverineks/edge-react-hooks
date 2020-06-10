@@ -1,7 +1,6 @@
-import { EdgeAccount, EdgeCurrencyWallet, EdgeDenomination, EdgeMetaToken } from 'edge-core-js'
+import { EdgeAccount, EdgeCurrencyWallet, EdgeMetaToken } from 'edge-core-js'
 import {
   useChangeWalletState,
-  useConvertCurrency,
   useEdgeAccount,
   useEdgeCurrencyWallet,
   useEnabledTokens,
@@ -10,9 +9,11 @@ import {
 import * as React from 'react'
 import { Button, Image, ListGroup } from 'react-bootstrap'
 
+import { DisplayAmount } from '../Components/DisplayAmount'
+import { FiatAmount } from '../Components/FiatAmount'
 import { Logo } from '../Components/Logo'
 import { useSelectedWallet } from '../Providers/SelectedWalletProvider'
-import { getFiatInfo, getSortedCurrencyWallets, nativeToDenomination, useCurrencySetting } from '../utils'
+import { getSortedCurrencyWallets } from '../utils/utils'
 
 export const ActiveWalletList: React.FC<{ account: EdgeAccount; onSelect: (wallet: EdgeCurrencyWallet) => any }> = ({
   account,
@@ -34,27 +35,27 @@ export const ActiveWalletList: React.FC<{ account: EdgeAccount; onSelect: (walle
   )
 }
 
-const ActiveWalletRow: React.FC<{ wallet: EdgeCurrencyWallet; account: EdgeAccount; onSelect: Function }> = ({
-  account,
-  wallet,
-  onSelect,
-}) => {
+const ActiveWalletRow: React.FC<{
+  wallet: EdgeCurrencyWallet
+  account: EdgeAccount
+  onSelect: (wallet: EdgeCurrencyWallet) => any
+}> = ({ account, wallet, onSelect }) => {
   useEdgeAccount(account)
   useEdgeCurrencyWallet(wallet)
 
   const selectedWallet = useSelectedWallet()
-  const balance = React.useMemo(() => String(Math.random() * 1000000000), []) // wallet.balances[currencyCode]
+  const balance = wallet.balances[wallet.currencyInfo.currencyCode]
 
   useOnNewTransactions(wallet, (transactions) =>
     alert(`${wallet.name} - ${transactions.length > 1 ? 'New Transactions' : 'New Transaction'}`),
   )
 
   return (
-    <ListGroup>
+    <ListGroup style={{ paddingTop: 4, paddingBottom: 4 }}>
       <ListGroup.Item variant={selectedWallet && wallet.id === selectedWallet.id ? 'primary' : undefined}>
         <span onClick={() => onSelect(wallet)} className={'float-left'}>
-          <Logo account={account} walletType={wallet.type} />
-          <DisplayAmount account={account} nativeAmount={balance} currencyInfo={wallet.currencyInfo} /> -{' '}
+          <Logo account={account} walletType={wallet.type} /> {wallet.name}{' '}
+          <DisplayAmount nativeAmount={balance} currencyInfo={wallet.currencyInfo} /> -{' '}
           <FiatAmount
             account={account}
             currencyInfo={wallet.currencyInfo}
@@ -106,13 +107,15 @@ export const EnabledTokensList: React.FC<{
     enabledTokens.data.includes(tokenInfo.currencyCode),
   )
 
-  return (
-    <ListGroup variant={'flush'}>
-      {tokenInfos.map((tokenInfo) => (
-        <EnabledTokenRow account={account} wallet={wallet} key={tokenInfo.currencyCode} tokenInfo={tokenInfo} />
-      ))}
-    </ListGroup>
-  )
+  return enabledTokens.data.length > 0 ? (
+    <ListGroup.Item>
+      <ListGroup variant={'flush'}>
+        {tokenInfos.map((tokenInfo) => (
+          <EnabledTokenRow account={account} wallet={wallet} key={tokenInfo.currencyCode} tokenInfo={tokenInfo} />
+        ))}
+      </ListGroup>
+    </ListGroup.Item>
+  ) : null
 }
 
 const EnabledTokenRow: React.FC<{
@@ -124,13 +127,13 @@ const EnabledTokenRow: React.FC<{
   useEdgeCurrencyWallet(wallet)
 
   const { symbolImage } = tokenInfo
-  const balance = React.useMemo(() => String(Math.random() * 10000000000000000000), []) // wallet.balances[currencyCode]
+  const balance = wallet.balances[tokenInfo.currencyCode]
 
   return (
     <ListGroup.Item>
       <span className={'float-left'}>
         <Image src={symbolImage} />
-        <DisplayAmount account={account} nativeAmount={balance} currencyInfo={tokenInfo} /> -{' '}
+        <DisplayAmount nativeAmount={balance} currencyInfo={tokenInfo} /> -{' '}
         <FiatAmount
           account={account}
           currencyInfo={tokenInfo}
@@ -139,59 +142,5 @@ const EnabledTokenRow: React.FC<{
         />
       </span>
     </ListGroup.Item>
-  )
-}
-
-export const DisplayAmount = ({
-  account,
-  nativeAmount,
-  currencyInfo,
-}: {
-  account: EdgeAccount
-  nativeAmount: string
-  currencyInfo: { currencyCode: string; denominations: EdgeDenomination[] }
-}) => {
-  const { read } = useCurrencySetting(account, { currencyCode: currencyInfo.currencyCode })
-
-  if (read.error) return <div>Error {read.error.message}</div>
-  if (!read.data) return <div>Loading...</div>
-
-  const denomination =
-    currencyInfo.denominations.find(
-      (denomination) => denomination.multiplier === read.data.displayDenominationMultiplier,
-    ) || currencyInfo.denominations[0]
-
-  return (
-    <>
-      {denomination.symbol} {nativeToDenomination({ denomination, nativeAmount })} {denomination.name}
-    </>
-  )
-}
-
-export const FiatAmount = ({
-  account,
-  currencyInfo,
-  toCurrencyCode,
-  nativeAmount: _nativeAmount,
-}: {
-  account: EdgeAccount
-  currencyInfo: { currencyCode: string; denominations: EdgeDenomination[] }
-  toCurrencyCode: string
-  nativeAmount: string
-}) => {
-  // const exchangeDenomination = currencyInfo.denominations[0]
-  const { data: fiatAmount } = useConvertCurrency(account.rateCache, {
-    fromCurrency: currencyInfo.currencyCode,
-    toCurrency: toCurrencyCode,
-    amount: 1, // exchangeAmount
-  })
-  const fiatInfo = getFiatInfo({ currencyCode: toCurrencyCode })
-
-  if (!fiatAmount) return <>Loading...</>
-
-  return (
-    <>
-      {fiatInfo?.symbol} {fiatAmount.toFixed(2)} {fiatInfo?.currencyCode}
-    </>
   )
 }

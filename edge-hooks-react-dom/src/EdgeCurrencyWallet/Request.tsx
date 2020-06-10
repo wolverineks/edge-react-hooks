@@ -1,19 +1,21 @@
-import { EdgeCurrencyWallet } from 'edge-core-js'
+import { EdgeAccount, EdgeCurrencyWallet } from 'edge-core-js'
 import { useEdgeCurrencyWallet, useReceiveAddressAndEncodeUri } from 'edge-react-hooks'
 import QRCode from 'qrcode.react'
 import * as React from 'react'
 import { Alert, Form, FormControl, FormGroup, FormLabel } from 'react-bootstrap'
 import JSONPretty from 'react-json-pretty'
 
-import { getCurrencyCodes } from '../utils'
+import { Select } from '../Components/Select'
+import { getCurrencyCodes, getCurrencyInfoFromCurrencyCode, useFiatAmount } from '../utils/utils'
 
-export const Request: React.FC<{ wallet: EdgeCurrencyWallet }> = ({ wallet }) => {
+export const Request: React.FC<{ account: EdgeAccount; wallet: EdgeCurrencyWallet }> = ({ account, wallet }) => {
   useEdgeCurrencyWallet(wallet)
 
-  const [nativeAmount, setNativeAmount] = React.useState('')
-  const [currencyCode, setCurrencyCode] = React.useState('')
   const currencyCodes = getCurrencyCodes(wallet)
-
+  const [nativeAmount, setNativeAmount] = React.useState('')
+  const [currencyCode, setCurrencyCode] = React.useState(currencyCodes[0])
+  const currencyInfo = getCurrencyInfoFromCurrencyCode(wallet, { currencyCode })
+  const fiatAmount = useFiatAmount({ account, nativeAmount, currencyInfo, toCurrencyCode: wallet.fiatCurrencyCode })
   const { data, error } = useReceiveAddressAndEncodeUri(wallet, {
     nativeAmount,
     options: { currencyCode },
@@ -27,26 +29,25 @@ export const Request: React.FC<{ wallet: EdgeCurrencyWallet }> = ({ wallet }) =>
       </FormGroup>
 
       <FormGroup>
-        <FormLabel>Amount:</FormLabel>
+        <FormLabel>Native Amount:</FormLabel>
         <FormControl value={nativeAmount} onChange={(event) => setNativeAmount(event.currentTarget.value)} />
+
+        <FormLabel>Fiat:</FormLabel>
+        <FormControl readOnly value={fiatAmount?.toFixed(2) || '0.00'} />
 
         {error && <Alert variant={'danger'}>{error.message}</Alert>}
       </FormGroup>
 
-      <FormGroup>
-        <FormLabel>CurrencyCode:</FormLabel>
-        <FormControl
-          as={'select'}
-          value={currencyCode}
-          onChange={(event) => setCurrencyCode(event.currentTarget.value)}
-        >
-          {currencyCodes.map((currencyCode) => (
-            <option key={currencyCode} value={currencyCode}>
-              {currencyCode}
-            </option>
-          ))}
-        </FormControl>
-      </FormGroup>
+      <Select
+        title={'CurrenyCode'}
+        onSelect={(event) => setCurrencyCode(event.currentTarget.value)}
+        options={currencyCodes}
+        renderOption={(currencyCode) => (
+          <option key={currencyCode} value={currencyCode}>
+            {currencyCode}
+          </option>
+        )}
+      />
 
       <FormGroup>
         <QRCode value={data?.uri || ''} />

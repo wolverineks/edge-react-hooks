@@ -25,8 +25,8 @@ import {
 } from 'react-bootstrap'
 
 import { Disklet } from '../Disklet/Disklet'
-import { BalanceList } from '../EdgeAccount/BalanceList'
-import { fiatCurrencyInfos } from '../utils'
+import { fiatCurrencyInfos } from '../utils/fiatInfos'
+import { BalanceList } from './BalanceList'
 import { Request } from './Request'
 import { Send } from './Send'
 import { TransactionList } from './TransactionList'
@@ -40,18 +40,10 @@ export const WalletInfo: React.FC<{ wallet: EdgeCurrencyWallet; account: EdgeAcc
   )
 
   return (
-    <Tabs id={'walletTabs'} defaultActiveKey={'details'}>
-      <Tab eventKey={'details'} title={'Details'}>
-        <WalletOptions wallet={wallet} />
-        <DisplayKeys wallet={wallet} />
+    <Tabs variant={'pills'} id={'walletTabs'} defaultActiveKey={'balance'}>
+      <Tab eventKey={'balance'} title={'Balance'}>
         <BalanceList wallet={wallet} account={account} />
-        <Tokens wallet={wallet} />
-        <Disklet disklet={wallet.disklet} title={'Disklet'} />
-        <Disklet disklet={wallet.localDisklet} title={'Local Disklet'} />
-      </Tab>
-
-      <Tab eventKey={'transactions'} title={'History'}>
-        <TransactionList key={wallet.id} wallet={wallet} />
+        <TransactionList key={wallet.id} account={account} wallet={wallet} />
       </Tab>
 
       <Tab eventKey={'send'} title={'Send'}>
@@ -59,7 +51,16 @@ export const WalletInfo: React.FC<{ wallet: EdgeCurrencyWallet; account: EdgeAcc
       </Tab>
 
       <Tab eventKey={'request'} title={'Request'}>
-        <Request wallet={wallet} />
+        <Request account={account} wallet={wallet} />
+      </Tab>
+
+      <Tab eventKey={'storage'} title={'Storage'}>
+        <Disklet disklet={wallet.disklet} path={'/'} title={'Disklet'} />
+        <Disklet disklet={wallet.localDisklet} path={'/'} title={'Local Disklet'} />
+      </Tab>
+
+      <Tab eventKey={'settings'} title={'Settings'}>
+        <Settings wallet={wallet} />
       </Tab>
     </Tabs>
   )
@@ -89,25 +90,23 @@ const Tokens: React.FC<{ wallet: EdgeCurrencyWallet }> = ({ wallet }) => {
         <Card.Title>Tokens</Card.Title>
       </Card.Header>
 
-      <Card.Body>
-        {availableTokens.length <= 0 ? (
-          <Card.Text>No Tokens Available</Card.Text>
-        ) : (
-          <ListGroup>
-            {availableTokens.map((token) => (
-              <ListGroup.Item
-                key={token.currencyCode}
-                variant={enabledTokens.data.includes(token.currencyCode) ? 'primary' : undefined}
-                disabled={pending}
-                onClick={toggleToken(token)}
-              >
-                <Image src={token.symbolImage} /> {token.currencyName}
-                {token.currencyCode}
-              </ListGroup.Item>
-            ))}
-          </ListGroup>
-        )}
-      </Card.Body>
+      {availableTokens.length <= 0 ? (
+        <Card.Text>No Tokens Available</Card.Text>
+      ) : (
+        <ListGroup>
+          {availableTokens.map((token) => (
+            <ListGroup.Item
+              key={token.currencyCode}
+              variant={enabledTokens.data.includes(token.currencyCode) ? 'primary' : undefined}
+              disabled={pending}
+              onClick={toggleToken(token)}
+            >
+              <Image src={token.symbolImage} /> {token.currencyName}
+              {token.currencyCode}
+            </ListGroup.Item>
+          ))}
+        </ListGroup>
+      )}
     </Card>
   )
 }
@@ -187,5 +186,15 @@ const DisplayKeys = ({ wallet }: { wallet: EdgeCurrencyWallet }) => {
         <Button onClick={() => setShowPublicSeed((x) => !x)}>Show Public Seed</Button>
       </FormGroup>
     </Form>
+  )
+}
+
+const Settings: React.FC<{ wallet: EdgeCurrencyWallet }> = ({ wallet }) => {
+  return (
+    <>
+      <WalletOptions wallet={wallet} />
+      <DisplayKeys wallet={wallet} />
+      <Tokens wallet={wallet} />
+    </>
   )
 }
