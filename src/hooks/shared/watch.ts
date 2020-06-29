@@ -1,15 +1,28 @@
 import { EdgeAccount, EdgeContext, EdgeCurrencyConfig, EdgeCurrencyWallet, EdgeSwapConfig } from 'edge-core-js'
 import * as React from 'react'
+import { Subscriber } from 'yaob'
 
 import { useForceUpdate } from '../../utils/useForceUpdate'
 
-export const useWatch = <T extends { watch: Function }>(object: T, property: keyof T) => {
+type Watchable = { watch: Subscriber<any> }
+
+export const useWatch = <W extends Watchable, P extends keyof W>(
+  object: W,
+  property: P,
+  callback?: (data: W[P]) => any,
+): void => {
   const forceUpdate = useForceUpdate()
 
-  React.useEffect(() => object.watch(property, forceUpdate), [object, forceUpdate, property])
+  React.useEffect(() => {
+    const unsub = object.watch(property, callback || forceUpdate)
+
+    return () => {
+      unsub()
+    }
+  })
 }
 
-export const useWatchAll = <T extends { watch: Function }>(object: T) => {
+export const useWatchAll = <E extends Watchable>(object: E): void => {
   const forceUpdate = useForceUpdate()
 
   React.useEffect(() => {
@@ -19,8 +32,8 @@ export const useWatchAll = <T extends { watch: Function }>(object: T) => {
   }, [object, forceUpdate])
 }
 
-export const useEdgeContext = (context: EdgeContext) => useWatchAll(context)
-export const useEdgeAccount = (account: EdgeAccount) => useWatchAll(account)
-export const useEdgeCurrencyWallet = (wallet: EdgeCurrencyWallet) => useWatchAll(wallet)
-export const useEdgeCurrencyConfig = (config: EdgeCurrencyConfig) => useWatchAll(config)
-export const useEdgeSwapConfig = (swapConfig: EdgeSwapConfig) => useWatchAll(swapConfig)
+export const useEdgeContext = (context: EdgeContext): void => useWatchAll(context)
+export const useEdgeAccount = (account: EdgeAccount): void => useWatchAll(account)
+export const useEdgeCurrencyWallet = (wallet: EdgeCurrencyWallet): void => useWatchAll(wallet)
+export const useEdgeCurrencyConfig = (config: EdgeCurrencyConfig): void => useWatchAll(config)
+export const useEdgeSwapConfig = (swapConfig: EdgeSwapConfig): void => useWatchAll(swapConfig)
