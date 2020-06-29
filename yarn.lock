@@ -777,10 +777,10 @@ duplexer@^0.1.1, duplexer@~0.1.1:
   resolved "https://registry.yarnpkg.com/duplexer/-/duplexer-0.1.1.tgz#ace6ff808c1ce66b57d1ebf97977acb02334cfc1"
   integrity sha1-rOb/gIwc5mtX0ev5eXessCM0z8E=
 
-edge-core-js@^0.17.3:
-  version "0.17.3"
-  resolved "https://registry.yarnpkg.com/edge-core-js/-/edge-core-js-0.17.3.tgz#86d5591471bd89e478b5c9723ee0e28b1feb0e20"
-  integrity sha512-hqt1rVjld0eHh6eXHqdJzKgcqFAlG7e1yTJcE2NNVahVQrljDhMBxJF1ceBLafOt1J4mAansLTaofYUUX/apPQ==
+edge-core-js@^0.17.6:
+  version "0.17.6"
+  resolved "https://registry.yarnpkg.com/edge-core-js/-/edge-core-js-0.17.6.tgz#eb9e37f29e70e2cedfe25182dc09035ee007c3d3"
+  integrity sha512-lOpernFAca9G1M1ThAPU/ztpi2PRRFjefVnDq96rHsmWNB0QGHRFXmUJEbNNbS/NBn+lJdQ6ieqlgr8fICZokw==
   dependencies:
     aes-js "^3.1.0"
     base-x "^1.0.4"
