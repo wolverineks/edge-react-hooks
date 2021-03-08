@@ -434,10 +434,10 @@ bip66@^1.1.5:
   dependencies:
     safe-buffer "^5.0.1"
 
-bn.js@^4.11.0, bn.js@^4.11.1, bn.js@^4.11.7, bn.js@^4.11.8, bn.js@^4.4.0:
-  version "4.11.9"
-  resolved "https://registry.yarnpkg.com/bn.js/-/bn.js-4.11.9.tgz#26d556829458f9d1e81fc48952493d0ba3507828"
-  integrity sha512-E6QoYqCKZfgatHTdHzs1RRKP7ip4vvm+EyRUeE2RF0NblwVvb0p6jSVeNTOFxPn26QXN2o6SMfNxKp6kU8zQaw==
+bn.js@^4.11.0, bn.js@^4.11.1, bn.js@^4.11.7, bn.js@^4.11.8, bn.js@^4.11.9:
+  version "4.12.0"
+  resolved "https://registry.yarnpkg.com/bn.js/-/bn.js-4.12.0.tgz#775b3f278efbb9718eec7361f483fb36fbbfea88"
+  integrity sha512-c98Bf3tPniI+scsdk237ku1Dc3ujXQTSgyiPUDEOe7tRkhrqridvh8klBv0HCEso1OLOYcHuCv/cS6DNxKH+ZA==
 
 brace-expansion@^1.1.7:
   version "1.1.11"
@@ -454,7 +454,7 @@ braces@^3.0.1:
   dependencies:
     fill-range "^7.0.1"
 
-brorand@^1.0.1:
+brorand@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/brorand/-/brorand-1.1.0.tgz#12c25efe40a45e3c323eb8675a0a0ce57b22371f"
   integrity sha1-EsJe/kCkXjwyPrhnWgoM5XsiNx8=
@@ -548,10 +548,10 @@ cipher-base@^1.0.0, cipher-base@^1.0.1, cipher-base@^1.0.3:
     inherits "^2.0.1"
     safe-buffer "^5.0.1"
 
-cleaners@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/cleaners/-/cleaners-0.2.0.tgz#b1a583878f4c217c8f0bd2e7756dca3eaca91003"
-  integrity sha512-UsCPC3eYtqBgk9kYSh8WbFoXbDD4lr9r7wz57MSsluMLFb78ws3ER6Bs2q+7iUmaeBiwZ/+S02FOQ5gEA2y4Sg==
+cleaners@^0.3.3:
+  version "0.3.7"
+  resolved "https://registry.yarnpkg.com/cleaners/-/cleaners-0.3.7.tgz#b8fa056a430974d1125a1bb523ee128a6763fbfd"
+  integrity sha512-pRzWeIOXnbgJa211YAHjU1zW1kFMCdftJrB6DJC98nRAcd5XepWy0sAmvZ3kuh1g0y9gukRNSCli0+8aVNhwRg==
 
 cli-cursor@^3.1.0:
   version "3.1.0"
@@ -777,44 +777,44 @@ duplexer@^0.1.1, duplexer@~0.1.1:
   resolved "https://registry.yarnpkg.com/duplexer/-/duplexer-0.1.1.tgz#ace6ff808c1ce66b57d1ebf97977acb02334cfc1"
   integrity sha1-rOb/gIwc5mtX0ev5eXessCM0z8E=
 
-edge-core-js@*:
-  version "0.17.6"
-  resolved "https://registry.yarnpkg.com/edge-core-js/-/edge-core-js-0.17.6.tgz#eb9e37f29e70e2cedfe25182dc09035ee007c3d3"
-  integrity sha512-lOpernFAca9G1M1ThAPU/ztpi2PRRFjefVnDq96rHsmWNB0QGHRFXmUJEbNNbS/NBn+lJdQ6ieqlgr8fICZokw==
+edge-core-js@^0.17.6:
+  version "0.17.26"
+  resolved "https://registry.yarnpkg.com/edge-core-js/-/edge-core-js-0.17.26.tgz#882a2e8d2e2bcadb858a64e3e12a5cfd48e4352f"
+  integrity sha512-GucwagWf2ILw92jW0KoxZo4FNjlmUq7GONXAzpRI45QdBJDe7A3lp21xh7mhvZ9BbHelqKMAUYDiC9swD4gvcg==
   dependencies:
     aes-js "^3.1.0"
     base-x "^1.0.4"
     biggystring "^3.0.2"
-    cleaners "^0.2.0"
+    cleaners "^0.3.3"
     currency-codes "^1.1.2"
     disklet "^0.4.5"
     elliptic "^6.4.0"
     esm "^3.2.4"
     ethereumjs-tx "^1.3.7"
     ethereumjs-util "^5.2.0"
-    hash.js "^1.0.3"
+    hash.js "^1.1.7"
     hmac-drbg "^1.0.1"
     json-csv "^1.5.0"
-    node-fetch "^2.0.0"
+    node-fetch "^2.6.1"
     redux "^3.6.0"
-    redux-keto "^0.3.3"
+    redux-keto "^0.3.4"
     redux-pixies "^0.3.6"
-    rfc4648 "^1.1.0"
+    rfc4648 "^1.4.0"
     scrypt-js "^2.0.3"
     yaob "^0.3.6"
 
 elliptic@^6.4.0, elliptic@^6.5.2:
-  version "6.5.3"
-  resolved "https://registry.yarnpkg.com/elliptic/-/elliptic-6.5.3.tgz#cb59eb2efdaf73a0bd78ccd7015a62ad6e0f93d6"
-  integrity sha512-IMqzv5wNQf+E6aHeIqATs0tOLeOTwj1QKbRcS3jBbYkl5oLAserA8yJTT7/VyHUYG91PRmPyeQDObKLPpeS4dw==
+  version "6.5.4"
+  resolved "https://registry.yarnpkg.com/elliptic/-/elliptic-6.5.4.tgz#da37cebd31e79a1367e941b592ed1fbebd58abbb"
+  integrity sha512-iLhC6ULemrljPZb+QutR5TQGB+pdW6KGD5RSegS+8sorOZT+rdQFbsQFJgvN3eRqNALqJer4oQ16YvJHlU8hzQ==
   dependencies:
-    bn.js "^4.4.0"
-    brorand "^1.0.1"
+    bn.js "^4.11.9"
+    brorand "^1.1.0"
     hash.js "^1.0.0"
-    hmac-drbg "^1.0.0"
-    inherits "^2.0.1"
-    minimalistic-assert "^1.0.0"
-    minimalistic-crypto-utils "^1.0.0"
+    hmac-drbg "^1.0.1"
+    inherits "^2.0.4"
+    minimalistic-assert "^1.0.1"
+    minimalistic-crypto-utils "^1.0.1"
 
 emoji-regex@^7.0.1:
   version "7.0.3"
@@ -1349,7 +1349,7 @@ hash-base@^3.0.0:
     readable-stream "^3.6.0"
     safe-buffer "^5.2.0"
 
-hash.js@^1.0.0, hash.js@^1.0.3:
+hash.js@^1.0.0, hash.js@^1.0.3, hash.js@^1.1.7:
   version "1.1.7"
   resolved "https://registry.yarnpkg.com/hash.js/-/hash.js-1.1.7.tgz#0babca538e8d4ee4a0f8988d68866537a003cf42"
   integrity sha512-taOaskGt4z4SOANNseOviYDvjEJinIkRgmp7LbKP2YTTmVxWBl87s/uzK9r+44BclBSp2X7K1hqeNfz9JbBeXA==
@@ -1357,7 +1357,7 @@ hash.js@^1.0.0, hash.js@^1.0.3:
     inherits "^2.0.3"
     minimalistic-assert "^1.0.1"
 
-hmac-drbg@^1.0.0, hmac-drbg@^1.0.1:
+hmac-drbg@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/hmac-drbg/-/hmac-drbg-1.0.1.tgz#d2745701025a6c775a6c545793ed502fc0c649a1"
   integrity sha1-0nRXAQJabHdabFRXk+1QL8DGSaE=
@@ -1471,12 +1471,7 @@ inflight@^1.0.4:
     once "^1.3.0"
     wrappy "1"
 
-inherits@2:
-  version "2.0.3"
-  resolved "https://registry.yarnpkg.com/inherits/-/inherits-2.0.3.tgz#633c2c83e3da42a502f52466022480f4208261de"
-  integrity sha1-Yzwsg+PaQqUC9SRmAiSA9CCCYd4=
-
-inherits@^2.0.1, inherits@^2.0.3, inherits@^2.0.4, inherits@~2.0.3:
+inherits@2, inherits@^2.0.1, inherits@^2.0.3, inherits@^2.0.4, inherits@~2.0.3:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/inherits/-/inherits-2.0.4.tgz#0fa2c64f932917c3433a0ded55363aae37416b7c"
   integrity sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==
@@ -1749,7 +1744,7 @@ minimalistic-assert@^1.0.0, minimalistic-assert@^1.0.1:
   resolved "https://registry.yarnpkg.com/minimalistic-assert/-/minimalistic-assert-1.0.1.tgz#2e194de044626d4a10e7f7fbc00ce73e83e4d5c7"
   integrity sha512-UtJcAD4yEaGtjPezWuO9wC4nwUnVH/8/Im3yEHQP4b67cXlD/Qr9hdITCU1xDbSEXg2XKNaP8jsReV7vQd00/A==
 
-minimalistic-crypto-utils@^1.0.0, minimalistic-crypto-utils@^1.0.1:
+minimalistic-crypto-utils@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/minimalistic-crypto-utils/-/minimalistic-crypto-utils-1.0.1.tgz#f6c00c1c0b082246e5c4d99dfb8c7c083b2b582a"
   integrity sha1-9sAMHAsIIkblxNmd+4x8CDsrWCo=
@@ -1798,10 +1793,10 @@ natural-compare@^1.4.0:
   resolved "https://registry.yarnpkg.com/natural-compare/-/natural-compare-1.4.0.tgz#4abebfeed7541f2c27acfb29bdbbd15c8d5ba4f7"
   integrity sha1-Sr6/7tdUHywnrPspvbvRXI1bpPc=
 
-node-fetch@^2.0.0:
-  version "2.6.0"
-  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.0.tgz#e633456386d4aa55863f676a7ab0daa8fdecb0fd"
-  integrity sha512-8dG4H5ujfvFiqDmVu9fQ5bOHUC15JMjMY/Zumv26oOvvVJjM67KF8koCWIabKQ1GJIa9r2mMZscBq/TbdOcmNA==
+node-fetch@^2.6.1:
+  version "2.6.1"
+  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.1.tgz#045bd323631f76ed2e2b55573394416b639a0052"
+  integrity sha512-V4aYg89jEoVRxRb2fJdAg8FHvI7cEyYdVAh94HH0UIK8oJxUfkjlDQN9RbMx+bEjP7+ggMiFRprSti032Oipxw==
 
 normalize-package-data@^2.3.2:
   version "2.5.0"
@@ -2118,10 +2113,10 @@ readable-stream@^3.6.0:
     string_decoder "^1.1.1"
     util-deprecate "^1.0.1"
 
-redux-keto@^0.3.3:
-  version "0.3.3"
-  resolved "https://registry.yarnpkg.com/redux-keto/-/redux-keto-0.3.3.tgz#db31fbfcbab11784cd2992d7ce204f6e50807969"
-  integrity sha512-JRbMmmhFHLXCl2J3Hb8zCTdM5O0jtY70mRnh/83xArCWeuWQoJK8adzUXiw9egEi//e7ti1Y/FzJlYbZYOSn8A==
+redux-keto@^0.3.4:
+  version "0.3.4"
+  resolved "https://registry.yarnpkg.com/redux-keto/-/redux-keto-0.3.4.tgz#1bf78a36736dc181dd419b10e57116dea17fa3a5"
+  integrity sha512-16q/QujMkv+zdsVRExJuGbl6grXZLoRakBbQR5E9DmEAPIeJoXtjmc6L3bCMUVjBfF+0XFQyJDZwjhS2guh+ng==
 
 redux-pixies@^0.3.6:
   version "0.3.6"
@@ -2190,6 +2185,11 @@ rfc4648@^1.1.0, rfc4648@^1.3.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/rfc4648/-/rfc4648-1.3.0.tgz#2a69c76f05bc0e388feab933672de9b492af95f1"
   integrity sha512-x36K12jOflpm1V8QjPq3I+pt7Z1xzeZIjiC8J2Oxd7bE1efTrOG241DTYVJByP/SxR9jl1t7iZqYxDX864jgBQ==
+
+rfc4648@^1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/rfc4648/-/rfc4648-1.4.0.tgz#c75b2856ad2e2d588b6ddb985d556f1f7f2a2abd"
+  integrity sha512-3qIzGhHlMHA6PoT6+cdPKZ+ZqtxkIvg8DZGKA5z6PQ33/uuhoJ+Ws/D/J9rXW6gXodgH8QYlz2UCl+sdUDmNIg==
 
 rimraf@2.6.3:
   version "2.6.3"
